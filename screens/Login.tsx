@@ -50,7 +50,7 @@ function Login({navigation}: LoginProps): React.JSX.Element {
 
   const btnIngresarOnPress = function () {
     if (usuario && contrasena) {
-      navigation.navigate('Home');
+      navigation.navigate('Tabs');
       return;
     }
     Alert.alert('Fallido', 'Datos incorrectos...');
