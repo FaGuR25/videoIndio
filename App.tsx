@@ -2,20 +2,40 @@ import React from 'react';
 import 'react-native-gesture-handler';
 import {NavigationContainer} from '@react-navigation/native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import {createStackNavigator} from '@react-navigation/stack';
 import {Icon} from 'react-native-elements';
 
 import Login from './screens/Login';
 import HomeScreen from './screens/HomeScreen';
 import FindScreen from './screens/FindScreen';
 import ChatScreen from './screens/ChatScreen';
+import DetailsNotes from './screens/DetailsNote';
+import CreateNotes from './screens/CreateNotes';
 import PostScreen from './screens/PostScreen';
 import SettingsScreen from './screens/SettingsScreen';
-
-import {createStackNavigator} from '@react-navigation/stack';
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 
+// Pantallas ocultas en el bottom tab navigator
+function HiddenStackNavigator() {
+  return (
+    <Stack.Navigator>
+      <Stack.Screen
+        name="DetailsNotes"
+        component={DetailsNotes}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="CreateNotes"
+        component={CreateNotes}
+        options={{headerShown: false}}
+      />
+    </Stack.Navigator>
+  );
+}
+
+// Navigator para las pantallas principales en el bottom tab navigator
 function TabNavigator() {
   return (
     <Tab.Navigator initialRouteName="Inicio">
@@ -28,19 +48,42 @@ function TabNavigator() {
           ),
         }}
       />
-      <Tab.Screen name="Find" component={FindScreen} />
       <Tab.Screen
-        name="notas"
-        component={ChatScreen}
+        name="Find"
+        component={FindScreen}
         options={{
-          title: 'notas',
-          headerTitleAlign: 'center',
-          headerStyle: {backgroundColor: '#881874'},
-          headerTintColor: 'white',
+          tabBarIcon: props => (
+            <Icon type="feather" name="search" color={props.color} />
+          ),
         }}
       />
-      <Tab.Screen name="Post" component={PostScreen} />
-      <Tab.Screen name="Setting" component={SettingsScreen} />
+      <Tab.Screen
+        name="Plus"
+        component={ChatScreen}
+        options={{
+          tabBarIcon: props => (
+            <Icon type="feather" name="search" color={props.color} />
+          ),
+        }}
+      />
+      <Tab.Screen
+        name="Post"
+        component={PostScreen}
+        options={{
+          tabBarIcon: props => (
+            <Icon type="feather" name="plus-square" color={props.color} />
+          ),
+        }}
+      />
+      <Tab.Screen
+        name="Setting"
+        component={SettingsScreen}
+        options={{
+          tabBarIcon: props => (
+            <Icon type="feather" name="settings" color={props.color} />
+          ),
+        }}
+      />
     </Tab.Navigator>
   );
 }
@@ -59,21 +102,17 @@ export default function App(): React.JSX.Element {
           component={TabNavigator}
           options={{headerShown: false}}
         />
+        <Stack.Screen
+          name="HiddenScreens"
+          component={HiddenStackNavigator}
+          options={{headerShown: false}}
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );
 }
 
 /*
-
-options={{
-          title: 'notas',
-          headerTitleAlign: 'center',
-          headerStyle: {backgroundColor: '#881874'},
-          headerTintColor: 'white',
-        }}
-
-
 
 import React from 'react';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
