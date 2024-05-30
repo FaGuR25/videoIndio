@@ -4,8 +4,7 @@ import {View, Text, StyleSheet, Image, TouchableOpacity} from 'react-native';
 const SettingsScreen = ({navigation}) => {
   return (
     <View style={styles.container}>
-      <View style={styles.header}>
-      </View>
+      <View style={styles.header}></View>
       <View style={styles.infoContainer}>
         <View style={styles.infoRow}>
           <Text style={styles.infoLabel}>Nombre</Text>
