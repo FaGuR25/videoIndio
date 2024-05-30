@@ -11,7 +11,7 @@ const SettingsScreen = ({navigation}) => {
           <Text style={styles.infoValue}>John Doe</Text>
           <TouchableOpacity
             style={styles.editIcon}
-            onPress={() => navigation.navigate('EditName')}
+            onPress={() => navigation.navigate('Edits')}
             accessibilityLabel="Edit Name">
             <Text style={styles.editText}>✏️</Text>
           </TouchableOpacity>

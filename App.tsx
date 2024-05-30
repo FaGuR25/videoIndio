@@ -13,27 +13,36 @@ import DetailsNotes from './screens/DetailsNote';
 import CreateNotes from './screens/CreateNotes';
 import PostScreen from './screens/PostScreen';
 import SettingsScreen from './screens/SettingsScreen';
+import Edits from './screens/Edits';
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 
-// Pantallas ocultas en el bottom tab navigator
-function HiddenStackNavigator() {
-  return (
-    <Stack.Navigator>
-      <Stack.Screen
-        name="DetailsNotes"
-        component={DetailsNotes}
-        options={{headerShown: false}}
-      />
-      <Stack.Screen
-        name="CreateNotes"
-        component={CreateNotes}
-        options={{headerShown: false}}
-      />
-    </Stack.Navigator>
-  );
-}
+// // Pantallas ocultas en el bottom tab navigator
+// function HiddenStackNavigator() {
+//   return (
+//     <NavigationContainer>
+
+//     <Stack.Navigator>
+//       <Stack.Screen
+//         name="DetailsNotes"
+//         component={DetailsNotes}
+//         options={{headerShown: false}}
+//       />
+//       <Stack.Screen
+//         name="CreateNotes"
+//         component={CreateNotes}
+//         options={{headerShown: false}}
+//       />
+//       <Stack.Screen
+//         name="Edits"
+//         component={Edits}
+//         options={{headerShown: false}}
+//       />
+//     </Stack.Navigator>
+//     </NavigationContainer>
+//   );
+// }
 
 // Navigator para las pantallas principales en el bottom tab navigator
 function TabNavigator() {
@@ -102,9 +111,14 @@ export default function App(): React.JSX.Element {
           component={TabNavigator}
           options={{headerShown: false}}
         />
-        <Stack.Screen
+        {/* <Stack.Screen
           name="HiddenScreens"
           component={HiddenStackNavigator}
+          options={{headerShown: false}}
+        /> */}
+        <Stack.Screen
+          name="Edits"
+          component={Edits}
           options={{headerShown: false}}
         />
       </Stack.Navigator>
