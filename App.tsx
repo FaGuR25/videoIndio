@@ -59,7 +59,7 @@ function TabNavigator() {
       />
       <Tab.Screen
         name="Plus"
-        component={ChatScreen}
+        component={CreateNotes}
         options={{
           tabBarIcon: props => (
             <Icon type="feather" name="search" color={props.color} />
