@@ -6,7 +6,7 @@ import {
   TouchableOpacity,
 } from 'react-native';
 
-export default function ChatScreen(props): React.JSX.Element {
+export default function ChatScreen(props) {
   return (
     <ScrollView>
       <View>

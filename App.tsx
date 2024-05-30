@@ -22,6 +22,11 @@ function HiddenStackNavigator() {
   return (
     <Stack.Navigator>
       <Stack.Screen
+        name="ChatScreen"
+        component={ChatScreen}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
         name="DetailsNotes"
         component={DetailsNotes}
         options={{headerShown: false}}
