@@ -38,7 +38,7 @@ export default function HomeScreen() {
     <SafeAreaView style={{flex: 1}}>
       <View style={styles.container}>
         <View style={styles.header}>
-          <Text style={styles.title}>Your Schedule</Text>
+          <Text style={styles.title}>Your Schedule</Text> 
         </View>
 
         <View style={styles.picker}>
