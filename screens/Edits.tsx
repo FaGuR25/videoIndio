@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import {
   View,
   TextInput,
@@ -7,9 +7,9 @@ import {
   TouchableOpacity,
   Text,
 } from 'react-native';
-import {Button as RNButton} from 'react-native-elements';
+import { Button as RNButton } from 'react-native-elements';
 
-export default function Edits() {
+export default function Edits({ navigation }) {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -24,8 +24,34 @@ export default function Edits() {
       Alert.alert('Error', 'Correo electrónico no es válido');
       return;
     }
-    // Aquí puedes agregar la lógica para guardar los datos
-    Alert.alert('Éxito', 'Datos guardados correctamente');
+
+    const myHeaders = new Headers();
+    myHeaders.append('Content-Type', 'application/json');
+
+    const raw = JSON.stringify({
+      nombre: name,
+      correo: email,
+      contrasena: password,
+    });
+
+    const requestOptions: RequestInit = {
+      method: 'PUT',
+      headers: myHeaders,
+      body: raw,
+      redirect: 'follow',
+    };
+
+    fetch('http://127.0.0.1:3100/Guardar/1', requestOptions)
+      .then(response => response.json())
+      .then(result => {
+        console.log(result);
+        Alert.alert('Éxito', 'Datos guardados correctamente');
+        navigation.navigate('Settings'); 
+      })
+      .catch(error => {
+        console.error(error);
+        Alert.alert('Error', 'Ocurrió un error al guardar los datos');
+      });
   };
 
   const validateEmail = (email: string) => {
@@ -52,14 +78,15 @@ export default function Edits() {
       <Text style={styles.label}>Contraseña:</Text>
       <View style={styles.passwordContainer}>
         <TextInput
-          style={[styles.input, {flex: 1}]}
+          style={[styles.input, { flex: 1 }]}
           value={password}
           onChangeText={setPassword}
           secureTextEntry={!showPassword}
         />
         <TouchableOpacity
           style={styles.showButton}
-          onPress={() => setShowPassword(!showPassword)}>
+          onPress={() => setShowPassword(!showPassword)}
+        >
           <Text style={styles.showButtonText}>
             {showPassword ? 'Ocultar' : 'Mostrar'}
           </Text>
