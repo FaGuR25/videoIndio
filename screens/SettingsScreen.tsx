@@ -11,13 +11,13 @@ const SettingsScreen = () => {
     const myHeaders = new Headers();
     myHeaders.append('Content-Type', 'application/json');
 
-    const requestOptions: RequestInit = {
+    const requestOptions = {
       method: 'GET',
       headers: myHeaders,
       redirect: 'follow',
     };
 
-    fetch('http://10.0.2.2:3100/Guardar', requestOptions)
+    fetch('http://10.0.2.2:3100/Guardar/1', requestOptions)
       .then(response => response.json())
       .then(result => {
         console.log(result);
@@ -40,7 +40,9 @@ const SettingsScreen = () => {
 
   return (
     <View style={styles.container}>
-      <View style={styles.header}></View>
+      <View style={styles.header}>
+        <Text style={styles.headerText}>Setting</Text>
+      </View>
       <View style={styles.infoContainer}>
         <View style={styles.infoRow}>
           <Text style={styles.infoLabel}>Nombre</Text>
@@ -77,21 +79,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginVertical: 20,
   },
-  profileImage: {
-    width: 100,
-    height: 100,
-    borderRadius: 50,
-  },
-  editIcon: {
-    position: 'absolute',
-    right: -10,
-    top: -10,
-    backgroundColor: 'white',
-    borderRadius: 15,
-    padding: 5,
-  },
-  editText: {
-    fontSize: 16,
+  headerText: {
+    fontSize: 24,
+    fontWeight: 'bold',
   },
   infoContainer: {
     marginVertical: 20,
@@ -115,20 +105,15 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: 'black',
   },
-  createButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: '#f28b82',
-    padding: 15,
-    borderRadius: 30,
+  editIcon: {
     position: 'absolute',
-    bottom: 30,
-    right: 30,
+    right: -10,
+    top: -10,
+    backgroundColor: 'white',
+    borderRadius: 15,
+    padding: 5,
   },
-  createButtonText: {
-    color: 'white',
+  editText: {
     fontSize: 16,
-    marginLeft: 10,
   },
 });

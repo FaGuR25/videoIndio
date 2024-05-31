@@ -8,8 +8,10 @@ import {
   Text,
 } from 'react-native';
 import { Button as RNButton } from 'react-native-elements';
+import { useNavigation } from '@react-navigation/native';
 
-export default function Edits({ navigation }) {
+export default function Edits() {
+  const navigation = useNavigation();
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -34,19 +36,19 @@ export default function Edits({ navigation }) {
       contrasena: password,
     });
 
-    const requestOptions: RequestInit = {
+    const requestOptions = {
       method: 'PUT',
       headers: myHeaders,
       body: raw,
       redirect: 'follow',
     };
 
-    fetch('http://127.0.0.1:3100/Guardar/1', requestOptions)
+    fetch('http://10.0.2.2:3100/Guardar/1', requestOptions)
       .then(response => response.json())
       .then(result => {
         console.log(result);
         Alert.alert('Éxito', 'Datos guardados correctamente');
-        navigation.navigate('Settings'); 
+        navigation.navigate('Setting', { updated: true });
       })
       .catch(error => {
         console.error(error);
@@ -54,7 +56,7 @@ export default function Edits({ navigation }) {
       });
   };
 
-  const validateEmail = (email: string) => {
+  const validateEmail = (email) => {
     const re = /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/;
     return re.test(email);
   };
