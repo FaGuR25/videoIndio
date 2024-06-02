@@ -1,4 +1,4 @@
-import React from 'react';
+/*import React from 'react';
 import {StyleSheet, View} from 'react-native';
 import WeeklyCalendar from 'react-native-weekly-calendar';
 
@@ -46,9 +46,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-});
+});*/
 
-/* import React, {useState} from 'react';
+import React, {useState} from 'react';
 import {View, StyleSheet, Text} from 'react-native';
 import {Calendar} from 'react-native-calendars';
 
@@ -114,4 +114,4 @@ const styles = StyleSheet.create({
     borderRadius: 5,
   },
 });
- */
+ 

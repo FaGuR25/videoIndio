@@ -11,13 +11,13 @@ const SettingsScreen = () => {
     const myHeaders = new Headers();
     myHeaders.append('Content-Type', 'application/json');
 
-    const requestOptions = {
+    const requestOptions: RequestInit = {
       method: 'GET',
       headers: myHeaders,
       redirect: 'follow',
     };
 
-    fetch('http://10.0.2.2:3100/Guardar/1', requestOptions)
+    fetch('http://127.0.0.1:3100/Guardar', requestOptions)
       .then(response => response.json())
       .then(result => {
         console.log(result);

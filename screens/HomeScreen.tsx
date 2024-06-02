@@ -11,6 +11,7 @@ import {
 } from 'react-native';
 import moment from 'moment';
 import Swiper from 'react-native-swiper';
+import {FAB} from 'react-native-paper';
 
 const {width} = Dimensions.get('window');
 
@@ -38,7 +39,7 @@ export default function HomeScreen() {
     <SafeAreaView style={{flex: 1}}>
       <View style={styles.container}>
         <View style={styles.header}>
-          <Text style={styles.title}>Your Schedule</Text> 
+          <Text style={styles.title}>Your Schedule</Text>
         </View>
 
         <View style={styles.picker}>
@@ -105,6 +106,15 @@ export default function HomeScreen() {
             Todavía no hay ningún recordatorio. ¡Pulsa "+" para agregar uno!
           </Text>
         </View>
+
+        <FAB
+          style={styles.fab}
+          small
+          icon="plus"
+          onPress={() => {
+            // Acción al presionar el botón
+          }}
+        />
       </View>
     </SafeAreaView>
   );
@@ -137,7 +147,6 @@ const styles = StyleSheet.create({
     marginTop: 'auto',
     paddingHorizontal: 16,
   },
-  /** Item */
   item: {
     flex: 1,
     height: 50,
@@ -168,7 +177,6 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     color: '#111',
   },
-  /** Placeholder */
   placeholder: {
     flexGrow: 1,
     flexShrink: 1,
@@ -187,7 +195,6 @@ const styles = StyleSheet.create({
     flexShrink: 1,
     flexBasis: 0,
   },
-  /** Button */
   btn: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -222,6 +229,11 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     marginLeft: 30,
     marginRight: 30,
+  },
+  fab: {
+    position: 'absolute',
+    right: 16,
+    bottom: 16,
   },
 });
 

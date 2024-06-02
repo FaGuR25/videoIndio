@@ -58,7 +58,7 @@ function TabNavigator() {
         }}
       />
       <Tab.Screen
-        name="Find"
+        name="Calendario"
         component={FindScreen}
         options={{
           tabBarIcon: props => (
@@ -68,7 +68,7 @@ function TabNavigator() {
       />
       <Tab.Screen
         name="Plus"
-        component={CreateNotes}
+        component={ChatScreen}
         options={{
           tabBarIcon: props => (
             <Icon type="feather" name="search" color={props.color} />
@@ -76,7 +76,7 @@ function TabNavigator() {
         }}
       />
       <Tab.Screen
-        name="Post"
+        name="Blog"
         component={PostScreen}
         options={{
           tabBarIcon: props => (
@@ -85,7 +85,7 @@ function TabNavigator() {
         }}
       />
       <Tab.Screen
-        name="Setting"
+        name="Perfil"
         component={SettingsScreen}
         options={{
           tabBarIcon: props => (
@@ -119,6 +119,11 @@ export default function App(): React.JSX.Element {
         <Stack.Screen
           name="Edits"
           component={Edits}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name="CreateNotes"
+          component={CreateNotes}
           options={{headerShown: false}}
         />
       </Stack.Navigator>

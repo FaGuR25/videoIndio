@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, {useState} from 'react';
 import {
   View,
   TextInput,
@@ -7,8 +7,8 @@ import {
   TouchableOpacity,
   Text,
 } from 'react-native';
-import { Button as RNButton } from 'react-native-elements';
-import { useNavigation } from '@react-navigation/native';
+import {Button as RNButton} from 'react-native-elements';
+import {useNavigation} from '@react-navigation/native';
 
 export default function Edits() {
   const navigation = useNavigation();
@@ -36,19 +36,19 @@ export default function Edits() {
       contrasena: password,
     });
 
-    const requestOptions = {
-      method: 'PUT',
+    const requestOptions: RequestInit = {
+      method: 'POST',
       headers: myHeaders,
       body: raw,
       redirect: 'follow',
     };
 
-    fetch('http://10.0.2.2:3100/Guardar/1', requestOptions)
+    fetch('http://127.0.0.1:3100/Guardar', requestOptions)
       .then(response => response.json())
       .then(result => {
         console.log(result);
         Alert.alert('Éxito', 'Datos guardados correctamente');
-        navigation.navigate('Setting', { updated: true });
+        navigation.navigate('Setting', {updated: true});
       })
       .catch(error => {
         console.error(error);
@@ -56,7 +56,7 @@ export default function Edits() {
       });
   };
 
-  const validateEmail = (email) => {
+  const validateEmail = email => {
     const re = /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/;
     return re.test(email);
   };
@@ -80,15 +80,14 @@ export default function Edits() {
       <Text style={styles.label}>Contraseña:</Text>
       <View style={styles.passwordContainer}>
         <TextInput
-          style={[styles.input, { flex: 1 }]}
+          style={[styles.input, {flex: 1}]}
           value={password}
           onChangeText={setPassword}
           secureTextEntry={!showPassword}
         />
         <TouchableOpacity
           style={styles.showButton}
-          onPress={() => setShowPassword(!showPassword)}
-        >
+          onPress={() => setShowPassword(!showPassword)}>
           <Text style={styles.showButtonText}>
             {showPassword ? 'Ocultar' : 'Mostrar'}
           </Text>
