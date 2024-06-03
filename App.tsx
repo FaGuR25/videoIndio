@@ -14,6 +14,8 @@ import CreateNotes from './screens/CreateNotes';
 import PostScreen from './screens/PostScreen';
 import SettingsScreen from './screens/SettingsScreen';
 import Edits from './screens/Edits';
+import MiniBlog from './screens/Miniblog';
+import BlogDetailScreen from './screens/BlogDetailScreen';
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -124,6 +126,16 @@ export default function App(): React.JSX.Element {
         <Stack.Screen
           name="CreateNotes"
           component={CreateNotes}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name="MiniBlog"
+          component={MiniBlog}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name="BlogDetailScreen"
+          component={BlogDetailScreen}
           options={{headerShown: false}}
         />
       </Stack.Navigator>
