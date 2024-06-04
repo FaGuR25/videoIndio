@@ -17,11 +17,14 @@ const SettingsScreen = () => {
       redirect: 'follow',
     };
 
-    fetch('http://127.0.0.1:3100/Guardar', requestOptions)
+    fetch('http://127.0.0.1:3100/Guardar/', requestOptions)
       .then(response => response.json())
       .then(result => {
-        console.log(result);
-        setUserData(result);
+
+        const a = result?.length ?? 0;
+        
+        console.log(result[a - 1]);
+        setUserData(result[a - 1]);
       })
       .catch(error => console.error(error));
   };
