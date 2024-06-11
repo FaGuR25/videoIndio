@@ -6,7 +6,6 @@ const MiniBlog = ({ title, content, image, onPress }) => {
     <TouchableOpacity onPress={onPress} style={styles.container}>
       <Image source={image} style={styles.image} />
       <Text style={styles.title}>{title}</Text>
-
     </TouchableOpacity>
   );
 };

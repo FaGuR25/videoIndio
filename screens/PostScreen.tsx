@@ -8,7 +8,9 @@ const PostScreen = ({navigation}) => {
       id: 1,
       title: '¿Por qué se ocaciona la diabetes?',
       content:
-        'La causa exacta de la mayoría de los tipos de diabetes se desconoce.  En todos los casos, la glucosa se acumula en el torrente sanguíneo. Esto se debe a que el páncreas no produce suficiente insulina. Ambas clases de diabetes, tipo 1 y tipo 2, pueden causarse por una combinación de factores genéticos y ambientales Diabetes.          (s/f). Recuperado el 10 de junio de 2024, de Mayoclinic.org website: https://www.mayoclinic.org/es/diseases-conditions/diabetes/symptoms-causes/syc-20371444',
+        'La causa exacta de la mayoría de los tipos de diabetes se desconoce.  En todos los casos, la glucosa se acumula en el torrente sanguíneo. Esto se debe a que el páncreas no produce suficiente insulina. Ambas clases de diabetes, tipo 1 y tipo 2, pueden causarse por una combinación de factores genéticos y ambientales Diabetes.',
+      footer:
+        '(s/f). Recuperado el 10 de junio de 2024, de Mayoclinic.org website: https://www.mayoclinic.org/es/diseases-conditions/diabetes/symptoms-causes/syc-20371444',
       image: require('../assets/icons/blog1.png'),
     },
     {

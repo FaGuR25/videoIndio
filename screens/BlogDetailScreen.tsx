@@ -9,6 +9,7 @@ const BlogDetailScreen = ({ route }) => {
       <Image source={blog.image} style={styles.image} />
       <Text style={styles.title}>{blog.title}</Text>
       <Text style={styles.content}>{blog.content}</Text>
+      <Text style={styles.content}>{blog.footer}</Text>
     </ScrollView>
   );
 };
