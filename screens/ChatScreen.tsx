@@ -13,7 +13,7 @@ export default function ChatScreen(props) {
         <TouchableOpacity
           style={styles.boton}
           onPress={() => props.navigation.navigate('CreateNotes')}>
-          <Text style={styles.textoBoton}>Agregar una nueva nota</Text>
+          <Text style={styles.textoBoton}>Agregar Nota</Text>
         </TouchableOpacity>
       </View>
     </ScrollView>
@@ -22,8 +22,8 @@ export default function ChatScreen(props) {
 
 const styles = StyleSheet.create({
   boton: {
-    backgroundColor: '#b71375',
-    borderColor: '#fc4f00',
+    backgroundColor: '#019915',
+    borderColor: '#019915',
     borderRadius: 20,
     marginLeft: 20,
     marginRight: 20,
@@ -33,6 +33,6 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     padding: 10,
     color: 'white',
-    fontSize: 16,
+    fontSize: 17,
   },
 });

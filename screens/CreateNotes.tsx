@@ -7,16 +7,22 @@ export default function CreateNotes() {
     <View style={styles.contenedorPadre}>
       <View style={styles.tarjeta}>
         <View style={styles.contenedor}></View>
-        <TextInput placeholder="Ingresa el titulo" style={styles.textoInput} />
         <TextInput
-          placeholder="Ingresa el detalle"
+          placeholder="Ingresa el titulo"
+          style={styles.textoInputTitle}
+        />
+        <TextInput
+          placeholder="Ingresa la nota"
           multiline={true}
           numberOfLines={4}
           style={styles.textoInput}
         />
         <View>
           <TouchableOpacity style={styles.botonEnviar}>
-            <Text style={styles.textoBtnEnviar}>Agregar una nueva nota</Text>
+            <Text style={styles.textoBtnEnviar}>Guardar</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.botonCancelar}>
+            <Text style={styles.textoBtnEnviar}>Cancelar</Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -32,9 +38,10 @@ const styles = StyleSheet.create({
   },
   tarjeta: {
     margin: 20,
-    backgroundColor: 'white',
+    backgroundColor: '#d4fed3',
     borderRadius: 20,
-    width: '90%',
+    width: '95%',
+    height: '90%',
     padding: 20,
     shadowColor: '#000',
     shadowOffset: {
@@ -48,21 +55,33 @@ const styles = StyleSheet.create({
   contenedor: {
     padding: 20,
   },
-  textoInput: {
-    borderColor: 'slategray',
-    borderWidth: 1,
-    padding: 2,
-    marginTop: 10,
+  textoInputTitle: {
+    borderColor: '#d4fed3',
+    marginTop: 20,
     borderRadius: 8,
+    marginBottom: 20,
+    fontSize: 22,
+  },
+  textoInput: {
+    borderColor: '#d4fed3',
+    borderRadius: 8,
+    marginBottom: 200,
+    fontSize: 20,
+    height: '40%',
   },
   botonEnviar: {
-    backgroundColor: '#b71375',
-    borderColor: '#fc4f00',
+    backgroundColor: '#019915',
+    borderColor: '#019915',
     borderWidth: 3,
     borderRadius: 20,
-    marginLeft: 20,
-    marginRight: 20,
-    marginTop: 20,
+    marginLeft: 220,
+  },
+  botonCancelar: {
+    backgroundColor: '#ff534a',
+    borderColor: '#ff534a',
+    borderWidth: 3,
+    borderRadius: 20,
+    marginRight: 220,
   },
   textoBtnEnviar: {
     textAlign: 'center',
