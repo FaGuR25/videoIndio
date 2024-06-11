@@ -38,10 +38,6 @@ export default function HomeScreen() {
   return (
     <SafeAreaView style={{flex: 1}}>
       <View style={styles.container}>
-        <View style={styles.header}>
-          <Text style={styles.title}>Your Schedule</Text>
-        </View>
-
         <View style={styles.picker}>
           <Swiper
             index={1}
@@ -73,8 +69,8 @@ export default function HomeScreen() {
                         style={[
                           styles.item,
                           isActive && {
-                            backgroundColor: '#111',
-                            borderColor: '#111',
+                            backgroundColor: '#01780d',
+                            borderColor: '#01780d',
                           },
                         ]}>
                         <Text
@@ -107,23 +103,13 @@ export default function HomeScreen() {
           </Text>
         </View>
 
-        <FAB
-          style={styles.fab}
-          small
-          icon="plus"
-          onPress={() => {
-            // Acción al presionar el botón
-          }}
-        />
+        <FAB style={styles.fab} small icon="plus" onPress={() => {}} />
       </View>
     </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
-  header: {
-    paddingHorizontal: 16,
-  },
   title: {
     fontSize: 32,
     fontWeight: '700',
@@ -136,6 +122,7 @@ const styles = StyleSheet.create({
     paddingVertical: 12,
     flexDirection: 'row',
     alignItems: 'center',
+    marginTop: 5,
   },
   subtitle: {
     fontSize: 17,
@@ -143,10 +130,7 @@ const styles = StyleSheet.create({
     color: '#999999',
     marginBottom: 12,
   },
-  footer: {
-    marginTop: 'auto',
-    paddingHorizontal: 16,
-  },
+
   item: {
     flex: 1,
     height: 50,
@@ -221,11 +205,12 @@ const styles = StyleSheet.create({
   imagen: {
     width: 100,
     height: 100,
+    marginTop: 1,
   },
   texto: {
     fontSize: 18,
     textAlign: 'center',
-    marginTop: 10,
+    marginTop: 5,
     marginBottom: 10,
     marginLeft: 30,
     marginRight: 30,

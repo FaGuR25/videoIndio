@@ -46,7 +46,6 @@ export default function Edits() {
     fetch('http://127.0.0.1:3100/Guardar', requestOptions)
       .then(response => response.json())
       .then(async result => {
-        
         console.log(result);
         Alert.alert('Éxito', 'Datos guardados correctamente');
 

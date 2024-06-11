@@ -1,11 +1,15 @@
-import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
-import { useNavigation, useRoute } from '@react-navigation/native';
+import React, {useEffect, useState} from 'react';
+import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
+import {useNavigation, useRoute} from '@react-navigation/native';
 
 const SettingsScreen = () => {
   const navigation = useNavigation();
   const route = useRoute();
-  const [userData, setUserData] = useState({ nombre: '', correo: '', contrasena: '' });
+  const [userData, setUserData] = useState({
+    nombre: '',
+    correo: '',
+    contrasena: '',
+  });
 
   const fetchUserData = () => {
     const myHeaders = new Headers();
@@ -20,9 +24,8 @@ const SettingsScreen = () => {
     fetch('http://127.0.0.1:3100/Guardar/', requestOptions)
       .then(response => response.json())
       .then(result => {
-
         const a = result?.length ?? 0;
-        
+
         console.log(result[a - 1]);
         setUserData(result[a - 1]);
       })
