@@ -9,7 +9,7 @@ import Login from './screens/Login';
 import HomeScreen from './screens/HomeScreen';
 import FindScreen from './screens/FindScreen';
 import ChatScreen from './screens/ChatScreen';
-import DetailsNotes from './screens/DetailsNote';
+import AddMedice from './screens/AddMedice';
 import CreateNotes from './screens/CreateNotes';
 import PostScreen from './screens/PostScreen';
 import SettingsScreen from './screens/SettingsScreen';
@@ -123,11 +123,18 @@ export default function App(): React.JSX.Element {
           component={Edits}
           options={{headerShown: false}}
         />
+
         <Stack.Screen
           name="CreateNotes"
           component={CreateNotes}
           options={{headerShown: false}}
         />
+        <Stack.Screen
+          name="AddMedice"
+          component={AddMedice}
+          options={{headerShown: false}}
+        />
+
         <Stack.Screen
           name="MiniBlog"
           component={MiniBlog}
