@@ -1,38 +1,7 @@
-import {Image, Pressable, Text, StyleSheet} from 'react-native';
-
-export default function AddMedice({onPress, source, imageStyle, text}) {
-  return (
-    <Pressable
-      onPress={onPress}
-      style={({pressed}) => {
-        return [styles.row, pressed ? styles.row : styles.notPressed];
-      }}>
-      <Image style={imageStyle} source={source} />
-      <Text style={styles.text}>{text}</Text>
-    </Pressable>
-  );
-}
-
-const styles = StyleSheet.create({
-  pressed: {
-    opacity: 0,
-  },
-  notPressed: {
-    opacity: 1,
-  },
-  row: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  text: {
-    margin: 16,
-  },
-});
-
-/* import React, {useState, useEffect} from 'react';
-import {Text, StyleSheet, View, TextInput, Image} from 'react-native';
+import React, {useState, useEffect} from 'react';
+import {Text, StyleSheet, View, TextInput, Image, Alert, Modal, Pressable} from 'react-native';
 import {TouchableOpacity} from 'react-native-gesture-handler';
+import ImageButton from './ImageButton';
 
 export default function CreateNotes() {
   return (
@@ -51,6 +20,22 @@ export default function CreateNotes() {
           style={styles.textoInput}
         />
         <Text style={styles.textgramos}> 0/50</Text>
+        <View style={styles.horario}>
+          <ImageButton
+            onPress={() => console.log('button')}
+            imageStyle={styles.image}
+            source={require('../assets/icons/reloj1.png')}
+            text="Horario"
+          />
+        </View>
+        <View style={styles.recordatorio}>
+          <ImageButton
+            onPress={() => console.log('button')}
+            imageStyle={styles.imageRecord}
+            source={require('../assets/icons/desli.png')}
+            text="Recordatorio"
+          />
+        </View>
         <View>
           <TouchableOpacity style={styles.botonEnviar}>
             <Text style={styles.textoBtnEnviar}>Guardar</Text>
@@ -91,7 +76,6 @@ const styles = StyleSheet.create({
   },
   textoInputTitle: {
     borderColor: '#d4fed3',
-    marginTop: 20,
     borderRadius: 8,
     marginBottom: 20,
     fontSize: 22,
@@ -107,7 +91,8 @@ const styles = StyleSheet.create({
     borderWidth: 3,
     borderRadius: 20,
     marginLeft: 220,
-    marginTop: 250,
+    marginTop: 120,
+    
   },
   botonCancelar: {
     backgroundColor: '#ff534a',
@@ -122,6 +107,46 @@ const styles = StyleSheet.create({
     color: 'white',
     fontSize: 16,
   },
-  textgramos: {},
+  textgramos: {
+    marginBottom: 30,
+  },
+  image: {
+    width: 50,
+    height: 50,
+    marginRight: 160,
+    marginTop: 5,
+  },
+  imageRecord: {
+    width: 75,
+    height: 50,
+    marginRight: 115,
+    marginTop: 5,
+  },
+  horario: {
+    backgroundColor: '#019915',
+    borderRadius: 30,
+    paddingBottom: 5,
+    paddingRight: 5,
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 1,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+  recordatorio: {
+    backgroundColor: '#019915',
+    borderRadius: 30,
+    paddingBottom: 5,
+    paddingRight: 5,
+    marginTop: 15,
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 1,
+    shadowRadius: 4,
+    elevation: 5,
+  },
 });
- */

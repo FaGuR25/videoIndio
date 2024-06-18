@@ -6,21 +6,9 @@ import {
   TouchableOpacity,
 } from 'react-native';
 
-import AddMedice from './AddMedice';
-import {StatusBar} from 'react-native';
-
 export default function ChatScreen(props) {
   return (
-    <View>
-      <AddMedice
-        onPress={() => console.log('button')}
-        imageStyle={styles.image}
-        source={require('../assets/icons/logome.png')}
-        text="press me"
-      />
-    </View>
-
-    /*  <ScrollView>
+    <ScrollView>
       <View>
         <TouchableOpacity
           style={styles.boton}
@@ -33,7 +21,7 @@ export default function ChatScreen(props) {
           <Text style={styles.textoBoton}>Agregar Medicina</Text>
         </TouchableOpacity>
       </View>
-    </ScrollView> */
+    </ScrollView>
   );
 }
 

@@ -1,10 +1,31 @@
-import React from 'react';
-import {TouchableOpacity, Image} from 'react-native';
+import {Image, Pressable, Text, StyleSheet} from 'react-native';
 
-const ImageButton = ({onPress, imageSource, style}) => (
-  <TouchableOpacity onPress={onPress} style={style}>
-    <Image source={imageSource} />
-  </TouchableOpacity>
-);
+export default function AddMedice({onPress, source, imageStyle, text}) {
+  return (
+    <Pressable
+      onPress={onPress}
+      style={({pressed}) => {
+        return [styles.row, pressed ? styles.row : styles.notPressed];
+      }}>
+      <Image style={imageStyle} source={source} />
+      <Text style={styles.text}>{text}</Text>
+    </Pressable>
+  );
+}
 
-export default ImageButton;
+const styles = StyleSheet.create({
+  pressed: {
+    opacity: 0,
+  },
+  notPressed: {
+    opacity: 1,
+  },
+  row: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  text: {
+    margin: 16,
+  },
+});
