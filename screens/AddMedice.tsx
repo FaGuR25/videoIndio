@@ -1,9 +1,29 @@
-import React, {useState, useEffect} from 'react';
-import {Text, StyleSheet, View, TextInput, Image, Alert, Modal, Pressable} from 'react-native';
-import {TouchableOpacity} from 'react-native-gesture-handler';
+import React, { useState } from 'react';
+import {
+  Text,
+  StyleSheet,
+  View,
+  TextInput,
+  Alert,
+  Modal,
+  Pressable,
+  TouchableOpacity,
+} from 'react-native';
 import ImageButton from './ImageButton';
 
+import DateTimePicker from '@react-native-community/datetimepicker';
+
 export default function CreateNotes() {
+  const [modalVisible, setModalVisible] = useState(false);
+  const [date, setDate] = useState(new Date());
+  const [showPicker, setShowPicker] = useState(false);
+
+  const onChange = (event, selectedDate) => {
+    const currentDate = selectedDate || date;
+    setShowPicker(Platform.OS === 'ios');
+    setDate(currentDate);
+  };
+
   return (
     <View style={styles.contenedorPadre}>
       <View style={styles.tarjeta}>
@@ -20,9 +40,10 @@ export default function CreateNotes() {
           style={styles.textoInput}
         />
         <Text style={styles.textgramos}> 0/50</Text>
+
         <View style={styles.horario}>
           <ImageButton
-            onPress={() => console.log('button')}
+            onPress={() => setModalVisible(true)}
             imageStyle={styles.image}
             source={require('../assets/icons/reloj1.png')}
             text="Horario"
@@ -30,12 +51,62 @@ export default function CreateNotes() {
         </View>
         <View style={styles.recordatorio}>
           <ImageButton
-            onPress={() => console.log('button')}
+            onPress={() => setModalVisible(true)}
             imageStyle={styles.imageRecord}
             source={require('../assets/icons/desli.png')}
             text="Recordatorio"
           />
         </View>
+
+        {/* MODAL */}
+        <View style={styles.conteinerModel}>
+          <Modal
+            animationType="slide"
+            transparent={true}
+            visible={modalVisible}
+            onRequestClose={() => {
+              Alert.alert('Modal has been closed.');
+              setModalVisible(!modalVisible);
+            }}>
+            <View style={styles.centeredView}>
+              <View style={styles.modalView}>
+                <Text style={styles.modalHeader}>HORARIO</Text>
+                <Pressable
+                  style={styles.closeButton}
+                  onPress={() => setModalVisible(!modalVisible)}>
+                  <Text style={styles.closeButtonText}>X</Text>
+                </Pressable>
+                <Pressable style={styles.saveButton}>
+                  <Text style={styles.saveButtonText}>GUARDAR</Text>
+                </Pressable>
+                <Text style={styles.modalSubHeader}>TOMAR</Text>
+                {showPicker && (
+                  <DateTimePicker
+                    value={date}
+                    mode="time"
+                    display="spinner"
+                    onChange={onChange}
+                  />
+                )}
+                <Pressable
+                  style={[styles.button, styles.buttonClose]}
+                  onPress={() => setShowPicker(true)}>
+                  <Text style={styles.textStyle}>Show Picker</Text>
+                </Pressable>
+                <Text style={styles.modalSubHeader}>DIAS</Text>
+                <View style={styles.daysContainer}>
+                  {['L', 'M', 'M', 'J', 'V', 'S', 'D'].map((day, index) => (
+                    <TouchableOpacity key={index} style={styles.dayButton}>
+                      <Text style={styles.dayButtonText}>{day}</Text>
+                    </TouchableOpacity>
+                  ))}
+                </View>
+              </View>
+            </View>
+          </Modal>
+        </View>
+        {/* FIN DE MODAL */}
+
         <View>
           <TouchableOpacity style={styles.botonEnviar}>
             <Text style={styles.textoBtnEnviar}>Guardar</Text>
@@ -92,7 +163,6 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     marginLeft: 220,
     marginTop: 120,
-    
   },
   botonCancelar: {
     backgroundColor: '#ff534a',
@@ -148,5 +218,93 @@ const styles = StyleSheet.create({
     shadowOpacity: 1,
     shadowRadius: 4,
     elevation: 5,
+  },
+
+  centeredView: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 22,
+  },
+  modalView: {
+    margin: 20,
+    backgroundColor: 'white',
+    borderRadius: 20,
+    padding: 35,
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+  modalHeader: {
+    fontSize: 20,
+    fontWeight: 'bold',
+  },
+  closeButton: {
+    position: 'absolute',
+    top: 10,
+    left: 10,
+  },
+  closeButtonText: {
+    fontSize: 20,
+    fontWeight: 'bold',
+  },
+  saveButton: {
+    position: 'absolute',
+    top: 10,
+    right: 10,
+    backgroundColor: '#004d40',
+    paddingVertical: 5,
+    paddingHorizontal: 15,
+    borderRadius: 5,
+  },
+  saveButtonText: {
+    color: 'white',
+    fontWeight: 'bold',
+  },
+  modalSubHeader: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginVertical: 10,
+  },
+  daysContainer: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    marginTop: 10,
+  },
+  dayButton: {
+    backgroundColor: '#004d40',
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginHorizontal: 5,
+  },
+  dayButtonText: {
+    color: 'white',
+    fontWeight: 'bold',
+  },
+  button: {
+    borderRadius: 20,
+    padding: 10,
+    elevation: 2,
+  },
+  buttonClose: {
+    backgroundColor: '#2196F3',
+  },
+  textStyle: {
+    color: 'white',
+    fontWeight: 'bold',
+    textAlign: 'center',
+  },
+  modalText: {
+    marginBottom: 15,
+    textAlign: 'center',
   },
 });
