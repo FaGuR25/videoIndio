@@ -54,23 +54,24 @@ function TabNavigator() {
         name="Inicio"
         component={HomeScreen}
         options={{
+          headerShown: true,
+          headerTitle: 'Inicio',
+          headerStyle: {
+            backgroundColor: '#8fcbbc',
+          },
+          headerTitleStyle: {
+            color: '#006400',
+            fontWeight: 'bold',
+          },
           tabBarIcon: props => (
             <Icon type="feather" name="home" color={props.color} />
           ),
         }}
       />
+
       <Tab.Screen
         name="Calendario"
         component={FindScreen}
-        options={{
-          tabBarIcon: props => (
-            <Icon type="feather" name="search" color={props.color} />
-          ),
-        }}
-      />
-      <Tab.Screen
-        name="Plus"
-        component={ChatScreen}
         options={{
           tabBarIcon: props => (
             <Icon type="feather" name="search" color={props.color} />
@@ -134,7 +135,11 @@ export default function App(): React.JSX.Element {
           component={AddMedice}
           options={{headerShown: false}}
         />
-
+        <Stack.Screen
+          name="Plus"
+          component={ChatScreen}
+          options={{headerShown: false}}
+        />
         <Stack.Screen
           name="MiniBlog"
           component={MiniBlog}

@@ -8,14 +8,21 @@ import {
   Text,
   TouchableOpacity,
   Image,
+  Modal,
+  Pressable,
+  Alert,
 } from 'react-native';
+import ImageButton from './ImageButton';
 import moment from 'moment';
 import Swiper from 'react-native-swiper';
 import {FAB} from 'react-native-paper';
 
 const {width} = Dimensions.get('window');
 
-export default function HomeScreen() {
+export default function HomeScreen(props) {
+  const [modalVisible, setModalVisible] = useState(false);
+  const [date, setDate] = useState(new Date());
+  const [showPicker, setShowPicker] = useState(false);
   const swiper = useRef();
   const [value, setValue] = useState(new Date());
   const [week, setWeek] = useState(0);
@@ -103,18 +110,60 @@ export default function HomeScreen() {
           </Text>
         </View>
 
-        <FAB style={styles.fab} small icon="plus" onPress={() => {}} />
+        <FAB style={styles.fab} onPress={() => setModalVisible(true)} />
       </View>
+      {/* modal */}
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={() => {
+          Alert.alert('Modal has been closed.');
+          setModalVisible(!modalVisible);
+        }}>
+        <Pressable
+          style={styles.closeButton}
+          onPress={() => setModalVisible(!modalVisible)}>
+          <Text style={styles.closeButtonText}>X</Text>
+        </Pressable>
+        <View style={styles.centeredView}>
+          <View style={styles.modalView}>
+            <ImageButton
+              onPress={() => props.navigation.navigate('CreateNotes')}
+              imageStyle={styles.imagenotes}
+              source={require('../assets/icons/notas.png')}
+              text="Notas"
+            />
+            <ImageButton
+              onPress={() => props.navigation.navigate('AddMedice')}
+              imageStyle={styles.image}
+              source={require('../assets/icons/medi.png')}
+              text="Medicamentos"
+            />
+            <ImageButton
+              onPress={() => props.navigation.navigate('CreateNotes')}
+              imageStyle={styles.image}
+              source={require('../assets/icons/citas.png')}
+              text="Citas"
+            />
+          </View>
+        </View>
+      </Modal>
+      {/* modal */}
     </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
-  title: {
-    fontSize: 32,
-    fontWeight: '700',
-    color: '#1d1d1d',
-    marginBottom: 12,
+  imagenotes: {
+    width: 50,
+    height: 50,
+    alignItems: 'baseline',
+  },
+  image: {
+    width: 50,
+    height: 50,
+    marginTop: 5,
   },
   picker: {
     flex: 1,
@@ -220,19 +269,69 @@ const styles = StyleSheet.create({
     right: 16,
     bottom: 16,
   },
+  centeredView: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 22,
+  },
+  modalView: {
+    margin: 20,
+    backgroundColor: 'white',
+    borderRadius: 20,
+    padding: 35,
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+  button: {
+    borderRadius: 20,
+    padding: 10,
+    elevation: 2,
+  },
+  buttonOpen: {
+    backgroundColor: '#F194FF',
+  },
+  buttonClose: {
+    backgroundColor: '#2196F3',
+  },
+  textStyle: {
+    color: 'white',
+    fontWeight: 'bold',
+    textAlign: 'center',
+  },
+  modalText: {
+    marginBottom: 15,
+    textAlign: 'center',
+  },
+  closeButton: {
+    position: 'absolute',
+    top: 10,
+    left: 10,
+  },
+  closeButtonText: {
+    fontSize: 20,
+    fontWeight: 'bold',
+  },
 });
 
 /* import React from 'react';
-import {View, Text, StyleSheet, Image} from 'react-native';
-import {createStackNavigator} from '@react-navigation/stack';
+import { View, Text, StyleSheet, Image } from 'react-native';
+import { createStackNavigator } from '@react-navigation/stack';
 
 
 const Stack = createStackNavigator();
 
-const HomeScreen = ({navigation}) => {
+const HomeScreen = ({ navigation }) => {
   return (
 
-    
+
     <View style={styles.container}>
       <Image source={require('./img/salud.png')} style={styles.imagen} />
       <Text style={styles.texto}>
@@ -283,4 +382,4 @@ const styles = StyleSheet.create({
     marginRight: 30,
   },
 });
- */
+*/

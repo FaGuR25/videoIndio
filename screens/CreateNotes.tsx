@@ -1,8 +1,10 @@
 import React, {useState, useEffect} from 'react';
 import {Text, StyleSheet, View, TextInput} from 'react-native';
 import {TouchableOpacity} from 'react-native-gesture-handler';
+import { Pressable } from 'react-native';
+import ChatScreen from './screens/ChatScreen';
 
-export default function CreateNotes() {
+export default function CreateNotes(props) {
   return (
     <View style={styles.contenedorPadre}>
       <View style={styles.tarjeta}>
@@ -11,6 +13,11 @@ export default function CreateNotes() {
           placeholder="Ingresa el titulo"
           style={styles.textoInputTitle}
         />
+        <Pressable
+          style={styles.closeButton}
+          onPress={() => props.navigation.navigate('ChatScreen')}>
+          <Text style={styles.closeButtonText}>X</Text>
+        </Pressable>
         <TextInput
           placeholder="Ingresa la nota"
           multiline={true}
