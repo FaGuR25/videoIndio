@@ -130,19 +130,19 @@ export default function HomeScreen(props) {
           <View style={styles.modalView}>
             <ImageButton
               onPress={() => props.navigation.navigate('CreateNotes')}
-              imageStyle={styles.imagenotes}
+              imageStyle={styles.image}
               source={require('../assets/icons/notas.png')}
               text="Notas"
             />
             <ImageButton
               onPress={() => props.navigation.navigate('AddMedice')}
-              imageStyle={styles.image}
+              imageStyle={styles.imagemed}
               source={require('../assets/icons/medi.png')}
               text="Medicamentos"
             />
             <ImageButton
               onPress={() => props.navigation.navigate('CreateNotes')}
-              imageStyle={styles.image}
+              imageStyle={styles.imagecite}
               source={require('../assets/icons/citas.png')}
               text="Citas"
             />
@@ -155,15 +155,26 @@ export default function HomeScreen(props) {
 }
 
 const styles = StyleSheet.create({
-  imagenotes: {
-    width: 50,
-    height: 50,
-    alignItems: 'baseline',
+  imagemed: {
+    width: 55,
+    height: 52,
+    marginTop: 5,
+    marginRight: 10,
+    marginBottom: 20,
   },
   image: {
     width: 50,
     height: 50,
     marginTop: 5,
+    marginRight: 60,
+    marginBottom: 20,
+  },
+  imagecite: {
+    width: 70,
+    height: 60,
+    marginTop: 5,
+    marginRight: 60,
+    marginBottom: 20,
   },
   picker: {
     flex: 1,
@@ -268,6 +279,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     right: 16,
     bottom: 16,
+    backgroundColor: '#007307',
   },
   centeredView: {
     flex: 1,
@@ -289,6 +301,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 4,
     elevation: 5,
+    zIndex: 1,
   },
   button: {
     borderRadius: 20,
@@ -313,7 +326,9 @@ const styles = StyleSheet.create({
   closeButton: {
     position: 'absolute',
     top: 10,
-    left: 10,
+    right: 10,
+    elevation: 10,
+    zIndex: 2,
   },
   closeButtonText: {
     fontSize: 20,

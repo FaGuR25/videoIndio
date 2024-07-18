@@ -73,6 +73,15 @@ function TabNavigator() {
         name="Calendario"
         component={FindScreen}
         options={{
+          headerShown: true,
+          headerTitle: 'Calendario',
+          headerStyle: {
+            backgroundColor: '#8fcbbc',
+          },
+          headerTitleStyle: {
+            color: '#006400',
+            fontWeight: 'bold',
+          },
           tabBarIcon: props => (
             <Icon type="feather" name="search" color={props.color} />
           ),
@@ -82,6 +91,15 @@ function TabNavigator() {
         name="Blog"
         component={PostScreen}
         options={{
+          headerShown: true,
+          headerTitle: 'Blog',
+          headerStyle: {
+            backgroundColor: '#8fcbbc',
+          },
+          headerTitleStyle: {
+            color: '#006400',
+            fontWeight: 'bold',
+          },
           tabBarIcon: props => (
             <Icon type="feather" name="plus-square" color={props.color} />
           ),
@@ -91,6 +109,15 @@ function TabNavigator() {
         name="Perfil"
         component={SettingsScreen}
         options={{
+          headerShown: true,
+          headerTitle: 'Perfil',
+          headerStyle: {
+            backgroundColor: '#8fcbbc',
+          },
+          headerTitleStyle: {
+            color: '#006400',
+            fontWeight: 'bold',
+          },
           tabBarIcon: props => (
             <Icon type="feather" name="settings" color={props.color} />
           ),

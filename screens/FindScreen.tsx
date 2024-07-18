@@ -83,8 +83,8 @@ export default FindScreen;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
     paddingTop: 20,
+    backgroundColor: '#8fcbbc',
   },
   calendar: {
     borderTopWidth: 1,
