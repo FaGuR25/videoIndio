@@ -25,6 +25,12 @@ const PostScreen = ({navigation}) => {
       content: 'Contenido del Blog 3...',
       image: require('../assets/icons/logome.png'),
     },
+    {
+      id: 4,
+      title: 'Blog 3',
+      content: 'Contenido del Blog 3...',
+      image: require('../assets/icons/logome.png'),
+    },
   ];
 
   const handleBlogPress = blog => {

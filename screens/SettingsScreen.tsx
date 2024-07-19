@@ -1,8 +1,16 @@
 import React, {useEffect, useState} from 'react';
-import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  Switch,
+  useColorScheme,
+} from 'react-native';
 import {useNavigation, useRoute} from '@react-navigation/native';
 
 const SettingsScreen = () => {
+  const {colorScheme, toogleColorScheme} = useColorScheme();
   const navigation = useNavigation();
   const route = useRoute();
   const [userData, setUserData] = useState({
@@ -45,7 +53,7 @@ const SettingsScreen = () => {
   }, [route.params]);
 
   return (
-    <View style={styles.container}>
+    <View style={{backgroundColor:text-white}}>
       <View style={styles.header}>
         <Text style={styles.headerText}>Setting</Text>
       </View>
@@ -69,6 +77,8 @@ const SettingsScreen = () => {
           <Text style={styles.infoValue}>••••••••</Text>
         </View>
       </View>
+      <Text> Modo Oscuro</Text>
+      <Switch value={colorScheme == 'dark'} onChange={toogleColorScheme} />
     </View>
   );
 };

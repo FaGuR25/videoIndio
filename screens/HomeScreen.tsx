@@ -85,7 +85,13 @@ export default function HomeScreen(props) {
                             styles.itemWeekday,
                             isActive && {color: '#fff'},
                           ]}>
-                          {item.weekday}
+                          {item.weekday === 'Mon' && 'Lun'}
+                          {item.weekday === 'Tue' && 'Mar'}
+                          {item.weekday === 'Wed' && 'Mié'}
+                          {item.weekday === 'Thu' && 'Jue'}
+                          {item.weekday === 'Fri' && 'Vie'}
+                          {item.weekday === 'Sat' && 'Sáb'}
+                          {item.weekday === 'Sun' && 'Dom'}
                         </Text>
                         <Text
                           style={[
