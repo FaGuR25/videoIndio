@@ -1,4 +1,4 @@
-import React, {useState, useRef} from 'react';
+import React, {useState, useRef, useCallback} from 'react';
 import {
   StyleSheet,
   Dimensions,
@@ -12,6 +12,7 @@ import {
   Pressable,
   Alert,
 } from 'react-native';
+import {useFocusEffect} from '@react-navigation/native';
 import ImageButton from './ImageButton';
 import moment from 'moment';
 import Swiper from 'react-native-swiper';
@@ -26,6 +27,12 @@ export default function HomeScreen(props) {
   const swiper = useRef();
   const [value, setValue] = useState(new Date());
   const [week, setWeek] = useState(0);
+
+  useFocusEffect(
+    useCallback(() => {
+      setModalVisible(false);
+    }, []),
+  );
 
   const weeks = React.useMemo(() => {
     const start = moment().add(week, 'weeks').startOf('week');
@@ -135,19 +142,28 @@ export default function HomeScreen(props) {
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
             <ImageButton
-              onPress={() => props.navigation.navigate('CreateNotes')}
+              onPress={() => {
+                setModalVisible(false);
+                props.navigation.navigate('CreateNotes');
+              }}
               imageStyle={styles.image}
               source={require('../assets/icons/notas.png')}
               text="Notas"
             />
             <ImageButton
-              onPress={() => props.navigation.navigate('AddMedice')}
+              onPress={() => {
+                setModalVisible(false);
+                props.navigation.navigate('AddMedice');
+              }}
               imageStyle={styles.imagemed}
               source={require('../assets/icons/medi.png')}
               text="Medicamentos"
             />
             <ImageButton
-              onPress={() => props.navigation.navigate('CreateNotes')}
+              onPress={() => {
+                setModalVisible(false);
+                props.navigation.navigate('CreateNotes');
+              }}
               imageStyle={styles.imagecite}
               source={require('../assets/icons/citas.png')}
               text="Citas"
