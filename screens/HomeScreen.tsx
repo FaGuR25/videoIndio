@@ -1,4 +1,4 @@
-import React, {useState, useRef, useCallback} from 'react';
+import React, {useState, useEffect, useRef, useCallback} from 'react';
 import {
   StyleSheet,
   Dimensions,
@@ -11,6 +11,7 @@ import {
   Modal,
   Pressable,
   Alert,
+  FlatList,
 } from 'react-native';
 import {useFocusEffect} from '@react-navigation/native';
 import ImageButton from './ImageButton';
@@ -24,6 +25,7 @@ export default function HomeScreen(props) {
   const [modalVisible, setModalVisible] = useState(false);
   const [date, setDate] = useState(new Date());
   const [showPicker, setShowPicker] = useState(false);
+  const [notes, setNotes] = useState([]);
   const swiper = useRef();
   const [value, setValue] = useState(new Date());
   const [week, setWeek] = useState(0);
@@ -31,8 +33,25 @@ export default function HomeScreen(props) {
   useFocusEffect(
     useCallback(() => {
       setModalVisible(false);
+      fetchNotes();
     }, []),
   );
+  /*  fetch de CreateNotes */
+  const fetchNotes = () => {
+    const myHeaders = new Headers();
+    myHeaders.append('Content-Type', 'application/json');
+
+    const requestOptions = {
+      method: 'GET',
+      headers: myHeaders,
+      redirect: 'follow',
+    };
+
+    fetch('http://localhost:3100/Notas', requestOptions)
+      .then(response => response.json())
+      .then(result => setNotes(result))
+      .catch(error => console.error(error));
+  };
 
   const weeks = React.useMemo(() => {
     const start = moment().add(week, 'weeks').startOf('week');
@@ -116,12 +135,18 @@ export default function HomeScreen(props) {
           </Swiper>
         </View>
 
-        <View style={styles.container}>
-          <Image source={require('./img/salud.png')} style={styles.imagen} />
-          <Text style={styles.texto}>
-            Todavía no hay ningún recordatorio. ¡Pulsa "+" para agregar uno!
-          </Text>
-        </View>
+        <FlatList
+          data={notes}
+          keyExtractor={item =>
+            item.id ? item.id.toString() : Math.random().toString()
+          }
+          renderItem={({item}) => (
+            <View style={styles.noteCard}>
+              <Text style={styles.noteTitle}>{item.titulo}</Text>
+              <Text style={styles.noteContent}>{item.notas}</Text>
+            </View>
+          )}
+        />
 
         <FAB style={styles.fab} onPress={() => setModalVisible(true)} />
       </View>
@@ -162,7 +187,7 @@ export default function HomeScreen(props) {
             <ImageButton
               onPress={() => {
                 setModalVisible(false);
-                props.navigation.navigate('CreateNotes');
+                props.navigation.navigate('CreateCitas');
               }}
               imageStyle={styles.imagecite}
               source={require('../assets/icons/citas.png')}
@@ -212,7 +237,6 @@ const styles = StyleSheet.create({
     color: '#999999',
     marginBottom: 12,
   },
-
   item: {
     flex: 1,
     height: 50,
@@ -254,54 +278,78 @@ const styles = StyleSheet.create({
   },
   placeholderInset: {
     borderWidth: 4,
-    borderColor: '#e5e7eb',
-    borderStyle: 'dashed',
-    borderRadius: 9,
-    flexGrow: 1,
-    flexShrink: 1,
-    flexBasis: 0,
-  },
-  btn: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    borderRadius: 8,
-    paddingVertical: 10,
-    paddingHorizontal: 20,
-    borderWidth: 1,
-    backgroundColor: '#007aff',
-    borderColor: '#007aff',
-  },
-  btnText: {
-    fontSize: 18,
-    lineHeight: 26,
-    fontWeight: '600',
-    color: '#fff',
+    borderColor: '#0c0',
   },
   container: {
     flex: 1,
+    marginTop: 10,
+    backgroundColor: '#ffffff',
+  },
+  titleContainer: {
+    marginTop: 50,
+    paddingVertical: 16,
+  },
+  inputContainer: {
+    paddingTop: 20,
+  },
+  navcontainer: {
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#8fcbbc',
   },
-  imagen: {
+  welcome: {
+    textAlign: 'center',
+    marginVertical: 8,
+  },
+  footer: {
+    backgroundColor: '#01780d',
+    height: 70,
+  },
+  right: {
+    marginLeft: 200,
+  },
+  itemCard: {
+    flexDirection: 'row',
+    paddingVertical: 15,
+    paddingHorizontal: 10,
+    borderBottomWidth: 1,
+    borderBottomColor: '#ccc',
+  },
+  itemContent: {
+    flex: 1,
+  },
+  itemTitle: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    marginBottom: 4,
+  },
+  itemDescription: {
+    fontSize: 16,
+    color: '#666',
+  },
+  imageProfile: {
     width: 100,
     height: 100,
-    marginTop: 1,
-  },
-  texto: {
-    fontSize: 18,
-    textAlign: 'center',
-    marginTop: 5,
-    marginBottom: 10,
-    marginLeft: 30,
+    marginBottom: 20,
     marginRight: 30,
   },
+  center: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    alignContent: 'center',
+  },
+  title: {
+    fontSize: 30,
+    fontWeight: 'bold',
+  },
+  datepicker: {
+    width: '100%',
+  },
   fab: {
+    backgroundColor: '#01780d',
     position: 'absolute',
-    right: 16,
-    bottom: 16,
-    backgroundColor: '#007307',
+    margin: 16,
+    right: 0,
+    bottom: 0,
   },
   centeredView: {
     flex: 1,
@@ -323,38 +371,37 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 4,
     elevation: 5,
-    zIndex: 1,
-  },
-  button: {
-    borderRadius: 20,
-    padding: 10,
-    elevation: 2,
-  },
-  buttonOpen: {
-    backgroundColor: '#F194FF',
-  },
-  buttonClose: {
-    backgroundColor: '#2196F3',
-  },
-  textStyle: {
-    color: 'white',
-    fontWeight: 'bold',
-    textAlign: 'center',
-  },
-  modalText: {
-    marginBottom: 15,
-    textAlign: 'center',
   },
   closeButton: {
     position: 'absolute',
-    top: 10,
-    right: 10,
-    elevation: 10,
-    zIndex: 2,
+    top: 0,
+    right: 0,
+    padding: 10,
   },
   closeButtonText: {
-    fontSize: 20,
+    fontSize: 18,
     fontWeight: 'bold',
+    color: '#000',
+  },
+  noteCard: {
+    padding: 15,
+    borderRadius: 8,
+    backgroundColor: '#fff',
+    marginVertical: 8,
+    marginHorizontal: 16,
+    shadowColor: '#000',
+    shadowOpacity: 0.1,
+    shadowRadius: 8,
+    elevation: 2,
+  },
+  noteTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginBottom: 8,
+  },
+  noteContent: {
+    fontSize: 16,
+    color: '#333',
   },
 });
 

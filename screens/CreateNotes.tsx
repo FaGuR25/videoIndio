@@ -1,99 +1,73 @@
-import React, {useState, useEffect} from 'react';
-import {Text, StyleSheet, View, TextInput} from 'react-native';
-import {TouchableOpacity} from 'react-native-gesture-handler';
-import { Pressable } from 'react-native';
-import ChatScreen from './screens/ChatScreen';
+import React, { useState } from 'react';
+import {
+  StyleSheet,
+  View,
+  TextInput,
+  Button,
+  Alert,
+} from 'react-native';
 
-export default function CreateNotes(props) {
+export default function CreateNotes({ navigation }) {
+  const [titulo, setTitulo] = useState('');
+  const [notas, setNotas] = useState('');
+
+  const handleSaveNote = () => {
+    if (titulo === '' || notas === '') {
+      Alert.alert('Error', 'Por favor completa todos los campos');
+      return;
+    }
+
+    const myHeaders = new Headers();
+    myHeaders.append('Content-Type', 'application/json');
+
+    const raw = JSON.stringify({ titulo, notas });
+
+    const requestOptions = {
+      method: 'POST',
+      headers: myHeaders,
+      body: raw,
+      redirect: 'follow',
+    };
+
+    fetch('http://localhost:3100/Notas', requestOptions)
+      .then((response) => response.json())
+      .then((result) => {
+        Alert.alert('Nota guardada', 'Tu nota ha sido guardada exitosamente.');
+        navigation.navigate(''); // Navega de vuelta a la pantalla de inicio
+      })
+      .catch((error) => console.error(error));
+  };
+
   return (
-    <View style={styles.contenedorPadre}>
-      <View style={styles.tarjeta}>
-        <View style={styles.contenedor}></View>
-        <TextInput
-          placeholder="Ingresa el titulo"
-          style={styles.textoInputTitle}
-        />
-        <Pressable
-          style={styles.closeButton}
-          onPress={() => props.navigation.navigate('ChatScreen')}>
-          <Text style={styles.closeButtonText}>X</Text>
-        </Pressable>
-        <TextInput
-          placeholder="Ingresa la nota"
-          multiline={true}
-          numberOfLines={4}
-          style={styles.textoInput}
-        />
-        <View>
-          <TouchableOpacity style={styles.botonEnviar}>
-            <Text style={styles.textoBtnEnviar}>Guardar</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.botonCancelar}>
-            <Text style={styles.textoBtnEnviar}>Cancelar</Text>
-          </TouchableOpacity>
-        </View>
-      </View>
+    <View style={styles.container}>
+      <TextInput
+        style={styles.input}
+        placeholder="Título"
+        value={titulo}
+        onChangeText={setTitulo}
+      />
+      <TextInput
+        style={styles.input}
+        placeholder="Notas"
+        value={notas}
+        onChangeText={setNotas}
+      />
+      <Button title="Guardar Nota" onPress={handleSaveNote} />
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  contenedorPadre: {
+  container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+    padding: 16,
+    backgroundColor: '#fff',
   },
-  tarjeta: {
-    margin: 20,
-    backgroundColor: '#d4fed3',
-    borderRadius: 20,
-    width: '95%',
-    height: '90%',
-    padding: 20,
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 4,
-    elevation: 5,
-  },
-  contenedor: {
-    padding: 20,
-  },
-  textoInputTitle: {
-    borderColor: '#d4fed3',
-    marginTop: 20,
-    borderRadius: 8,
-    marginBottom: 20,
-    fontSize: 22,
-  },
-  textoInput: {
-    borderColor: '#d4fed3',
-    borderRadius: 8,
-    marginBottom: 200,
-    fontSize: 20,
-    height: '40%',
-  },
-  botonEnviar: {
-    backgroundColor: '#019915',
-    borderColor: '#019915',
-    borderWidth: 3,
-    borderRadius: 20,
-    marginLeft: 220,
-  },
-  botonCancelar: {
-    backgroundColor: '#ff534a',
-    borderColor: '#ff534a',
-    borderWidth: 3,
-    borderRadius: 20,
-    marginRight: 220,
-  },
-  textoBtnEnviar: {
-    textAlign: 'center',
-    padding: 10,
-    color: 'white',
-    fontSize: 16,
+  input: {
+    height: 40,
+    borderColor: 'gray',
+    borderWidth: 1,
+    marginBottom: 12,
+    paddingHorizontal: 8,
   },
 });

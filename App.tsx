@@ -16,6 +16,7 @@ import SettingsScreen from './screens/SettingsScreen';
 import Edits from './screens/Edits';
 import MiniBlog from './screens/Miniblog';
 import BlogDetailScreen from './screens/BlogDetailScreen';
+import CreateCitas from './screens/CreateCitas';
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -146,11 +147,11 @@ export default function App(): React.JSX.Element {
           component={HiddenStackNavigator}
           options={{headerShown: false}}
         /> */}
-        <Stack.Screen
+        {/* <Stack.Screen
           name="Edits"
           component={Edits}
           options={{headerShown: false}}
-        />
+        /> */}
 
         <Stack.Screen
           name="CreateNotes"
@@ -175,6 +176,11 @@ export default function App(): React.JSX.Element {
         <Stack.Screen
           name="BlogDetailScreen"
           component={BlogDetailScreen}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name="CreateCitas"
+          component={CreateCitas}
           options={{headerShown: false}}
         />
       </Stack.Navigator>

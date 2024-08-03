@@ -1,4 +1,73 @@
-import React, {useEffect, useState} from 'react';
+import React from 'react';
+import AntDesign from 'react-native-vector-icons/AntDesign';
+import {
+  Text,
+  View,
+  Image,
+  SafeAreaView,
+  TouchableOpacity,
+  StyleSheet,
+  StatusBar,
+} from 'react-native';
+
+const SettingsScreen = () => {
+  return (
+    <SafeAreaView style={styles.screen}>
+      <View>
+        <TouchableOpacity>
+          <AntDesign style={{fontSize: 40}} name='arrowleft' />
+        </TouchableOpacity>
+
+        <Text>Mi perfil</Text>
+      </View>
+
+      <View style={{marginTop: 30, alignItems: 'center'}}>
+        <Image
+          style={styles.avatar}
+          source={require('../assets/icons/profile.png')}
+        />
+        <Text style={styles.userName}>Alex Morelos Patin</Text>
+        <Text> akljfkjlaa@gmail.com</Text>
+      </View>
+      <TouchableOpacity style={styles.btn}>
+        <Text style={styles.textBtn}>Cerrar Sesion</Text>
+      </TouchableOpacity>
+    </SafeAreaView>
+  );
+};
+
+const styles = StyleSheet.create({
+  screen: {
+    flex: 1,
+    alignItems: 'center',
+  },
+  avatar: {
+    width: 100,
+    height: 100,
+    borderRadius: 50,
+  },
+  userName: {
+    fontSize: 18,
+    textAlign: 'center',
+    marginTop: 10,
+  },
+  btn: {
+    width: 100,
+    backgroundColor: 'blue',
+    padding: 20,
+    borderRadius: 30,
+    marginTop: 40,
+  },
+  textBtn: {
+    textAlign: 'center',
+    fontWeight: 'bold',
+    fontSize: 18,
+  },
+});
+
+export default SettingsScreen;
+
+/* import React, {useEffect, useState} from 'react';
 import {
   View,
   Text,
@@ -133,3 +202,4 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
 });
+ */

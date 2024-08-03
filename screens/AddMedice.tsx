@@ -172,10 +172,9 @@ const styles = StyleSheet.create({
     marginRight: 220,
   },
   textoBtnEnviar: {
-    textAlign: 'center',
-    padding: 10,
-    color: 'white',
-    fontSize: 16,
+    position: 'absolute',
+    width: 200,
+    height: 100,
   },
   textgramos: {
     marginBottom: 30,
