@@ -134,6 +134,7 @@ export default function HomeScreen(props) {
             ))}
           </Swiper>
         </View>
+        
 
         <FlatList
           data={notes}

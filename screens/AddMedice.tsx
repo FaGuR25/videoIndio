@@ -172,9 +172,11 @@ const styles = StyleSheet.create({
     marginRight: 220,
   },
   textoBtnEnviar: {
-    position: 'absolute',
-    width: 200,
-    height: 100,
+    color: 'white', // Texto blanco en los botones para mejor contraste
+    textAlign: 'center',
+    padding: 10,
+    fontSize: 16,
+    fontWeight: 'bold',
   },
   textgramos: {
     marginBottom: 30,
@@ -223,79 +225,95 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    marginTop: 22,
+    backgroundColor: 'rgba(0, 0, 0, 0.5)', // Fondo oscuro para el modal
   },
   modalView: {
     margin: 20,
-    backgroundColor: 'white',
-    borderRadius: 20,
-    padding: 35,
+    backgroundColor: '#ffffff',
+    borderRadius: 30, // Bordes más redondeados
+    padding: 30,
     alignItems: 'center',
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
       height: 2,
     },
-    shadowOpacity: 0.25,
+    shadowOpacity: 0.3,
     shadowRadius: 4,
-    elevation: 5,
+    elevation: 10, // Sombra más pronunciada
+    width: '90%',
   },
   modalHeader: {
-    fontSize: 20,
+    fontSize: 24,
     fontWeight: 'bold',
+    marginBottom: 15,
+    color: '#333', // Color de texto más oscuro
   },
   closeButton: {
     position: 'absolute',
     top: 10,
-    left: 10,
+    right: 10,
+    backgroundColor: '#ff6347', // Botón rojo
+    paddingVertical: 5,
+    paddingHorizontal: 10,
+    borderRadius: 20,
   },
   closeButtonText: {
-    fontSize: 20,
+    color: 'white',
     fontWeight: 'bold',
   },
   saveButton: {
-    position: 'absolute',
-    top: 10,
-    right: 10,
-    backgroundColor: '#004d40',
-    paddingVertical: 5,
-    paddingHorizontal: 15,
-    borderRadius: 5,
+    backgroundColor: '#4682b4', // Botón azul
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 20,
+    marginTop: 20,
   },
   saveButtonText: {
     color: 'white',
     fontWeight: 'bold',
   },
   modalSubHeader: {
-    fontSize: 18,
+    fontSize: 20,
     fontWeight: 'bold',
-    marginVertical: 10,
+    marginVertical: 20,
+    color: '#4682b4',
   },
   daysContainer: {
     flexDirection: 'row',
     justifyContent: 'center',
-    marginTop: 10,
+    marginTop: 20,
   },
   dayButton: {
-    backgroundColor: '#004d40',
-    width: 40,
-    height: 40,
-    borderRadius: 20,
+    backgroundColor: '#4682b4', // Botones azules
+    width: 50,
+    height: 50,
+    borderRadius: 25,
     justifyContent: 'center',
     alignItems: 'center',
     marginHorizontal: 5,
+    elevation: 2,
   },
   dayButtonText: {
     color: 'white',
     fontWeight: 'bold',
+    fontSize: 16,
   },
-  button: {
+  boton: {
+    backgroundColor: '#019915',
+    borderColor: '#019915',
+    borderWidth: 3,
     borderRadius: 20,
+    marginLeft: 20,
     padding: 10,
-    elevation: 2,
   },
-  buttonClose: {
-    backgroundColor: '#2196F3',
+  botonCloser: {
+    backgroundColor: '#ff534a',
+    borderColor: '#ff534a',
+    borderWidth: 3,
+    borderRadius: 20,
+    marginRight: 20,
+    padding: 10,
   },
   textStyle: {
     color: 'white',
