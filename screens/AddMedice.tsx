@@ -1,22 +1,23 @@
-import React, { useState } from 'react';
+import React, {useState} from 'react';
 import {
   Text,
   StyleSheet,
   View,
   TextInput,
-  Alert,
-  Modal,
-  Pressable,
   TouchableOpacity,
+  ScrollView,
+  Platform,
+  Alert,
 } from 'react-native';
-import ImageButton from './ImageButton';
-
 import DateTimePicker from '@react-native-community/datetimepicker';
+import PushNotification from 'react-native-push-notification';
 
-export default function CreateNotes() {
-  const [modalVisible, setModalVisible] = useState(false);
+export default function AddMedice({navigation}) {
   const [date, setDate] = useState(new Date());
   const [showPicker, setShowPicker] = useState(false);
+  const [nombreMedicamento, setNombreMedicamento] = useState('');
+  const [gramos, setGramos] = useState('');
+  const [dias, setDias] = useState([]);
 
   const onChange = (event, selectedDate) => {
     const currentDate = selectedDate || date;
@@ -24,274 +25,215 @@ export default function CreateNotes() {
     setDate(currentDate);
   };
 
+  const handleSave = () => {
+    if (nombreMedicamento === '' || gramos === '') {
+      Alert.alert('Error', 'Por favor completa todos los campos');
+      return;
+    }
+
+    const myHeaders = new Headers();
+    myHeaders.append('Content-Type', 'application/json');
+
+    const raw = JSON.stringify({
+      nombreMedicamento,
+      gramos,
+      tiempo: date.toTimeString().split(' ')[0],
+      dias,
+    });
+
+    const requestOptions = {
+      method: 'POST',
+      headers: myHeaders,
+      body: raw,
+      redirect: 'follow',
+    };
+
+    fetch('http://localhost:3100/Medicamentos', requestOptions)
+      .then(response => response.json())
+      .then(result => {
+        // Configuración de la notificación
+        dias.forEach(day => {
+          const notificationDate = new Date(date);
+          notificationDate.setDate(
+            notificationDate.getDate() +
+              ((day - notificationDate.getDay() + 7) % 7),
+          );
+
+          PushNotification.localNotificationSchedule({
+            channelId: 'fatima1', // (required for Android)
+            title: `Recordatorio: ${nombreMedicamento}`, // (optional)
+            message: `Es hora de tomar ${nombreMedicamento} (${gramos})`, // (required)
+            date: notificationDate,
+            repeatType: 'week', // Repite cada semana en el mismo día
+            allowWhileIdle: true,
+          });
+        });
+
+        Alert.alert('Éxito', 'Medicamento guardado y notificación programada exitosamente.');
+        navigation.navigate('HomeScreen'); // Navega a la pantalla de inicio
+      })
+      .catch(error => console.error(error));
+  };
+
   return (
-    <View style={styles.contenedorPadre}>
+    <ScrollView contentContainerStyle={styles.contenedorPadre}>
       <View style={styles.tarjeta}>
-        <View style={styles.contenedor}></View>
+        <Text style={styles.NameMedice}>Nombre del Medicamento</Text>
         <TextInput
           placeholder="Nombre del Medicamento"
           style={styles.textoInputTitle}
+          numberOfLines={3}
+          value={nombreMedicamento}
+          onChangeText={setNombreMedicamento}
         />
-        <Text> 0/250</Text>
+        <Text style={styles.textLimit}>0/250</Text>
+
+        <Text style={styles.NameMedice}>Gramos</Text>
         <TextInput
           placeholder="Gramos"
           multiline={true}
-          numberOfLines={4}
           style={styles.textoInput}
+          value={gramos}
+          onChangeText={setGramos}
         />
-        <Text style={styles.textgramos}> 0/50</Text>
+        <Text style={styles.textLimit}>0/50</Text>
 
-        <View style={styles.horario}>
-          <ImageButton
-            onPress={() => setModalVisible(true)}
-            imageStyle={styles.image}
-            source={require('../assets/icons/reloj1.png')}
-            text="Horario"
+        <Text style={styles.modalHeader}>Horario</Text>
+        {showPicker && (
+          <DateTimePicker
+            value={date}
+            mode="time"
+            display="spinner"
+            onChange={onChange}
           />
-        </View>
-        <View style={styles.recordatorio}>
-          <ImageButton
-            onPress={() => setModalVisible(true)}
-            imageStyle={styles.imageRecord}
-            source={require('../assets/icons/desli.png')}
-            text="Recordatorio"
-          />
+        )}
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => setShowPicker(true)}>
+          <Text style={styles.buttonText}>Agregar Hora</Text>
+        </TouchableOpacity>
+
+        <Text style={styles.modalHeader}>Días</Text>
+        <View style={styles.daysContainer}>
+          {['L', 'M', 'M', 'J', 'V', 'S', 'D'].map((day, index) => (
+            <TouchableOpacity
+              key={index}
+              style={[
+                styles.dayButton,
+                dias.includes(index + 1) && {backgroundColor: '#01780d'},
+              ]}
+              onPress={() => {
+                setDias(prev =>
+                  prev.includes(index + 1)
+                    ? prev.filter(d => d !== index + 1)
+                    : [...prev, index + 1],
+                );
+              }}>
+              <Text style={styles.dayButtonText}>{day}</Text>
+            </TouchableOpacity>
+          ))}
         </View>
 
-        {/* MODAL */}
-        <View style={styles.conteinerModel}>
-          <Modal
-            animationType="slide"
-            transparent={true}
-            visible={modalVisible}
-            onRequestClose={() => {
-              Alert.alert('Modal has been closed.');
-              setModalVisible(!modalVisible);
-            }}>
-            <View style={styles.centeredView}>
-              <View style={styles.modalView}>
-                <Text style={styles.modalHeader}>HORARIO</Text>
-                <Pressable
-                  style={styles.closeButton}
-                  onPress={() => setModalVisible(!modalVisible)}>
-                  <Text style={styles.closeButtonText}>X</Text>
-                </Pressable>
-                <Pressable style={styles.saveButton}>
-                  <Text style={styles.saveButtonText}>GUARDAR</Text>
-                </Pressable>
-                <Text style={styles.modalSubHeader}>TOMAR</Text>
-                {showPicker && (
-                  <DateTimePicker
-                    value={date}
-                    mode="time"
-                    display="spinner"
-                    onChange={onChange}
-                  />
-                )}
-                <Pressable
-                  style={[styles.button, styles.buttonClose]}
-                  onPress={() => setShowPicker(true)}>
-                  <Text style={styles.textStyle}>Show Picker</Text>
-                </Pressable>
-                <Text style={styles.modalSubHeader}>DIAS</Text>
-                <View style={styles.daysContainer}>
-                  {['L', 'M', 'M', 'J', 'V', 'S', 'D'].map((day, index) => (
-                    <TouchableOpacity key={index} style={styles.dayButton}>
-                      <Text style={styles.dayButtonText}>{day}</Text>
-                    </TouchableOpacity>
-                  ))}
-                </View>
-              </View>
-            </View>
-          </Modal>
-        </View>
-        {/* FIN DE MODAL */}
-
-        <View>
-          <TouchableOpacity style={styles.botonEnviar}>
-            <Text style={styles.textoBtnEnviar}>Guardar</Text>
+        <View style={styles.buttonContainer}>
+          <TouchableOpacity style={styles.botonEnviar} onPress={handleSave}>
+            <Text style={styles.textoBtn}>Guardar</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.botonCancelar}>
-            <Text style={styles.textoBtnEnviar}>Cancelar</Text>
+          <TouchableOpacity
+            style={styles.botonCancelar}
+            onPress={() => navigation.goBack()}>
+            <Text style={styles.textoBtn}>Cancelar</Text>
           </TouchableOpacity>
         </View>
       </View>
-    </View>
+    </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
+  botonRecordatorio: {
+    color: '#333',
+  },
+  NameMedice: {
+    color: '#333',
+    fontSize: 18,
+    marginBottom: 10,
+    fontWeight: 'bold',
+  },
   contenedorPadre: {
-    flex: 1,
+    flexGrow: 1,
     justifyContent: 'center',
     alignItems: 'center',
+    padding: 20,
+    backgroundColor: '#f0f0f0',
   },
   tarjeta: {
-    margin: 20,
-    backgroundColor: '#d4fed3',
-    borderRadius: 20,
-    width: '95%',
-    height: '90%',
+    backgroundColor: '#ffffff',
+    borderRadius: 10,
     padding: 20,
+    width: '100%',
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
       height: 2,
     },
-    shadowOpacity: 0.25,
+    shadowOpacity: 0.2,
     shadowRadius: 4,
     elevation: 5,
-  },
-  contenedor: {
-    padding: 20,
   },
   textoInputTitle: {
-    borderColor: '#d4fed3',
+    borderColor: '#cccccc',
+    borderWidth: 1,
     borderRadius: 8,
-    marginBottom: 20,
-    fontSize: 22,
-  },
-  textoInput: {
-    borderColor: '#d4fed3',
-    borderRadius: 8,
-    fontSize: 20,
-  },
-  botonEnviar: {
-    backgroundColor: '#019915',
-    borderColor: '#019915',
-    borderWidth: 3,
-    borderRadius: 20,
-    marginLeft: 220,
-    marginTop: 120,
-  },
-  botonCancelar: {
-    backgroundColor: '#ff534a',
-    borderColor: '#ff534a',
-    borderWidth: 3,
-    borderRadius: 20,
-    marginRight: 220,
-  },
-  textoBtnEnviar: {
-    color: 'white', // Texto blanco en los botones para mejor contraste
-    textAlign: 'center',
+    marginBottom: 10,
     padding: 10,
     fontSize: 16,
-    fontWeight: 'bold',
+    color: '#333',
   },
-  textgramos: {
-    marginBottom: 30,
+  textoInput: {
+    borderColor: '#cccccc',
+    borderWidth: 1,
+    borderRadius: 8,
+    marginBottom: 10,
+    padding: 10,
+    fontSize: 16,
+    color: '#333',
   },
-  image: {
-    width: 50,
-    height: 50,
-    marginRight: 160,
-    marginTop: 5,
-  },
-  imageRecord: {
-    width: 75,
-    height: 50,
-    marginRight: 115,
-    marginTop: 5,
-  },
-  horario: {
-    backgroundColor: '#019915',
-    borderRadius: 30,
-    paddingBottom: 5,
-    paddingRight: 5,
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 1,
-    shadowRadius: 4,
-    elevation: 5,
-  },
-  recordatorio: {
-    backgroundColor: '#019915',
-    borderRadius: 30,
-    paddingBottom: 5,
-    paddingRight: 5,
-    marginTop: 15,
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 1,
-    shadowRadius: 4,
-    elevation: 5,
-  },
-
-  centeredView: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: 'rgba(0, 0, 0, 0.5)', // Fondo oscuro para el modal
-  },
-  modalView: {
-    margin: 20,
-    backgroundColor: '#ffffff',
-    borderRadius: 30, // Bordes más redondeados
-    padding: 30,
-    alignItems: 'center',
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.3,
-    shadowRadius: 4,
-    elevation: 10, // Sombra más pronunciada
-    width: '90%',
+  textLimit: {
+    alignSelf: 'flex-end',
+    marginBottom: 15,
+    fontSize: 12,
+    color: '#666',
   },
   modalHeader: {
-    fontSize: 24,
+    fontSize: 18,
     fontWeight: 'bold',
-    marginBottom: 15,
-    color: '#333', // Color de texto más oscuro
+    marginBottom: 10,
+    color: '#333',
   },
-  closeButton: {
-    position: 'absolute',
-    top: 10,
-    right: 10,
-    backgroundColor: '#ff6347', // Botón rojo
-    paddingVertical: 5,
-    paddingHorizontal: 10,
-    borderRadius: 20,
-  },
-  closeButtonText: {
-    color: 'white',
-    fontWeight: 'bold',
-  },
-  saveButton: {
-    backgroundColor: '#4682b4', // Botón azul
+  button: {
+    backgroundColor: '#4682b4',
     paddingVertical: 10,
-    paddingHorizontal: 20,
-    borderRadius: 20,
-    marginTop: 20,
+    paddingHorizontal: 15,
+    borderRadius: 5,
+    marginBottom: 20,
+    alignSelf: 'center',
   },
-  saveButtonText: {
+  buttonText: {
     color: 'white',
     fontWeight: 'bold',
-  },
-  modalSubHeader: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    marginVertical: 20,
-    color: '#4682b4',
   },
   daysContainer: {
     flexDirection: 'row',
-    justifyContent: 'center',
-    marginTop: 20,
+    justifyContent: 'space-around',
+    marginVertical: 10,
   },
   dayButton: {
-    backgroundColor: '#4682b4', // Botones azules
-    width: 50,
-    height: 50,
-    borderRadius: 25,
+    backgroundColor: '#4682b4',
+    width: 40,
+    height: 40,
+    borderRadius: 20,
     justifyContent: 'center',
     alignItems: 'center',
-    marginHorizontal: 5,
     elevation: 2,
   },
   dayButtonText: {
@@ -299,29 +241,27 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     fontSize: 16,
   },
-  boton: {
+  buttonContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginTop: 30,
+  },
+  botonEnviar: {
     backgroundColor: '#019915',
-    borderColor: '#019915',
-    borderWidth: 3,
-    borderRadius: 20,
-    marginLeft: 20,
-    padding: 10,
+    borderRadius: 5,
+    paddingVertical: 10,
+    paddingHorizontal: 20,
   },
-  botonCloser: {
+  botonCancelar: {
     backgroundColor: '#ff534a',
-    borderColor: '#ff534a',
-    borderWidth: 3,
-    borderRadius: 20,
-    marginRight: 20,
-    padding: 10,
+    borderRadius: 5,
+    paddingVertical: 10,
+    paddingHorizontal: 20,
   },
-  textStyle: {
+  textoBtn: {
     color: 'white',
     fontWeight: 'bold',
-    textAlign: 'center',
-  },
-  modalText: {
-    marginBottom: 15,
+    fontSize: 16,
     textAlign: 'center',
   },
 });

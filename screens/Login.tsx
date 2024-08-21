@@ -7,8 +7,12 @@ import {
   Text,
   Alert,
   Image,
+  Pressable,
 } from 'react-native';
 import React, {useState} from 'react';
+import HomeScreen from './HomeScreen';
+import PushNotification from 'react-native-push-notification';
+import {TouchableOpacity} from 'react-native-gesture-handler';
 
 const styles = StyleSheet.create({
   container: {
@@ -106,6 +110,18 @@ function Login({navigation}: LoginProps): React.JSX.Element {
           </Text>
         </View>
       </View>
+      <TouchableOpacity
+        onPress={() => {
+          PushNotification.localNotificationSchedule({
+            channelId: 'fatima1', // (required for Android)
+            title: 'medicamentos 15 segundos', // (optional)
+            message: 'tomate los medicamentos', // (required)
+            date: new Date(Date.now() + 15 * 1000),
+            allowWhileIdle: true,
+          });
+        }}>
+        <Text>boton</Text>
+      </TouchableOpacity>
     </SafeAreaView>
   );
 }

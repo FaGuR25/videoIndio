@@ -5,14 +5,15 @@ import {
   View,
   TextInput,
   Alert,
+  Modal,
   Pressable,
   TouchableOpacity,
   Switch,
 } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
-import PushNotification from 'react-native-push-notification';
 
-export default function CreateCitas({navigation}) {
+export default function CreateCitas() {
+  const [modalVisible, setModalVisible] = useState(false);
   const [date, setDate] = useState(new Date());
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [showTimePicker, setShowTimePicker] = useState(false);
@@ -24,103 +25,38 @@ export default function CreateCitas({navigation}) {
     setShowDatePicker(false);
     setDate(currentDate);
   };
-
   const onChangeTime = (event, selectedTime) => {
     const currentTime = selectedTime || date;
     setShowTimePicker(false);
     setDate(currentTime);
   };
 
-  const handleSave = () => {
-    const cita = {
-      fecha: date.toISOString().split('T')[0],
-      tiempo: date.toTimeString().split(' ')[0],
-      documentos: items.join(', '),
-    };
+  const myHeaders = new Headers();
+  myHeaders.append('Content-Type', 'application/json');
 
-    fetch('http://localhost:3100/Citas', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(cita),
-    })
-      .then(response => response.json())
-      .then(result => {
-        Alert.alert('Cita guardada');
-        navigation.goBack(); // Regresa al calendario
-      })
-      .catch(error => console.error('Error saving cita:', error));
-  };
-
-  //desde aqui empieza lo de las notificaciones
-
-  // Must be outside of any component LifeCycle (such as `componentDidMount`).
-  PushNotification.configure({
-    // (optional) Called when Token is generated (iOS and Android)
-    onRegister: function (token) {
-      console.log('TOKEN:', token);
-    },
-
-    // (required) Called when a remote is received or opened, or local notification is opened
-    onNotification: function (notification) {
-      console.log('NOTIFICATION:', notification);
-
-      // process the notification
-
-      // (required) Called when a remote is received or opened, or local notification is opened
-      //notification.finish(PushNotificationIOS.FetchResult.NoData);
-    },
-
-    // (optional) Called when Registered Action is pressed and invokeApp is false, if true onNotification will be called (Android)
-    onAction: function (notification) {
-      console.log('ACTION:', notification.action);
-      console.log('NOTIFICATION:', notification);
-
-      // process the action
-    },
-
-    // (optional) Called when the user fails to register for remote notifications. Typically occurs when APNS is having issues, or the device is a simulator. (iOS)
-    onRegistrationError: function (err) {
-      console.error(err.message, err);
-    },
-
-    // IOS ONLY (optional): default: all - Permissions to register.
-    permissions: {
-      alert: true,
-      badge: true,
-      sound: true,
-    },
-
-    // Should the initial notification be popped automatically
-    // default: true
-    popInitialNotification: true,
-
-    /**
-     * (optional) default: true
-     * - Specified if permissions (ios) and token (android and ios) will requested or not,
-     * - if not, you must call PushNotificationsHandler.requestPermissions() later
-     * - if you are not using remote notification or do not have Firebase installed, use this:
-     *     requestPermissions: Platform.OS === 'ios'
-     */
-    requestPermissions: true,
+  const raw = JSON.stringify({
+    fecha: '2020-12-01',
+    tiempo: '03:00:00',
+    documentos: 'acta',
   });
 
-  testPush = () => {
-    PushNotification.localNotification({
-      title: 'My Notification Title', // (optional)
-      message: 'My Notification Message', // (required)
-    });
+  const requestOptions = {
+    method: 'POST',
+    headers: myHeaders,
+    body: raw,
+    redirect: 'follow',
   };
 
-  //aqui termina lo de notificaciones
-
+  fetch('http://localhost:3100/Citas', requestOptions)
+    .then(response => response.text())
+    .then(result => console.log(result))
+    .catch(error => console.error(error));
   return (
     <View style={styles.contenedorPadre}>
       <View style={styles.tarjeta}>
         <Pressable
           style={styles.closeButton}
-          onPress={() => navigation.goBack()}>
+          onPress={() => setModalVisible(false)}>
           <Text style={styles.closeButtonText}>X</Text>
         </Pressable>
         <View style={styles.datePicker}>
@@ -165,7 +101,9 @@ export default function CreateCitas({navigation}) {
           onChangeText={text => setItems(text.split('\n'))}
         />
         <View style={styles.buttonsContainer}>
-          <TouchableOpacity style={styles.saveButton} onPress={handleSave}>
+          <TouchableOpacity
+            style={styles.saveButton}
+            onPress={() => Alert.alert('Cita guardada')}>
             <Text style={styles.saveButtonText}>GUARDAR</Text>
           </TouchableOpacity>
         </View>

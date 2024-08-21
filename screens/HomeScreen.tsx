@@ -26,6 +26,7 @@ export default function HomeScreen(props) {
   const [date, setDate] = useState(new Date());
   const [showPicker, setShowPicker] = useState(false);
   const [notes, setNotes] = useState([]);
+  const [medice, setMedice] = useState([]);
   const swiper = useRef();
   const [value, setValue] = useState(new Date());
   const [week, setWeek] = useState(0);
@@ -34,8 +35,10 @@ export default function HomeScreen(props) {
     useCallback(() => {
       setModalVisible(false);
       fetchNotes();
+      fetchMedice();
     }, []),
   );
+
   /*  fetch de CreateNotes */
   const fetchNotes = () => {
     const myHeaders = new Headers();
@@ -50,6 +53,22 @@ export default function HomeScreen(props) {
     fetch('http://localhost:3100/Notas', requestOptions)
       .then(response => response.json())
       .then(result => setNotes(result))
+      .catch(error => console.error(error));
+  };
+
+  const fetchMedice = () => {
+    const myHeaders = new Headers();
+    myHeaders.append('Content-Type', 'application/json');
+
+    const requestOptions = {
+      method: 'GET',
+      headers: myHeaders,
+      redirect: 'follow',
+    };
+
+    fetch('http://localhost:3100/Medicamentos', requestOptions)
+      .then(response => response.json())
+      .then(result => setMedice(result))
       .catch(error => console.error(error));
   };
 
@@ -134,7 +153,6 @@ export default function HomeScreen(props) {
             ))}
           </Swiper>
         </View>
-        
 
         <FlatList
           data={notes}
@@ -143,8 +161,24 @@ export default function HomeScreen(props) {
           }
           renderItem={({item}) => (
             <View style={styles.noteCard}>
-              <Text style={styles.noteTitle}>{item.titulo}</Text>
+              <Text style={styles.diseño}>Notas</Text>
+              <Text style={styles.diseño}>{item.titulo}</Text>
               <Text style={styles.noteContent}>{item.notas}</Text>
+            </View>
+          )}
+        />
+        <FlatList
+          data={medice}
+          keyExtractor={item =>
+            item.id ? item.id.toString() : Math.random().toString()
+          }
+          renderItem={({item}) => (
+            <View style={styles.noteCard}>
+              <Text style={styles.diseño}>Medicamentos</Text>
+              <Text style={styles.diseño}>{item.nombreMedicamento}</Text>
+              <Text style={styles.noteContent}>{item.gramos}</Text>
+              <Text style={styles.noteContent}>{item.tiempo}</Text>
+              <Text style={styles.noteContent}>{item.dias}</Text>
             </View>
           )}
         />
@@ -203,6 +237,13 @@ export default function HomeScreen(props) {
 }
 
 const styles = StyleSheet.create({
+  diseño: {
+    color: '#333',
+    fontSize: 18,
+  },
+  noteCard: {
+    color: '#333',
+  },
   imagemed: {
     width: 55,
     height: 52,
@@ -394,6 +435,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.1,
     shadowRadius: 8,
     elevation: 2,
+    color: '#333',
   },
   noteTitle: {
     fontSize: 18,

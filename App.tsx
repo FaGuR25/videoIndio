@@ -18,8 +18,36 @@ import MiniBlog from './screens/Miniblog';
 import BlogDetailScreen from './screens/BlogDetailScreen';
 import CreateCitas from './screens/CreateCitas';
 
+import PushNotification from 'react-native-push-notification';
+
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
+
+PushNotification.configure({
+  onNotification: function (notification) {
+    console.log('NOTIFICATION:', notification);
+    // Handle notification click
+  },
+  popInitialNotification: true, // This ensures the initial notification is handled
+  requestPermissions: false,
+});
+
+PushNotification.createChannel(
+  {
+    channelId: 'fatima1', // (required)
+    channelName: 'Default Channel', // (required)
+    channelDescription: 'A default channel', // (optional)
+    soundName: 'default', // (optional)
+    importance: 1, // (optional) default: 4. Int value of the Android notification importance
+    vibrate: true, // (optional) default: true. Creates the default vibration pattern if true.
+    playSound: false,
+  },
+  created => console.log(`createChannel returned ${created}`), // (optional) callback returns whether the channel was created, false means it already existed.
+);
+
+PushNotification.getChannels(function (channel_ids) {
+  console.log(channel_ids); // ['channel_id_1']
+});
 
 // // Pantallas ocultas en el bottom tab navigator
 // function HiddenStackNavigator() {
@@ -84,7 +112,7 @@ function TabNavigator() {
             fontWeight: 'bold',
           },
           tabBarIcon: props => (
-            <Icon type="feather" name="search" color={props.color} />
+            <Icon type="entypo" name="calendar" color={props.color} />
           ),
         }}
       />
@@ -102,7 +130,7 @@ function TabNavigator() {
             fontWeight: 'bold',
           },
           tabBarIcon: props => (
-            <Icon type="feather" name="plus-square" color={props.color} />
+            <Icon type="foundation" name="clipboard-notes" color={props.color} />
           ),
         }}
       />
@@ -120,7 +148,7 @@ function TabNavigator() {
             fontWeight: 'bold',
           },
           tabBarIcon: props => (
-            <Icon type="feather" name="settings" color={props.color} />
+            <Icon type="MaterialCommunityIcons" name="account-circle" color={props.color} />
           ),
         }}
       />
