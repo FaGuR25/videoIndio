@@ -102,7 +102,7 @@ function TabNavigator() {
         name="Calendario"
         component={FindScreen}
         options={{
-          headerShown: true,
+          headerShown: false,
           headerTitle: 'Calendario',
           headerStyle: {
             backgroundColor: '#8fcbbc',

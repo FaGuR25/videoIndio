@@ -1,55 +1,42 @@
-import React, { useState, useEffect } from 'react';
-import { View, StyleSheet, Text, FlatList } from 'react-native';
-import { Calendar } from 'react-native-calendars';
+import React, {useState, useEffect} from 'react';
+import {View, StyleSheet, Text, FlatList, ScrollView} from 'react-native';
+import {Calendar} from 'react-native-calendars';
 
-const FindScreen = ({ navigation }) => {
-  const [citas, setCitas] = useState([]);
+const FindScreen = ({navigation}) => {
+  const [selectedDate, setSelectedDate] = useState('');
+  const [cites, setCites] = useState([]);
+
+  const handleDatePress = day => {
+    setSelectedDate(day.dateString);
+  };
 
   useEffect(() => {
-    fetchCitas();
-  }, []);
+    if (selectedDate !== '') {
+      // Actualizar citas cuando se selecciona una nueva fecha
+      fetchCitesForDate(selectedDate);
+    }
+  }, [selectedDate]);
 
-  const fetchCitas = () => {
-    fetch(`http://localhost:3100/Citas`, {
+  const fetchCitesForDate = (date) => {
+    fetch(`http://localhost:3100/Citas?fecha=${date}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
       },
     })
-      .then(response => response.json())
-      .then(data => {
-        console.log('Fetched Citas:', data);  // Log para verificar los datos recibidos
-        if (Array.isArray(data)) {
-          setCitas(data);
-        } else {
-          console.error('Error: Response is not an array');
-          setCitas([]);
-        }
-      })
-      .catch(error => console.error('Error fetching citas:', error));
-  };
-
-  const renderItem = ({ item }) => {
-    const { fecha, tiempo, documentos } = item;
-
-    if (!fecha || !tiempo || !documentos) {
-      return null;
-    }
-
-    return (
-      <View style={styles.citaItem}>
-        <Text style={styles.citaText}>Fecha: {fecha}</Text>
-        <Text style={styles.citaText}>Hora: {tiempo}</Text>
-        <Text style={styles.citaText}>Notas: {documentos}</Text>
-      </View>
-    );
+    .then(response => response.json())
+    .then(data => setCites(data))
+    .catch(error => console.error('Error fetching citas:', error));
   };
 
   return (
     <View style={styles.container}>
       <Text style={styles.headerText}>CALENDARIO</Text>
       <Calendar
-        markedDates={{}}
+        onDayPress={handleDatePress}
+        markedDates={{
+          [selectedDate]: {selected: true, selectedColor: '#8fcbbc'},
+        }}
         style={styles.calendar}
         theme={{
           calendarBackground: '#ffffff',
@@ -68,7 +55,7 @@ const FindScreen = ({ navigation }) => {
           textMonthFontSize: 20,
           textDayHeaderFontSize: 16,
         }}
-        renderHeader={(date) => {
+        renderHeader={date => {
           const header = date.toString('MMMM yyyy');
           const [month, year] = header.split(' ');
           return (
@@ -79,18 +66,29 @@ const FindScreen = ({ navigation }) => {
           );
         }}
       />
-      
-      <View style={styles.selectedDateContainer}>
-        {citas.length > 0 ? (
-          <FlatList
-            data={citas}
-            keyExtractor={(item) => item.id?.toString() || Math.random().toString()}
-            renderItem={renderItem}
-          />
-        ) : (
-          <Text style={styles.noCitasText}>No hay citas disponibles.</Text>
+
+      <ScrollView>
+        {selectedDate !== '' && (
+          <View style={styles.selectedDateContainer}>
+            <Text style={styles.selectedDateText}>Fecha seleccionada:</Text>
+            <Text style={styles.selectedDate}>{selectedDate}</Text>
+          </View>
         )}
-      </View>
+        <FlatList
+          data={cites}
+          keyExtractor={item =>
+            item.id ? item.id.toString() : Math.random().toString()
+          }
+          renderItem={({item}) => (
+            <View style={styles.noteCard}>
+              <Text style={styles.diseño}>Cita</Text>
+              <Text style={styles.diseño}>{item.fecha}</Text>
+              <Text style={styles.noteContent}>{item.tiempo}</Text>
+              <Text style={styles.noteContent}>{item.documentos}</Text>
+            </View>
+          )}
+        />
+      </ScrollView>
     </View>
   );
 };
@@ -129,23 +127,39 @@ const styles = StyleSheet.create({
     fontSize: 20,
   },
   selectedDateContainer: {
-    flex: 1,
     alignItems: 'center',
     marginBottom: 20,
-    width: '100%', // Asegura que la lista use todo el ancho disponible
   },
-  citaItem: {
-    padding: 10,
-    backgroundColor: '#f0f0f0',
-    marginVertical: 5,
-    borderRadius: 5,
-    width: '90%', // Ajusta el ancho de los elementos de la lista
-  },
-  citaText: {
+  selectedDateText: {
     fontSize: 16,
+    fontWeight: 'bold',
+    marginBottom: 5,
   },
-  noCitasText: {
-    marginTop: 10,
-    fontStyle: 'italic',
+  selectedDate: {
+    fontSize: 16,
+    color: '#8fcbbc',
+  },
+  noteCard: {
+    backgroundColor: '#f9f9f9',
+    padding: 15,
+    marginVertical: 5,
+    marginHorizontal: 20,
+    borderRadius: 10,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+  diseño: {
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+  noteContent: {
+    fontSize: 14,
+    color: '#555',
   },
 });

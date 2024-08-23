@@ -5,7 +5,6 @@ import {
   View,
   TextInput,
   Alert,
-  Modal,
   Pressable,
   TouchableOpacity,
   Switch,
@@ -25,32 +24,46 @@ export default function CreateCitas() {
     setShowDatePicker(false);
     setDate(currentDate);
   };
+
   const onChangeTime = (event, selectedTime) => {
     const currentTime = selectedTime || date;
     setShowTimePicker(false);
     setDate(currentTime);
   };
 
-  const myHeaders = new Headers();
-  myHeaders.append('Content-Type', 'application/json');
+  const handleSave = () => {
+    const fecha = date.toISOString().split('T')[0]; // Formato YYYY-MM-DD
+    const tiempo = date.toTimeString().split(' ')[0]; // Formato HH:MM:SS
+    const documentos = items.join(', ');
 
-  const raw = JSON.stringify({
-    fecha: '2020-12-01',
-    tiempo: '03:00:00',
-    documentos: 'acta',
-  });
+    const myHeaders = new Headers();
+    myHeaders.append('Content-Type', 'application/json');
 
-  const requestOptions = {
-    method: 'POST',
-    headers: myHeaders,
-    body: raw,
-    redirect: 'follow',
+    const raw = JSON.stringify({
+      fecha,
+      tiempo,
+      documentos,
+    });
+
+    const requestOptions = {
+      method: 'POST',
+      headers: myHeaders,
+      body: raw,
+      redirect: 'follow',
+    };
+
+    fetch('http://localhost:3100/Citas', requestOptions)
+      .then(response => response.json())
+      .then(result => {
+        Alert.alert('Éxito', 'Cita guardada exitosamente.');
+        setModalVisible(false); // Cierra el modal al guardar la cita
+      })
+      .catch(error => {
+        console.error(error);
+        Alert.alert('Error', 'No se pudo guardar la cita.');
+      });
   };
 
-  fetch('http://localhost:3100/Citas', requestOptions)
-    .then(response => response.text())
-    .then(result => console.log(result))
-    .catch(error => console.error(error));
   return (
     <View style={styles.contenedorPadre}>
       <View style={styles.tarjeta}>
@@ -101,9 +114,7 @@ export default function CreateCitas() {
           onChangeText={text => setItems(text.split('\n'))}
         />
         <View style={styles.buttonsContainer}>
-          <TouchableOpacity
-            style={styles.saveButton}
-            onPress={() => Alert.alert('Cita guardada')}>
+          <TouchableOpacity style={styles.saveButton} onPress={handleSave}>
             <Text style={styles.saveButtonText}>GUARDAR</Text>
           </TouchableOpacity>
         </View>
