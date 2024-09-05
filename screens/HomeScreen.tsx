@@ -16,6 +16,7 @@ import ImageButton from './ImageButton';
 import moment from 'moment';
 import Swiper from 'react-native-swiper';
 import {FAB} from 'react-native-paper';
+import {ScrollView} from 'react-native-gesture-handler';
 
 const {width} = Dimensions.get('window');
 
@@ -151,37 +152,42 @@ export default function HomeScreen(props) {
             ))}
           </Swiper>
         </View>
+        <ScrollView style={styles.Scrollcito}>
+          <FlatList
+            data={notes}
+            keyExtractor={item =>
+              item.id ? item.id.toString() : Math.random().toString()
+            }
+            renderItem={({item}) => (
+              <View style={styles.noteCard}>
+                <Text style={styles.diseño}>Notas</Text>
+                <Text style={styles.diseño}>{item.titulo}</Text>
+                <Text style={styles.noteContent}>{item.notas}</Text>
+              </View>
+            )}
+          />
+          <FlatList
+            data={medice}
+            keyExtractor={item =>
+              item.id ? item.id.toString() : Math.random().toString()
+            }
+            renderItem={({item}) => (
+              <View style={styles.noteCard}>
+                <Text style={styles.diseño}>Medicamentos</Text>
+                <Text style={styles.diseño}>{item.nombreMedicamento}</Text>
+                <Text style={styles.noteContent}>{item.gramos}</Text>
+                <Text style={styles.noteContent}>{item.tiempo}</Text>
+                <Text style={styles.noteContent}>{item.dias}</Text>
+              </View>
+            )}
+          />
+        </ScrollView>
 
-        <FlatList
-          data={notes}
-          keyExtractor={item =>
-            item.id ? item.id.toString() : Math.random().toString()
-          }
-          renderItem={({item}) => (
-            <View style={styles.noteCard}>
-              <Text style={styles.diseño}>Notas</Text>
-              <Text style={styles.diseño}>{item.titulo}</Text>
-              <Text style={styles.noteContent}>{item.notas}</Text>
-            </View>
-          )}
+        <FAB
+          icon="plus"
+          style={styles.fab}
+          onPress={() => setModalVisible(true)}
         />
-        <FlatList
-          data={medice}
-          keyExtractor={item =>
-            item.id ? item.id.toString() : Math.random().toString()
-          }
-          renderItem={({item}) => (
-            <View style={styles.noteCard}>
-              <Text style={styles.diseño}>Medicamentos</Text>
-              <Text style={styles.diseño}>{item.nombreMedicamento}</Text>
-              <Text style={styles.noteContent}>{item.gramos}</Text>
-              <Text style={styles.noteContent}>{item.tiempo}</Text>
-              <Text style={styles.noteContent}>{item.dias}</Text>
-            </View>
-          )}
-        />
-
-        <FAB icon="plus" style={styles.fab} onPress={() => setModalVisible(true)} />
       </View>
       {/* modal */}
       <Modal
@@ -235,7 +241,9 @@ export default function HomeScreen(props) {
 }
 
 const styles = StyleSheet.create({
-
+  Scrollcito: {
+    marginTop: 80,
+  },
   diseño: {
     color: '#333',
     fontSize: 18,
@@ -271,6 +279,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     marginTop: 5,
+    position: 'absolute',
   },
   subtitle: {
     fontSize: 17,
