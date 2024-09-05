@@ -76,11 +76,11 @@ function Login({navigation}: LoginProps): React.JSX.Element {
   const [contrasena, setContrasena] = useState('');
 
   const btnIngresarOnPress = function () {
-    if (usuario && contrasena) {
-      navigation.navigate('Tabs');
-      return;
-    }
-    Alert.alert('Fallido', 'Datos incorrectos...');
+    //if (usuario && contrasena) {
+    navigation.navigate('Tabs');
+    return;
+    //}
+    //Alert.alert('Fallido', 'Datos incorrectos...');
   };
 
   return (
@@ -91,7 +91,7 @@ function Login({navigation}: LoginProps): React.JSX.Element {
           style={styles.logo}
           resizeMode="contain"
         />
-        <Text style={styles.title}>Iniciar Sesión</Text>
+        {/* <Text style={styles.title}>Iniciar Sesión</Text>
         <TextInput
           style={styles.TextInput}
           placeholder="Usuario"
@@ -104,14 +104,14 @@ function Login({navigation}: LoginProps): React.JSX.Element {
           placeholderTextColor="#004d40"
           secureTextEntry={true}
           onChangeText={p => setContrasena(p)}
-        />
+        /> */}
         <View style={styles.buttonContainer}>
           <Text style={styles.buttonText} onPress={btnIngresarOnPress}>
             Ingresar
           </Text>
         </View>
       </View>
-      <TouchableOpacity
+      {/* <TouchableOpacity
         onPress={() => {
           PushNotification.localNotificationSchedule({
             channelId: 'fatima1', // (required for Android)
@@ -122,7 +122,7 @@ function Login({navigation}: LoginProps): React.JSX.Element {
           });
         }}>
         <Text>boton</Text>
-      </TouchableOpacity>
+      </TouchableOpacity> */}
     </SafeAreaView>
   );
 }
