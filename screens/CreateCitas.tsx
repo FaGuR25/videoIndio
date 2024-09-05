@@ -10,6 +10,7 @@ import {
   Switch,
 } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
+import PushNotification from 'react-native-push-notification';
 
 export default function CreateCitas() {
   const [modalVisible, setModalVisible] = useState(false);
@@ -18,6 +19,7 @@ export default function CreateCitas() {
   const [showTimePicker, setShowTimePicker] = useState(false);
   const [reminder, setReminder] = useState(false);
   const [items, setItems] = useState(['cartilla', 'acta']);
+  const [dias, setTime] = useState([]);
 
   const onChangeDate = (event, selectedDate) => {
     const currentDate = selectedDate || date;
@@ -56,13 +58,22 @@ export default function CreateCitas() {
       .then(response => response.json())
       .then(result => {
         Alert.alert('Éxito', 'Cita guardada exitosamente.');
-        setModalVisible(false); // Cierra el modal al guardar la cita
+        setModalVisible(false);
       })
       .catch(error => {
         console.error(error);
         Alert.alert('Error', 'No se pudo guardar la cita.');
       });
-  };
+
+  //   PushNotification.localNotificationSchedule({
+  //     channelId: 'fatima1', // (required for Android)
+  //     title: `Recordatorio: Tienes una cita`, // (optional)
+  //     message: `Es hora de tomar ${documentos}`, // (required)
+  //     date: notificationDate,
+  //     repeatType: 'week', // Repite cada semana en el mismo día
+  //     allowWhileIdle: true,
+  //   });
+   };
 
   return (
     <View style={styles.contenedorPadre}>
@@ -125,14 +136,17 @@ export default function CreateCitas() {
 
 const styles = StyleSheet.create({
   textLLevar: {
+    color: 'black',
     marginTop: 100,
   },
   contenedorPadre: {
+    color: 'black',
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
   },
   tarjeta: {
+    color: 'black',
     margin: 20,
     backgroundColor: '#d4fed3',
     borderRadius: 20,
@@ -149,13 +163,19 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
   closeButton: {
+    color: 'black',
+
     alignSelf: 'flex-end',
   },
   closeButtonText: {
+    color: 'black',
+
     fontSize: 20,
     fontWeight: 'bold',
   },
   datePicker: {
+    color: 'black',
+
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
@@ -164,18 +184,24 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   timePicker: {
+    color: 'black',
+
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
     marginVertical: 10,
   },
   reminderSwitch: {
+    color: 'black',
+
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
     marginVertical: 10,
   },
   textoInput: {
+    color: 'black',
+
     borderColor: '#d4fed3',
     borderRadius: 8,
     borderWidth: 1,

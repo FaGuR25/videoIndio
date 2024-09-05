@@ -9,13 +9,14 @@ import {
   StyleSheet,
   StatusBar,
 } from 'react-native';
+import {Button} from 'react-native-elements';
 
-const SettingsScreen = () => {
+const SettingsScreen = ({navigation}) => {
   return (
     <SafeAreaView style={styles.screen}>
       <View>
         <TouchableOpacity>
-          <AntDesign style={{fontSize: 40}} name='arrowleft' />
+          <AntDesign style={{fontSize: 40}} name="arrowleft" />
         </TouchableOpacity>
 
         <Text>Mi perfil</Text>
@@ -29,9 +30,9 @@ const SettingsScreen = () => {
         <Text style={styles.userName}>Alex Morelos Patin</Text>
         <Text> akljfkjlaa@gmail.com</Text>
       </View>
-      <TouchableOpacity style={styles.btn}>
+      <Button onPress={() => navigation.goBack()} style={styles.btn}>
         <Text style={styles.textBtn}>Cerrar Sesion</Text>
-      </TouchableOpacity>
+      </Button>
     </SafeAreaView>
   );
 };

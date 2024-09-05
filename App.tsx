@@ -13,7 +13,6 @@ import AddMedice from './screens/AddMedice';
 import CreateNotes from './screens/CreateNotes';
 import PostScreen from './screens/PostScreen';
 import SettingsScreen from './screens/SettingsScreen';
-import Edits from './screens/Edits';
 import MiniBlog from './screens/Miniblog';
 import BlogDetailScreen from './screens/BlogDetailScreen';
 import CreateCitas from './screens/CreateCitas';
@@ -130,7 +129,11 @@ function TabNavigator() {
             fontWeight: 'bold',
           },
           tabBarIcon: props => (
-            <Icon type="foundation" name="clipboard-notes" color={props.color} />
+            <Icon
+              type="foundation"
+              name="clipboard-notes"
+              color={props.color}
+            />
           ),
         }}
       />
@@ -148,7 +151,11 @@ function TabNavigator() {
             fontWeight: 'bold',
           },
           tabBarIcon: props => (
-            <Icon type="MaterialCommunityIcons" name="account-circle" color={props.color} />
+            <Icon
+              type="MaterialCommunityIcons"
+              name="account-circle"
+              color={props.color}
+            />
           ),
         }}
       />

@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useRef, useCallback} from 'react';
+import React, {useState, useRef, useCallback} from 'react';
 import {
   StyleSheet,
   Dimensions,
@@ -6,8 +6,6 @@ import {
   SafeAreaView,
   View,
   Text,
-  TouchableOpacity,
-  Image,
   Modal,
   Pressable,
   Alert,
@@ -183,7 +181,7 @@ export default function HomeScreen(props) {
           )}
         />
 
-        <FAB style={styles.fab} onPress={() => setModalVisible(true)} />
+        <FAB icon="plus" style={styles.fab} onPress={() => setModalVisible(true)} />
       </View>
       {/* modal */}
       <Modal
@@ -237,6 +235,7 @@ export default function HomeScreen(props) {
 }
 
 const styles = StyleSheet.create({
+
   diseño: {
     color: '#333',
     fontSize: 18,
@@ -389,6 +388,7 @@ const styles = StyleSheet.create({
   fab: {
     backgroundColor: '#01780d',
     position: 'absolute',
+    color: '#fdfefc',
     margin: 16,
     right: 0,
     bottom: 0,

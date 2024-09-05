@@ -69,7 +69,10 @@ export default function AddMedice({navigation}) {
           });
         });
 
-        Alert.alert('Éxito', 'Medicamento guardado y notificación programada exitosamente.');
+        Alert.alert(
+          'Éxito',
+          'Medicamento guardado y notificación programada exitosamente.',
+        );
         navigation.navigate('HomeScreen'); // Navega a la pantalla de inicio
       })
       .catch(error => console.error(error));
