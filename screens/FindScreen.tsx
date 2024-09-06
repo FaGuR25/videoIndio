@@ -17,16 +17,16 @@ const FindScreen = ({navigation}) => {
     }
   }, [selectedDate]);
 
-  const fetchCitesForDate = (date) => {
+  const fetchCitesForDate = date => {
     fetch(`http://localhost:3100/Citas?fecha=${date}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
       },
     })
-    .then(response => response.json())
-    .then(data => setCites(data))
-    .catch(error => console.error('Error fetching citas:', error));
+      .then(response => response.json())
+      .then(data => setCites(data))
+      .catch(error => console.error('Error fetching citas:', error));
   };
 
   return (
