@@ -7,19 +7,15 @@ import {
   Alert,
   Pressable,
   TouchableOpacity,
-  Switch,
 } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import PushNotification from 'react-native-push-notification';
 
-export default function CreateCitas() {
-  const [modalVisible, setModalVisible] = useState(false);
+export default function CreateCitas({navigation}) {
   const [date, setDate] = useState(new Date());
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [showTimePicker, setShowTimePicker] = useState(false);
-  const [reminder, setReminder] = useState(false);
-  const [items, setItems] = useState(['cartilla', 'acta']);
-  const [dias, setTime] = useState([]);
+  const [items, setItems] = useState(['']);
 
   const onChangeDate = (event, selectedDate) => {
     const currentDate = selectedDate || date;
@@ -58,33 +54,38 @@ export default function CreateCitas() {
       .then(response => response.json())
       .then(result => {
         Alert.alert('Éxito', 'Cita guardada exitosamente.');
-        setModalVisible(false);
+        scheduleNotification(fecha, tiempo, documentos); // notificación
+        navigation.navigate('HomeScreen');
       })
       .catch(error => {
         console.error(error);
         Alert.alert('Error', 'No se pudo guardar la cita.');
       });
+  };
 
-  //   PushNotification.localNotificationSchedule({
-  //     channelId: 'fatima1', // (required for Android)
-  //     title: `Recordatorio: Tienes una cita`, // (optional)
-  //     message: `Es hora de tomar ${documentos}`, // (required)
-  //     date: notificationDate,
-  //     repeatType: 'week', // Repite cada semana en el mismo día
-  //     allowWhileIdle: true,
-  //   });
-   };
+  const scheduleNotification = (fecha, tiempo, documentos) => {
+    const notificationDate = new Date(date);
+
+    PushNotification.localNotificationSchedule({
+      channelId: 'fatima1', // (required for Android)
+      title: `Recordatorio: Tienes una cita`, // (optional)
+      message: `No olvides llevar: ${documentos}`, // (required)
+      date: notificationDate, // Fecha y hora de la notificación
+      allowWhileIdle: true, // Permite notificaciones cuando el dispositivo está inactivo
+    });
+  };
 
   return (
     <View style={styles.contenedorPadre}>
       <View style={styles.tarjeta}>
         <Pressable
           style={styles.closeButton}
-          onPress={() => setModalVisible(false)}>
+          onPress={() => navigation.goBack()}>
           <Text style={styles.closeButtonText}>X</Text>
         </Pressable>
+
         <View style={styles.datePicker}>
-          <Text>Fecha</Text>
+          <Text>Fecha de la cita</Text>
           <Pressable onPress={() => setShowDatePicker(true)}>
             <Text>{date.toDateString()}</Text>
           </Pressable>
@@ -97,8 +98,9 @@ export default function CreateCitas() {
             />
           )}
         </View>
+
         <View style={styles.timePicker}>
-          <Text>Horario</Text>
+          <Text>Hora del recordatorio</Text>
           <Pressable onPress={() => setShowTimePicker(true)}>
             <Text>{date.toLocaleTimeString()}</Text>
           </Pressable>
@@ -111,11 +113,8 @@ export default function CreateCitas() {
             />
           )}
         </View>
-        <View style={styles.reminderSwitch}>
-          <Text>Recordatorio</Text>
-          <Switch onValueChange={setReminder} value={reminder} />
-        </View>
-        <Text style={styles.textLLevar}>LLevar</Text>
+
+        <Text style={styles.textLlevar}>¿Qué llevar?</Text>
         <TextInput
           placeholder="Agregar elementos"
           multiline={true}
@@ -124,6 +123,7 @@ export default function CreateCitas() {
           value={items.join('\n')}
           onChangeText={text => setItems(text.split('\n'))}
         />
+
         <View style={styles.buttonsContainer}>
           <TouchableOpacity style={styles.saveButton} onPress={handleSave}>
             <Text style={styles.saveButtonText}>GUARDAR</Text>
@@ -135,18 +135,12 @@ export default function CreateCitas() {
 }
 
 const styles = StyleSheet.create({
-  textLLevar: {
-    color: 'black',
-    marginTop: 100,
-  },
   contenedorPadre: {
-    color: 'black',
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
   },
   tarjeta: {
-    color: 'black',
     margin: 20,
     backgroundColor: '#d4fed3',
     borderRadius: 20,
@@ -154,60 +148,42 @@ const styles = StyleSheet.create({
     height: '90%',
     padding: 20,
     shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
+    shadowOffset: {width: 0, height: 2},
     shadowOpacity: 0.25,
     shadowRadius: 4,
     elevation: 5,
   },
   closeButton: {
-    color: 'black',
-
     alignSelf: 'flex-end',
   },
   closeButtonText: {
-    color: 'black',
-
     fontSize: 20,
     fontWeight: 'bold',
   },
   datePicker: {
-    color: 'black',
-
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
     marginVertical: 10,
-    marginTop: 40,
-    fontWeight: 'bold',
   },
   timePicker: {
-    color: 'black',
-
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginVertical: 10,
-  },
-  reminderSwitch: {
-    color: 'black',
-
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
     marginVertical: 10,
   },
   textoInput: {
-    color: 'black',
-
-    borderColor: '#d4fed3',
+    borderColor: '#cccccc',
     borderRadius: 8,
     borderWidth: 1,
     padding: 10,
     marginTop: 20,
     marginBottom: 20,
+  },
+  textLlevar: {
+    color: 'black',
+    marginTop: 20,
+    marginLeft: 140,
   },
   buttonsContainer: {
     flexDirection: 'row',
