@@ -1,13 +1,7 @@
-import React, { useState } from 'react';
-import {
-  StyleSheet,
-  View,
-  TextInput,
-  Button,
-  Alert,
-} from 'react-native';
+import React, {useState} from 'react';
+import {StyleSheet, View, TextInput, Button, Alert} from 'react-native';
 
-export default function CreateNotes({ navigation }) {
+export default function CreateNotes({navigation}) {
   const [titulo, setTitulo] = useState('');
   const [notas, setNotas] = useState('');
 
@@ -20,7 +14,10 @@ export default function CreateNotes({ navigation }) {
     const myHeaders = new Headers();
     myHeaders.append('Content-Type', 'application/json');
 
-    const raw = JSON.stringify({ titulo, notas });
+    const raw = JSON.stringify({
+      titulo,
+      notas,
+    });
 
     const requestOptions = {
       method: 'POST',
@@ -30,12 +27,12 @@ export default function CreateNotes({ navigation }) {
     };
 
     fetch('http://localhost:3100/Notas', requestOptions)
-      .then((response) => response.json())
-      .then((result) => {
+      .then(response => response.json())
+      .then(result => {
         Alert.alert('Nota guardada', 'Tu nota ha sido guardada exitosamente.');
         navigation.navigate(''); // Navega de vuelta a la pantalla de inicio
       })
-      .catch((error) => console.error(error));
+      .catch(error => console.error(error));
   };
 
   return (

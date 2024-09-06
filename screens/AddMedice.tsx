@@ -34,11 +34,17 @@ export default function AddMedice({navigation}) {
     const myHeaders = new Headers();
     myHeaders.append('Content-Type', 'application/json');
 
+    // const raw = JSON.stringify({
+    //   nombreMedicamento,
+    //   gramos,
+    //   tiempo: date.toTimeString().split(' ')[0],
+    //   dias,
+    // });
+
     const raw = JSON.stringify({
       nombreMedicamento,
       gramos,
       tiempo: date.toTimeString().split(' ')[0],
-      dias,
     });
 
     const requestOptions = {
