@@ -72,9 +72,12 @@ export default function AddMedice({navigation}) {
             date: notificationDate,
             repeatType: 'week', // Repite cada semana en el mismo día
             allowWhileIdle: true,
+            playSound: true, // Habilita el sonido
+            soundName: 'default', // Usa el sonido predeterminado
+            vibrate: true, // Habilita la vibración
+            vibration: 1000, // Duración de la vibración en milisegundos (opcional)
           });
         });
-
         Alert.alert(
           'Éxito',
           'Medicamento guardado y notificación programada exitosamente.',

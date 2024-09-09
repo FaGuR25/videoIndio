@@ -39,7 +39,7 @@ PushNotification.createChannel(
     soundName: 'default', // (optional)
     importance: 1, // (optional) default: 4. Int value of the Android notification importance
     vibrate: true, // (optional) default: true. Creates the default vibration pattern if true.
-    playSound: false,
+    playSound: true,
   },
   created => console.log(`createChannel returned ${created}`), // (optional) callback returns whether the channel was created, false means it already existed.
 );
@@ -48,42 +48,17 @@ PushNotification.getChannels(function (channel_ids) {
   console.log(channel_ids); // ['channel_id_1']
 });
 
-// // Pantallas ocultas en el bottom tab navigator
-// function HiddenStackNavigator() {
-//   return (
-//     <NavigationContainer>
-
-//     <Stack.Navigator>
-//       <Stack.Screen
-//         name="DetailsNotes"
-//         component={DetailsNotes}
-//         options={{headerShown: false}}
-//       />
-//       <Stack.Screen
-//         name="CreateNotes"
-//         component={CreateNotes}
-//         options={{headerShown: false}}
-//       />
-//       <Stack.Screen
-//         name="Edits"
-//         component={Edits}
-//         options={{headerShown: false}}
-//       />
-//     </Stack.Navigator>
-//     </NavigationContainer>
-//   );
-// }
 
 // Navigator para las pantallas principales en el bottom tab navigator
 function TabNavigator() {
   return (
     <Tab.Navigator initialRouteName="Inicio">
       <Tab.Screen
-        name="Inicio"
+        name="HomeScreen"
         component={HomeScreen}
         options={{
           headerShown: true,
-          headerTitle: 'Inicio',
+          headerTitle: 'HomeScreen',
           headerStyle: {
             backgroundColor: '#8fcbbc',
           },
