@@ -1,4 +1,4 @@
-import React, {useState, useRef, useCallback, useEffect} from 'react';
+import React, {useState, useRef, useCallback} from 'react';
 import {
   StyleSheet,
   Dimensions,
@@ -22,13 +22,19 @@ const {width} = Dimensions.get('window');
 
 interface Note {
   id_notas: number;
+  titulo: String;
+  notas: String;
 }
 
 interface Medicamentos {
   id_medicamento: number;
+  nombreMedicamento: String;
+  gramos: number;
+  tiempo: number;
+  dias: number;
 }
 
-export default function HomeScreen(props) {
+export default function HomeScreen({navigation}: {navigation: any}) {
   const [modalVisible, setModalVisible] = useState(false);
   // const [date, setDate] = useState(new Date());
   // const [showPicker, setShowPicker] = useState(false);
@@ -241,7 +247,7 @@ export default function HomeScreen(props) {
               <View style={styles.noteCard}>
                 <Text style={styles.diseño}>Medicamentos</Text>
                 <Text style={styles.diseño}>{item.nombreMedicamento}</Text>
-                <Text style={styles.noteContent}>{item.gramos}</Text>
+                <Text style={styles.noteContent}>{item.gramos} </Text>
                 <Text style={styles.noteContent}>{item.tiempo}</Text>
                 <Text style={styles.noteContent}>{item.dias}</Text>
                 <Pressable
@@ -279,7 +285,7 @@ export default function HomeScreen(props) {
             <ImageButton
               onPress={() => {
                 setModalVisible(false);
-                props.navigation.navigate('CreateNotes');
+                navigation.navigate('CreateNotes');
               }}
               imageStyle={styles.image}
               source={require('../assets/icons/notas.png')}
@@ -288,7 +294,7 @@ export default function HomeScreen(props) {
             <ImageButton
               onPress={() => {
                 setModalVisible(false);
-                props.navigation.navigate('AddMedice');
+                navigation.navigate('AddMedice');
               }}
               imageStyle={styles.imagemed}
               source={require('../assets/icons/medi.png')}
@@ -297,7 +303,7 @@ export default function HomeScreen(props) {
             <ImageButton
               onPress={() => {
                 setModalVisible(false);
-                props.navigation.navigate('CreateCitas');
+                navigation.navigate('CreateCitas');
               }}
               imageStyle={styles.imagecite}
               source={require('../assets/icons/citas.png')}
@@ -318,9 +324,6 @@ const styles = StyleSheet.create({
   diseño: {
     color: '#333',
     fontSize: 18,
-  },
-  noteCard: {
-    color: '#333',
   },
   imagemed: {
     width: 55,
@@ -506,6 +509,7 @@ const styles = StyleSheet.create({
     color: '#000',
   },
   noteCard: {
+    color: '#333',
     padding: 15,
     borderRadius: 8,
     backgroundColor: '#fff',
@@ -515,7 +519,6 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.1,
     shadowRadius: 8,
     elevation: 2,
-    color: '#333',
   },
   noteTitle: {
     fontSize: 18,
