@@ -12,14 +12,14 @@ import {
 import DateTimePicker from '@react-native-community/datetimepicker';
 import PushNotification from 'react-native-push-notification';
 
-export default function AddMedice({navigation}) {
+export default function AddMedice({navigation}: {navigation: any}) {
   const [date, setDate] = useState(new Date());
   const [showPicker, setShowPicker] = useState(false);
   const [nombreMedicamento, setNombreMedicamento] = useState('');
   const [gramos, setGramos] = useState('');
   const [dias, setDias] = useState([]);
 
-  const onChange = (event, selectedDate) => {
+  const onChange = ({selectedDate}: {selectedDate: any}) => {
     const currentDate = selectedDate || date;
     setShowPicker(Platform.OS === 'ios');
     setDate(currentDate);
