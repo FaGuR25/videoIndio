@@ -30,7 +30,7 @@ export default function CreateNotes({navigation}) {
       .then(response => response.json())
       .then(result => {
         Alert.alert('Nota guardada', 'Tu nota ha sido guardada exitosamente.');
-        navigation.navigate(''); // Navega de vuelta a la pantalla de inicio
+        navigation.navigate('HomeScreen'); // Navega de vuelta a la pantalla de inicio
       })
       .catch(error => console.error(error));
   };

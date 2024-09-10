@@ -48,7 +48,6 @@ PushNotification.getChannels(function (channel_ids) {
   console.log(channel_ids); // ['channel_id_1']
 });
 
-
 // Navigator para las pantallas principales en el bottom tab navigator
 function TabNavigator() {
   return (
@@ -58,7 +57,7 @@ function TabNavigator() {
         component={HomeScreen}
         options={{
           headerShown: true,
-          headerTitle: 'HomeScreen',
+          headerTitle: 'Home',
           headerStyle: {
             backgroundColor: '#8fcbbc',
           },

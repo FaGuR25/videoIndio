@@ -1,4 +1,4 @@
-import React, {useState, useRef, useCallback} from 'react';
+import React, {useState, useRef, useCallback, useEffect} from 'react';
 import {
   StyleSheet,
   Dimensions,
@@ -20,12 +20,20 @@ import {ScrollView} from 'react-native-gesture-handler';
 
 const {width} = Dimensions.get('window');
 
+interface Note {
+  id_notas: number;
+}
+
+interface Medicamentos {
+  id_medicamento: number;
+}
+
 export default function HomeScreen(props) {
   const [modalVisible, setModalVisible] = useState(false);
-  const [date, setDate] = useState(new Date());
-  const [showPicker, setShowPicker] = useState(false);
-  const [notes, setNotes] = useState([]);
-  const [medice, setMedice] = useState([]);
+  // const [date, setDate] = useState(new Date());
+  // const [showPicker, setShowPicker] = useState(false);
+  const [notes, setNotes] = useState<Note[]>([]);
+  const [medice, setMedice] = useState<Medicamentos[]>([]);
   const swiper = useRef();
   const [value, setValue] = useState(new Date());
   const [week, setWeek] = useState(0);
@@ -38,7 +46,8 @@ export default function HomeScreen(props) {
     }, []),
   );
 
-  /*  fetch de CreateNotes */
+  /*  fetch de GetNotes */
+  //===========================================================
   const fetchNotes = () => {
     const myHeaders = new Headers();
     myHeaders.append('Content-Type', 'application/json');
@@ -54,7 +63,10 @@ export default function HomeScreen(props) {
       .then(result => setNotes(result))
       .catch(error => console.error(error));
   };
+  //===========================================================
 
+  /* fetch de GetMedice */
+  //===========================================================
   const fetchMedice = () => {
     const myHeaders = new Headers();
     myHeaders.append('Content-Type', 'application/json');
@@ -70,6 +82,51 @@ export default function HomeScreen(props) {
       .then(result => setMedice(result))
       .catch(error => console.error(error));
   };
+  //===========================================================
+
+  /* fetch de DeleteNote */
+  //===========================================================
+
+  const handleDeleteNote = (id: number) => {
+    const requestOptions = {
+      method: 'DELETE',
+      // headers: myHeaders,
+      body: '',
+      redirect: 'follow',
+    };
+
+    fetch(`http://localhost:3100/Notas/${id}`, requestOptions)
+      .then(response => response.text())
+      .then(result => {
+        console.log(result);
+        fetchNotes();
+      })
+      .catch(error => console.error(error));
+    // console.log('hola');
+  };
+
+  //===========================================================
+
+  /* fetch de DeleteMedice */
+  //===========================================================
+  const handleDeleteMedicamento = (id: number) => {
+    const requestOptions = {
+      method: 'DELETE',
+      // headers: myHeaders,
+      body: '',
+      redirect: 'follow',
+    };
+
+    fetch(`http://localhost:3100/Medicamentos/${id}`, requestOptions)
+      .then(response => response.text())
+      .then(result => {
+        console.log(result);
+        fetchMedice();
+      })
+      .catch(error => console.error(error));
+    // console.log('hola');
+  };
+  //===========================================================
 
   const weeks = React.useMemo(() => {
     const start = moment().add(week, 'weeks').startOf('week');
@@ -156,20 +213,29 @@ export default function HomeScreen(props) {
           <FlatList
             data={notes}
             keyExtractor={item =>
-              item.id ? item.id.toString() : Math.random().toString()
+              item.id_notas
+                ? item.id_notas.toString()
+                : Math.random().toString()
             }
             renderItem={({item}) => (
               <View style={styles.noteCard}>
                 <Text style={styles.diseño}>Notas</Text>
                 <Text style={styles.diseño}>{item.titulo}</Text>
                 <Text style={styles.noteContent}>{item.notas}</Text>
+                <Pressable
+                  style={styles.closeButton}
+                  onPress={() => handleDeleteNote(item.id_notas)}>
+                  <Text style={styles.closeButtonText}>X</Text>
+                </Pressable>
               </View>
             )}
           />
           <FlatList
             data={medice}
             keyExtractor={item =>
-              item.id ? item.id.toString() : Math.random().toString()
+              item.id_medicamento
+                ? item.id_medicamento.toString()
+                : Math.random().toString()
             }
             renderItem={({item}) => (
               <View style={styles.noteCard}>
@@ -178,6 +244,11 @@ export default function HomeScreen(props) {
                 <Text style={styles.noteContent}>{item.gramos}</Text>
                 <Text style={styles.noteContent}>{item.tiempo}</Text>
                 <Text style={styles.noteContent}>{item.dias}</Text>
+                <Pressable
+                  style={styles.closeButton}
+                  onPress={() => handleDeleteMedicamento(item.id_medicamento)}>
+                  <Text style={styles.closeButtonText}>X</Text>
+                </Pressable>
               </View>
             )}
           />

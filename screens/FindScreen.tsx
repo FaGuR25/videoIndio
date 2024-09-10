@@ -1,7 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import {View, StyleSheet, Text, FlatList, ScrollView} from 'react-native';
 import {Calendar} from 'react-native-calendars';
-import {todayString} from 'react-native-calendars/src/expandableCalendar/commons';
 
 const FindScreen = ({navigation}) => {
   const [selectedDate, setSelectedDate] = useState('');
@@ -19,14 +18,14 @@ const FindScreen = ({navigation}) => {
   }, [selectedDate]);
 
   useEffect(() => {
-    // Actualizar citas cuando se selecciona una nueva fecha
+    // Actualizar citas cuando se inicializa
     const today: Date = new Date();
     const year: number = today.getFullYear();
     const month: string = String(today.getMonth() + 1).padStart(2, '0'); // Ajustar para que el mes tenga 2 dígitos
     const day: string = String(today.getDate()).padStart(2, '0'); // Ajustar para que el día tenga 2 dígitos
 
-    const hello: string = `${year}-${month}-${day}`;
-    setSelectedDate(hello);
+    const DiaCreado: string = `${year}-${month}-${day}`;
+    setSelectedDate(DiaCreado);
   }, []);
 
   const fetchCitesForDate = date => {
