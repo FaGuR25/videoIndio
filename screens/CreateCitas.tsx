@@ -55,6 +55,7 @@ export default function CreateCitas({navigation}) {
       .then(result => {
         Alert.alert('Éxito', 'Cita guardada exitosamente.');
         scheduleNotification(fecha, tiempo, documentos); // notificación
+        navigation.goBack();
       })
       .catch(error => {
         console.error(error);

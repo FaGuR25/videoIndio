@@ -1,20 +1,29 @@
 import React, {useState, useEffect} from 'react';
-import {View, StyleSheet, Text, FlatList, ScrollView} from 'react-native';
+import {View, StyleSheet, Text, FlatList, ScrollView, Pressable} from 'react-native';
 import {Calendar} from 'react-native-calendars';
 
 const FindScreen = ({navigation}) => {
   const [selectedDate, setSelectedDate] = useState('');
-  const [cites, setCites] = useState([]);
+  const [cites, setCites] = useState<Cita[]>([]);
 
   const handleDatePress = day => {
     setSelectedDate(day.dateString);
   };
+
+  interface Cita {
+    id_citas: number;
+    fecha: Date;
+    tiempo: number;
+    documentos: String;
+  }
 
   useEffect(() => {
     if (selectedDate !== '') {
       // Actualizar citas cuando se selecciona una nueva fecha
       fetchCitesForDate(selectedDate);
     }
+    //Actualiza citas cuando se agrega una nueva
+    fetchCitesForDate(selectedDate);
   }, [selectedDate]);
 
   useEffect(() => {
@@ -38,6 +47,26 @@ const FindScreen = ({navigation}) => {
       .then(response => response.json())
       .then(data => setCites(data))
       .catch(error => console.error('Error fetching citas:', error));
+  };
+
+  /* fetch de DeleteNote */
+  //===========================================================
+
+  const handleDeleteCita = (id: number) => {
+    const requestOptions = {
+      method: 'DELETE',
+      body: '',
+      redirect: 'follow',
+    };
+
+    fetch(`http://localhost:3100/Citas/${id}`, requestOptions)
+      .then(response => response.text())
+      .then(result => {
+        console.log(result);
+        fetchCitesForDate(selectedDate);
+      })
+      .catch(error => console.error(error));
+    // console.log('hola');
   };
 
   return (
@@ -88,7 +117,7 @@ const FindScreen = ({navigation}) => {
         <FlatList
           data={cites}
           keyExtractor={item =>
-            item.id ? item.id.toString() : Math.random().toString()
+            item.id_citas ? item.id_citas.toString() : Math.random().toString()
           }
           renderItem={({item}) => (
             <View style={styles.noteCard}>
@@ -96,6 +125,11 @@ const FindScreen = ({navigation}) => {
               <Text style={styles.diseño}>{item.fecha}</Text>
               <Text style={styles.noteContent}>{item.tiempo}</Text>
               <Text style={styles.noteContent}>{item.documentos}</Text>
+              <Pressable
+                style={styles.closeButton}
+                onPress={() => handleDeleteCita(item.id_citas)}>
+                <Text>X</Text>
+              </Pressable>
             </View>
           )}
         />
@@ -104,13 +138,17 @@ const FindScreen = ({navigation}) => {
   );
 };
 
-export default FindScreen;
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     paddingTop: 20,
     backgroundColor: '#ffffff',
+  },
+  closeButton: {
+    position: 'absolute',
+    top: 0,
+    right: 0,
+    padding: 10,
   },
   headerText: {
     fontSize: 24,
@@ -174,3 +212,5 @@ const styles = StyleSheet.create({
     color: '#555',
   },
 });
+
+export default FindScreen;
