@@ -15,7 +15,7 @@ const FindScreen = ({navigation}) => {
     fecha: Date;
     tiempo: number;
     documentos: String;
-  }
+  } 
 
   useEffect(() => {
     if (selectedDate !== '') {
@@ -23,7 +23,7 @@ const FindScreen = ({navigation}) => {
       fetchCitesForDate(selectedDate);
     }
     //Actualiza citas cuando se agrega una nueva
-    fetchCitesForDate(selectedDate);
+    //fetchCitesForDate(selectedDate);
   }, [selectedDate]);
 
   useEffect(() => {
