@@ -1,4 +1,6 @@
 import React, {useState, useRef, useCallback} from 'react';
+import {FloatingAction} from 'react-native-floating-action';
+import {Searchbar} from 'react-native-paper';
 import {
   StyleSheet,
   Dimensions,
@@ -12,10 +14,10 @@ import {
   FlatList,
 } from 'react-native';
 import {useFocusEffect} from '@react-navigation/native';
-import ImageButton from './ImageButton';
+//import ImageButton from './ImageButton';
 import moment from 'moment';
 import Swiper from 'react-native-swiper';
-import {FAB} from 'react-native-paper';
+//import {FAB} from 'react-native-paper';
 import {ScrollView} from 'react-native-gesture-handler';
 
 const {width} = Dimensions.get('window');
@@ -43,6 +45,8 @@ export default function HomeScreen({navigation}: {navigation: any}) {
   const swiper = useRef();
   const [value, setValue] = useState(new Date());
   const [week, setWeek] = useState(0);
+
+  const [searchQuery, setSearchQuery] = React.useState('');
 
   useFocusEffect(
     useCallback(() => {
@@ -149,171 +153,216 @@ export default function HomeScreen({navigation}: {navigation: any}) {
     });
   }, [week]);
 
-  return (
-    <SafeAreaView style={{flex: 1}}>
-      <View style={styles.container}>
-        <View style={styles.picker}>
-          <Swiper
-            index={1}
-            ref={swiper}
-            loop={false}
-            showsPagination={false}
-            onIndexChanged={ind => {
-              if (ind === 1) {
-                return;
-              }
-              setTimeout(() => {
-                const newIndex = ind - 1;
-                const newWeek = week + newIndex;
-                setWeek(newWeek);
-                setValue(moment(value).add(newIndex, 'week').toDate());
-                swiper.current.scrollTo(1, false);
-              }, 100);
-            }}>
-            {weeks.map((dates, index) => (
-              <View style={styles.itemRow} key={index}>
-                {dates.map((item, dateIndex) => {
-                  const isActive =
-                    value.toDateString() === item.date.toDateString();
-                  return (
-                    <TouchableWithoutFeedback
-                      key={dateIndex}
-                      onPress={() => setValue(item.date)}>
-                      <View
-                        style={[
-                          styles.item,
-                          isActive && {
-                            backgroundColor: '#01780d',
-                            borderColor: '#01780d',
-                          },
-                        ]}>
-                        <Text
-                          style={[
-                            styles.itemWeekday,
-                            isActive && {color: '#fff'},
-                          ]}>
-                          {item.weekday === 'Mon' && 'Lun'}
-                          {item.weekday === 'Tue' && 'Mar'}
-                          {item.weekday === 'Wed' && 'Mié'}
-                          {item.weekday === 'Thu' && 'Jue'}
-                          {item.weekday === 'Fri' && 'Vie'}
-                          {item.weekday === 'Sat' && 'Sáb'}
-                          {item.weekday === 'Sun' && 'Dom'}
-                        </Text>
-                        <Text
-                          style={[
-                            styles.itemDate,
-                            isActive && {color: '#fff'},
-                          ]}>
-                          {item.date.getDate()}
-                        </Text>
-                      </View>
-                    </TouchableWithoutFeedback>
-                  );
-                })}
-              </View>
-            ))}
-          </Swiper>
-        </View>
-        <ScrollView style={styles.Scrollcito}>
-          <FlatList
-            data={notes}
-            keyExtractor={item =>
-              item.id_notas
-                ? item.id_notas.toString()
-                : Math.random().toString()
-            }
-            renderItem={({item}) => (
-              <View style={styles.noteCard}>
-                <Text style={styles.diseño}>Notas</Text>
-                <Text style={styles.diseño}>{item.titulo}</Text>
-                <Text style={styles.noteContent}>{item.notas}</Text>
-                <Pressable
-                  style={styles.closeButton}
-                  onPress={() => handleDeleteNote(item.id_notas)}>
-                  <Text style={styles.closeButtonText}>X</Text>
-                </Pressable>
-              </View>
-            )}
-          />
-          <FlatList
-            data={medice}
-            keyExtractor={item =>
-              item.id_medicamento
-                ? item.id_medicamento.toString()
-                : Math.random().toString()
-            }
-            renderItem={({item}) => (
-              <View style={styles.noteCard}>
-                <Text style={styles.diseño}>Medicamentos</Text>
-                <Text style={styles.diseño}>{item.nombreMedicamento}</Text>
-                <Text style={styles.noteContent}>{item.gramos} </Text>
-                <Text style={styles.noteContent}>{item.tiempo}</Text>
-                <Text style={styles.noteContent}>{item.dias}</Text>
-                <Pressable
-                  style={styles.closeButton}
-                  onPress={() => handleDeleteMedicamento(item.id_medicamento)}>
-                  <Text style={styles.closeButtonText}>X</Text>
-                </Pressable>
-              </View>
-            )}
-          />
-        </ScrollView>
+  const actions = [
+    {
+      text: 'Crear Nota',
+      icon: require('../assets/icons/notes.png'),
+      name: 'Notes',
+      position: 1,
+    },
+    {
+      text: 'Agregar Medicamento',
+      icon: require('../assets/icons/farmaco.png'),
+      name: 'Medice',
+      position: 2,
+    },
+    {
+      text: 'Agregar Cita',
+      icon: require('../assets/icons/cita-medica.png'),
+      name: 'Cites',
+      position: 3,
+    },
+  ];
 
-        <FAB
-          icon="plus"
-          style={styles.fab}
-          onPress={() => setModalVisible(true)}
-        />
-      </View>
-      {/* modal */}
-      <Modal
-        animationType="slide"
-        transparent={true}
-        visible={modalVisible}
-        onRequestClose={() => {
-          Alert.alert('Modal has been closed.');
-          setModalVisible(!modalVisible);
-        }}>
-        <Pressable
-          style={styles.closeButton}
-          onPress={() => setModalVisible(!modalVisible)}>
-          <Text style={styles.closeButtonText}>X</Text>
-        </Pressable>
-        <View style={styles.centeredView}>
-          <View style={styles.modalView}>
-            <ImageButton
-              onPress={() => {
-                setModalVisible(false);
-                navigation.navigate('CreateNotes');
-              }}
-              imageStyle={styles.image}
-              source={require('../assets/icons/notas.png')}
-              text="Notas"
-            />
-            <ImageButton
-              onPress={() => {
-                setModalVisible(false);
-                navigation.navigate('AddMedice');
-              }}
-              imageStyle={styles.imagemed}
-              source={require('../assets/icons/medi.png')}
-              text="Medicamentos"
-            />
-            <ImageButton
-              onPress={() => {
-                setModalVisible(false);
-                navigation.navigate('CreateCitas');
-              }}
-              imageStyle={styles.imagecite}
-              source={require('../assets/icons/citas.png')}
-              text="Citas"
-            />
+  return (
+    <>
+      <SafeAreaView style={{flex: 1}}>
+        <View style={styles.container}>
+          <View style={styles.picker}>
+            <Swiper
+              index={1}
+              ref={swiper}
+              loop={false}
+              showsPagination={false}
+              onIndexChanged={ind => {
+                if (ind === 1) {
+                  return;
+                }
+                setTimeout(() => {
+                  const newIndex = ind - 1;
+                  const newWeek = week + newIndex;
+                  setWeek(newWeek);
+                  setValue(moment(value).add(newIndex, 'week').toDate());
+                  swiper.current.scrollTo(1, false);
+                }, 100);
+              }}>
+              {weeks.map((dates, index) => (
+                <View style={styles.itemRow} key={index}>
+                  {dates.map((item, dateIndex) => {
+                    const isActive =
+                      value.toDateString() === item.date.toDateString();
+                    return (
+                      <TouchableWithoutFeedback
+                        key={dateIndex}
+                        onPress={() => setValue(item.date)}>
+                        <View
+                          style={[
+                            styles.item,
+                            isActive && {
+                              backgroundColor: '#01780d',
+                              borderColor: '#01780d',
+                            },
+                          ]}>
+                          <Text
+                            style={[
+                              styles.itemWeekday,
+                              isActive && {color: '#fff'},
+                            ]}>
+                            {item.weekday === 'Mon' && 'Lun'}
+                            {item.weekday === 'Tue' && 'Mar'}
+                            {item.weekday === 'Wed' && 'Mié'}
+                            {item.weekday === 'Thu' && 'Jue'}
+                            {item.weekday === 'Fri' && 'Vie'}
+                            {item.weekday === 'Sat' && 'Sáb'}
+                            {item.weekday === 'Sun' && 'Dom'}
+                          </Text>
+                          <Text
+                            style={[
+                              styles.itemDate,
+                              isActive && {color: '#fff'},
+                            ]}>
+                            {item.date.getDate()}
+                          </Text>
+                        </View>
+                      </TouchableWithoutFeedback>
+                    );
+                  })}
+                </View>
+              ))}
+            </Swiper>
           </View>
+
+          <ScrollView style={styles.Scrollcito}>
+            <Searchbar
+              placeholder="Search"
+              onChangeText={setSearchQuery}
+              value={searchQuery}
+            />
+            <FlatList
+              data={notes}
+              keyExtractor={item =>
+                item.id_notas
+                  ? item.id_notas.toString()
+                  : Math.random().toString()
+              }
+              renderItem={({item}) => (
+                <View style={styles.noteCard}>
+                  <Text style={styles.diseño}>Notas</Text>
+                  <Text style={styles.diseño}>{item.titulo}</Text>
+                  <Text style={styles.noteContent}>{item.notas}</Text>
+                  <Pressable
+                    style={styles.closeButton}
+                    onPress={() => handleDeleteNote(item.id_notas)}>
+                    <Text style={styles.closeButtonText}>X</Text>
+                  </Pressable>
+                </View>
+              )}
+            />
+
+            <FlatList
+              data={medice}
+              keyExtractor={item =>
+                item.id_medicamento
+                  ? item.id_medicamento.toString()
+                  : Math.random().toString()
+              }
+              renderItem={({item}) => (
+                <View style={styles.noteCard}>
+                  <Text style={styles.diseño}>Medicamentos</Text>
+                  <Text style={styles.diseño}>{item.nombreMedicamento}</Text>
+                  <Text style={styles.noteContent}>{item.gramos} </Text>
+                  <Text style={styles.noteContent}>{item.tiempo}</Text>
+                  <Text style={styles.noteContent}>{item.dias}</Text>
+                  <Pressable
+                    style={styles.closeButton}
+                    onPress={() =>
+                      handleDeleteMedicamento(item.id_medicamento)
+                    }>
+                    <Text style={styles.closeButtonText}>X</Text>
+                  </Pressable>
+                </View>
+              )}
+            />
+          </ScrollView>
+          <FloatingAction
+            actions={actions}
+            position="right"
+            onPressItem={name => {
+              if (name === 'Notes') {
+                navigation.navigate('CreateNotes');
+              } else if (name === 'Medice') {
+                navigation.navigate('AddMedice');
+              } else if (name === 'Cites') {
+                navigation.navigate('CreateCitas');
+              }
+            }}
+          />
+
+          {/*           <FAB
+            icon="plus"
+            style={styles.fab}
+            onPress={() => setModalVisible(true)}
+          /> */}
         </View>
-      </Modal>
-      {/* modal */}
-    </SafeAreaView>
+        {/* modal */}
+        {/*         <Modal
+          animationType="slide"
+          transparent={true}
+          visible={modalVisible}
+          onRequestClose={() => {
+            Alert.alert('Modal has been closed.');
+            setModalVisible(!modalVisible);
+          }}>
+          <Pressable
+            style={styles.closeButton}
+            onPress={() => setModalVisible(!modalVisible)}>
+            <Text style={styles.closeButtonText}>X</Text>
+          </Pressable>
+          <View style={styles.centeredView}>
+            <View style={styles.modalView}>
+              <ImageButton
+                onPress={() => {
+                  setModalVisible(false);
+                  navigation.navigate('CreateNotes');
+                }}
+                imageStyle={styles.image}
+                source={require('../assets/icons/notas.png')}
+                text="Notas"
+              />
+              <ImageButton
+                onPress={() => {
+                  setModalVisible(false);
+                  navigation.navigate('AddMedice');
+                }}
+                imageStyle={styles.imagemed}
+                source={require('../assets/icons/medi.png')}
+                text="Medicamentos"
+              />
+              <ImageButton
+                onPress={() => {
+                  setModalVisible(false);
+                  navigation.navigate('CreateCitas');
+                }}
+                imageStyle={styles.imagecite}
+                source={require('../assets/icons/citas.png')}
+                text="Citas"
+              />
+            </View>
+          </View>
+        </Modal> */}
+        {/* modal */}
+      </SafeAreaView>
+    </>
   );
 }
 

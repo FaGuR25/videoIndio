@@ -59,7 +59,7 @@ function TabNavigator() {
           headerShown: true,
           headerTitle: 'Home',
           headerStyle: {
-            backgroundColor: '#8fcbbc',
+            backgroundColor: 'white',
           },
           headerTitleStyle: {
             color: '#006400',
