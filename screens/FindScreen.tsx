@@ -1,5 +1,13 @@
-import React, {useState, useEffect} from 'react';
-import {View, StyleSheet, Text, FlatList, ScrollView, Pressable} from 'react-native';
+import { useFocusEffect } from '@react-navigation/native';
+import React, {useState, useEffect, useCallback} from 'react';
+import {
+  View,
+  StyleSheet,
+  Text,
+  FlatList,
+  ScrollView,
+  Pressable,
+} from 'react-native';
 import {Calendar} from 'react-native-calendars';
 
 const FindScreen = ({navigation}) => {
@@ -15,15 +23,22 @@ const FindScreen = ({navigation}) => {
     fecha: Date;
     tiempo: number;
     documentos: String;
-  } 
+  }
+
+  useFocusEffect(
+    useCallback(() => {
+      fetchCites();
+    }, []),
+  );
 
   useEffect(() => {
     if (selectedDate !== '') {
       // Actualizar citas cuando se selecciona una nueva fecha
-      fetchCitesForDate(selectedDate);
+      fetchCites();
     }
     //Actualiza citas cuando se agrega una nueva
     //fetchCitesForDate(selectedDate);
+    //fetchCites();
   }, [selectedDate]);
 
   useEffect(() => {
@@ -49,6 +64,25 @@ const FindScreen = ({navigation}) => {
       .catch(error => console.error('Error fetching citas:', error));
   };
 
+  /*  fetch de GetNotes */
+  //=============Mantenimiento======================================
+  const fetchCites = () => {
+    const myHeaders = new Headers();
+    myHeaders.append('Content-Type', 'application/json');
+
+    const requestOptions = {
+      method: 'GET',
+      headers: myHeaders,
+      redirect: 'follow',
+    };
+
+    fetch('http://localhost:3100/Citas', requestOptions)
+      .then(response => response.json())
+      .then(result => setCites(result))
+      .catch(error => console.error(error));
+  };
+  //===========================================================
+
   /* fetch de DeleteNote */
   //===========================================================
 
@@ -63,7 +97,7 @@ const FindScreen = ({navigation}) => {
       .then(response => response.text())
       .then(result => {
         console.log(result);
-        fetchCitesForDate(selectedDate);
+        fetchCites();
       })
       .catch(error => console.error(error));
     // console.log('hola');
