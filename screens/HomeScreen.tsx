@@ -8,9 +8,7 @@ import {
   SafeAreaView,
   View,
   Text,
-  Modal,
   Pressable,
-  Alert,
   FlatList,
 } from 'react-native';
 import {useFocusEffect} from '@react-navigation/native';
@@ -243,11 +241,17 @@ export default function HomeScreen({navigation}: {navigation: any}) {
           </View>
 
           <ScrollView style={styles.Scrollcito}>
-            <Searchbar
+            {/*             <Searchbar
               placeholder="Search"
               onChangeText={setSearchQuery}
               value={searchQuery}
-            />
+            /> */}
+
+            {/* <Image source={require('./img/salud.png')} style={styles.imagen} />
+            <Text style={styles.texto}>
+              Todavía no hay ningún recordatorio. ¡Pulsa "+" para agregar uno!
+            </Text> */}
+
             <FlatList
               data={notes}
               keyExtractor={item =>
@@ -307,60 +311,7 @@ export default function HomeScreen({navigation}: {navigation: any}) {
               }
             }}
           />
-
-          {/*           <FAB
-            icon="plus"
-            style={styles.fab}
-            onPress={() => setModalVisible(true)}
-          /> */}
         </View>
-        {/* modal */}
-        {/*         <Modal
-          animationType="slide"
-          transparent={true}
-          visible={modalVisible}
-          onRequestClose={() => {
-            Alert.alert('Modal has been closed.');
-            setModalVisible(!modalVisible);
-          }}>
-          <Pressable
-            style={styles.closeButton}
-            onPress={() => setModalVisible(!modalVisible)}>
-            <Text style={styles.closeButtonText}>X</Text>
-          </Pressable>
-          <View style={styles.centeredView}>
-            <View style={styles.modalView}>
-              <ImageButton
-                onPress={() => {
-                  setModalVisible(false);
-                  navigation.navigate('CreateNotes');
-                }}
-                imageStyle={styles.image}
-                source={require('../assets/icons/notas.png')}
-                text="Notas"
-              />
-              <ImageButton
-                onPress={() => {
-                  setModalVisible(false);
-                  navigation.navigate('AddMedice');
-                }}
-                imageStyle={styles.imagemed}
-                source={require('../assets/icons/medi.png')}
-                text="Medicamentos"
-              />
-              <ImageButton
-                onPress={() => {
-                  setModalVisible(false);
-                  navigation.navigate('CreateCitas');
-                }}
-                imageStyle={styles.imagecite}
-                source={require('../assets/icons/citas.png')}
-                text="Citas"
-              />
-            </View>
-          </View>
-        </Modal> */}
-        {/* modal */}
       </SafeAreaView>
     </>
   );
@@ -579,6 +530,60 @@ const styles = StyleSheet.create({
     color: '#333',
   },
 });
+
+{
+  /*           <FAB
+            icon="plus"
+            style={styles.fab}
+            onPress={() => setModalVisible(true)}
+          /> */
+}
+
+/*         <Modal
+          animationType="slide"
+          transparent={true}
+          visible={modalVisible}
+          onRequestClose={() => {
+            Alert.alert('Modal has been closed.');
+            setModalVisible(!modalVisible);
+          }}>
+          <Pressable
+            style={styles.closeButton}
+            onPress={() => setModalVisible(!modalVisible)}>
+            <Text style={styles.closeButtonText}>X</Text>
+          </Pressable>
+          <View style={styles.centeredView}>
+            <View style={styles.modalView}>
+              <ImageButton
+                onPress={() => {
+                  setModalVisible(false);
+                  navigation.navigate('CreateNotes');
+                }}
+                imageStyle={styles.image}
+                source={require('../assets/icons/notas.png')}
+                text="Notas"
+              />
+              <ImageButton
+                onPress={() => {
+                  setModalVisible(false);
+                  navigation.navigate('AddMedice');
+                }}
+                imageStyle={styles.imagemed}
+                source={require('../assets/icons/medi.png')}
+                text="Medicamentos"
+              />
+              <ImageButton
+                onPress={() => {
+                  setModalVisible(false);
+                  navigation.navigate('CreateCitas');
+                }}
+                imageStyle={styles.imagecite}
+                source={require('../assets/icons/citas.png')}
+                text="Citas"
+              />
+            </View>
+          </View>
+        </Modal> */
 
 /* import React from 'react';
 import { View, Text, StyleSheet, Image } from 'react-native';

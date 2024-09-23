@@ -1,4 +1,4 @@
-import { useFocusEffect } from '@react-navigation/native';
+import {useFocusEffect} from '@react-navigation/native';
 import React, {useState, useEffect, useCallback} from 'react';
 import {
   View,
@@ -10,7 +10,7 @@ import {
 } from 'react-native';
 import {Calendar} from 'react-native-calendars';
 
-const FindScreen = ({navigation}) => {
+const FindScreen = () => {
   const [selectedDate, setSelectedDate] = useState('');
   const [cites, setCites] = useState<Cita[]>([]);
 
