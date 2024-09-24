@@ -103,6 +103,11 @@ const FindScreen = () => {
     // console.log('hola');
   };
 
+
+
+
+
+  
   return (
     <View style={styles.container}>
       <Text style={styles.headerText}>CALENDARIO</Text>

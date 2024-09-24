@@ -10,6 +10,7 @@ import {
   Text,
   Pressable,
   FlatList,
+  Alert,
 } from 'react-native';
 import {useFocusEffect} from '@react-navigation/native';
 //import ImageButton from './ImageButton';
@@ -96,21 +97,42 @@ export default function HomeScreen({navigation}: {navigation: any}) {
   //===========================================================
 
   const handleDeleteNote = (id: number) => {
-    const requestOptions = {
-      method: 'DELETE',
-      // headers: myHeaders,
-      body: '',
-      redirect: 'follow',
-    };
+    Alert.alert(
+      'Eliminar Nota', // Título de la alerta
+      '¿Estás seguro de que deseas eliminar esta nota?', // Mensaje
+      [
+        {
+          text: 'No', // Opción de cancelar
+          onPress: () => console.log('Eliminación cancelada'),
+          style: 'cancel', // Estilo del botón de cancelar
+        },
+        {
+          text: 'Sí', // Opción de confirmación
+          onPress: () => {
+            // Ejecutar la eliminación si el usuario confirma
+            const requestOptions = {
+              method: 'DELETE',
+              redirect: 'follow',
+            };
 
-    fetch(`http://localhost:3100/Notas/${id}`, requestOptions)
-      .then(response => response.text())
-      .then(result => {
-        console.log(result);
-        fetchNotes();
-      })
-      .catch(error => console.error(error));
-    // console.log('hola');
+            fetch(`http://localhost:3100/Notas/${id}`, requestOptions)
+              .then(response => response.text())
+              .then(result => {
+                Alert.alert(
+                  'Nota eliminada',
+                  'Tu nota ha sido eliminada exitosamente.',
+                );
+                console.log(result);
+                fetchNotes(); // Actualizar la lista de notas
+              })
+              .catch(error =>
+                console.error('Error al eliminar la nota:', error),
+              );
+          },
+        },
+      ],
+      {cancelable: true}, // Permitir que se cierre tocando fuera de la alerta
+    );
   };
 
   //===========================================================
@@ -118,21 +140,43 @@ export default function HomeScreen({navigation}: {navigation: any}) {
   /* fetch de DeleteMedice */
   //===========================================================
   const handleDeleteMedicamento = (id: number) => {
-    const requestOptions = {
-      method: 'DELETE',
-      // headers: myHeaders,
-      body: '',
-      redirect: 'follow',
-    };
+    // Mostrar alerta de confirmación
+    Alert.alert(
+      'Eliminar Medicamento', // Título de la alerta
+      '¿Estás seguro de que deseas eliminar este medicamento?', // Mensaje
+      [
+        {
+          text: 'No', // Opción de cancelar
+          onPress: () => console.log('Eliminación cancelada'),
+          style: 'cancel', // Estilo del botón de cancelar
+        },
+        {
+          text: 'Sí', // Opción de confirmación
+          onPress: () => {
+            // Ejecutar la eliminación si el usuario confirma
+            const requestOptions = {
+              method: 'DELETE',
+              redirect: 'follow',
+            };
 
-    fetch(`http://localhost:3100/Medicamentos/${id}`, requestOptions)
-      .then(response => response.text())
-      .then(result => {
-        console.log(result);
-        fetchMedice();
-      })
-      .catch(error => console.error(error));
-    // console.log('hola');
+            fetch(`http://localhost:3100/Medicamentos/${id}`, requestOptions)
+              .then(response => response.text())
+              .then(result => {
+                Alert.alert(
+                  'Medicamento eliminado',
+                  'El medicamento ha sido eliminado exitosamente.',
+                );
+                console.log(result);
+                fetchMedice(); // Actualizar la lista de medicamentos
+              })
+              .catch(error =>
+                console.error('Error al eliminar el medicamento:', error),
+              );
+          },
+        },
+      ],
+      {cancelable: true}, // Permitir que se cierre tocando fuera de la alerta
+    );
   };
   //===========================================================
 

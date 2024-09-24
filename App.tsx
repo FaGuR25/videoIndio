@@ -111,7 +111,7 @@ function TabNavigator() {
           ),
         }}
       />
-      <Tab.Screen
+      {/* <Tab.Screen
         name="Perfil"
         component={SettingsScreen}
         options={{
@@ -132,7 +132,7 @@ function TabNavigator() {
             />
           ),
         }}
-      />
+      /> */}
     </Tab.Navigator>
   );
 }
