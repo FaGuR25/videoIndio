@@ -1,8 +1,8 @@
 import React from 'react';
-import {View, StyleSheet, ScrollView} from 'react-native';
+import {StyleSheet, ScrollView} from 'react-native';
 import MiniBlog from './Miniblog';
 
-const PostScreen = ({navigation}) => {
+const PostScreen = ({navigation}: {navigation: any}) => {
   const blogs = [
     {
       id: 1,
@@ -33,7 +33,7 @@ const PostScreen = ({navigation}) => {
     },
   ];
 
-  const handleBlogPress = blog => {
+  const handleBlogPress = (blog: any) => {
     navigation.navigate('BlogDetailScreen', {blog});
   };
 

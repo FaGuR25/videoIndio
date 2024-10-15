@@ -1,7 +1,7 @@
 import React from 'react';
 import {View, Text, StyleSheet} from 'react-native';
 
-const BlogDetail = ({route}) => {
+const BlogDetail = ({route}: {route: any}) => {
   const {blog} = route.params;
 
   return (

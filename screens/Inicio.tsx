@@ -1,6 +1,6 @@
 import React, {useState, useRef, useCallback} from 'react';
 import {FloatingAction} from 'react-native-floating-action';
-import {Searchbar} from 'react-native-paper';
+// import {Searchbar} from 'react-native-paper';
 import {
   StyleSheet,
   Dimensions,
@@ -11,6 +11,7 @@ import {
   Pressable,
   FlatList,
   Alert,
+  TouchableOpacity,
 } from 'react-native';
 import {useFocusEffect} from '@react-navigation/native';
 //import ImageButton from './ImageButton';
@@ -18,6 +19,7 @@ import moment from 'moment';
 import Swiper from 'react-native-swiper';
 //import {FAB} from 'react-native-paper';
 import {ScrollView} from 'react-native-gesture-handler';
+import {Modal} from 'react-native';
 
 const {width} = Dimensions.get('window');
 
@@ -35,8 +37,42 @@ interface Medicamentos {
   dias: number;
 }
 
+const CustomAlertNotas = ({visible, onConfirm, onCancel, id_citas}) => {
+  return (
+    <Modal
+      visible={visible}
+      transparent={true}
+      animationType="fade"
+      onRequestClose={onCancel}>
+      <View style={styles.modalBackground}>
+        <View style={styles.alertContainer}>
+          <Text style={styles.alertTitle}>Eliminar Cita</Text>
+          <Text style={styles.alertMessage}>
+            ¿Estás seguro de que deseas eliminar esta cita?
+          </Text>
+          <View style={styles.buttonContainer}>
+            <TouchableOpacity
+              style={[styles.button, styles.cancelButton]}
+              onPress={onCancel}>
+              {/* {onCancelDelete}> */}
+              <Text style={styles.cancelButtonText}>Cancelar</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={[styles.button, styles.confirmButton]}
+              onPress={() => onConfirm(id_citas)}>
+              {/* onConfirmDelete(id_citas)} */}
+
+              <Text style={styles.confirmButtonText}>Sí</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </View>
+    </Modal>
+  );
+};
+
 export default function HomeScreen({navigation}: {navigation: any}) {
-  const [modalVisible, setModalVisible] = useState(false);
+  //const [modalVisible, setModalVisible] = useState(false);
   // const [date, setDate] = useState(new Date());
   // const [showPicker, setShowPicker] = useState(false);
   const [notes, setNotes] = useState<Note[]>([]);
@@ -44,12 +80,13 @@ export default function HomeScreen({navigation}: {navigation: any}) {
   const swiper = useRef();
   const [value, setValue] = useState(new Date());
   const [week, setWeek] = useState(0);
+  const [isModalVisible, setModalVisible] = useState(false);
 
-  const [searchQuery, setSearchQuery] = React.useState('');
+  //const [searchQuery, setSearchQuery] = React.useState('');
 
   useFocusEffect(
     useCallback(() => {
-      setModalVisible(false);
+      //setModalVisible(false);
       fetchNotes();
       fetchMedice();
     }, []),
@@ -97,42 +134,23 @@ export default function HomeScreen({navigation}: {navigation: any}) {
   //===========================================================
 
   const handleDeleteNote = (id: number) => {
-    Alert.alert(
-      'Eliminar Nota', // Título de la alerta
-      '¿Estás seguro de que deseas eliminar esta nota?', // Mensaje
-      [
-        {
-          text: 'No', // Opción de cancelar
-          onPress: () => console.log('Eliminación cancelada'),
-          style: 'cancel', // Estilo del botón de cancelar
-        },
-        {
-          text: 'Sí', // Opción de confirmación
-          onPress: () => {
-            // Ejecutar la eliminación si el usuario confirma
-            const requestOptions = {
-              method: 'DELETE',
-              redirect: 'follow',
-            };
+    setModalVisible(false);
+    const requestOptions = {
+      method: 'DELETE',
+      redirect: 'follow',
+    };
 
-            fetch(`http://localhost:3100/Notas/${id}`, requestOptions)
-              .then(response => response.text())
-              .then(result => {
-                Alert.alert(
-                  'Nota eliminada',
-                  'Tu nota ha sido eliminada exitosamente.',
-                );
-                console.log(result);
-                fetchNotes(); // Actualizar la lista de notas
-              })
-              .catch(error =>
-                console.error('Error al eliminar la nota:', error),
-              );
-          },
-        },
-      ],
-      {cancelable: true}, // Permitir que se cierre tocando fuera de la alerta
-    );
+    fetch(`http://localhost:3100/Notas/${id}`, requestOptions)
+      .then(response => response.text())
+      .then(result => {
+        Alert.alert(
+          'Nota eliminada',
+          'Tu nota ha sido eliminada exitosamente.',
+        );
+        console.log(result);
+        fetchNotes(); // Actualizar la lista de notas
+      })
+      .catch(error => console.error('Error al eliminar la nota:', error));
   };
 
   //===========================================================
@@ -178,6 +196,27 @@ export default function HomeScreen({navigation}: {navigation: any}) {
       {cancelable: true}, // Permitir que se cierre tocando fuera de la alerta
     );
   };
+  //===========================================================
+
+  //===========================================================
+  // Custom Aler
+
+  const handleDeleteNotas = () => {
+    setModalVisible(true);
+  };
+
+  const onConfirmDelete = (id: number) => {
+    setModalVisible(false);
+    // Lógica para eliminar la cita
+    handleDeleteNote(id);
+    console.log('Cita eliminada');
+  };
+
+  const onCancelDelete = () => {
+    setModalVisible(false);
+    console.log('Eliminación cancelada');
+  };
+
   //===========================================================
 
   const weeks = React.useMemo(() => {
@@ -310,8 +349,14 @@ export default function HomeScreen({navigation}: {navigation: any}) {
                   <Text style={styles.noteContent}>{item.notas}</Text>
                   <Pressable
                     style={styles.closeButton}
-                    onPress={() => handleDeleteNote(item.id_notas)}>
+                    onPress={() => handleDeleteNotas()}>
                     <Text style={styles.closeButtonText}>X</Text>
+                    <CustomAlertNotas
+                      visible={isModalVisible}
+                      onConfirm={onConfirmDelete}
+                      onCancel={onCancelDelete} //AQUI TIENE QUE SER onConfirmDelete
+                      id_citas={item.id_notas}
+                    />
                   </Pressable>
                 </View>
               )}
@@ -344,6 +389,7 @@ export default function HomeScreen({navigation}: {navigation: any}) {
           </ScrollView>
           <FloatingAction
             actions={actions}
+            color="green"
             position="right"
             onPressItem={name => {
               if (name === 'Notes') {
@@ -362,6 +408,70 @@ export default function HomeScreen({navigation}: {navigation: any}) {
 }
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 10,
+    backgroundColor: '#ffffff',
+  },
+  modalBackground: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)', // Fondo oscuro transparente
+  },
+  alertContainer: {
+    width: 300,
+    padding: 20,
+    backgroundColor: '#fff',
+    borderRadius: 10,
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: {width: 0, height: 2},
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+  alertTitle: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    marginBottom: 15,
+    color: '#333', // Color del título
+  },
+  alertMessage: {
+    fontSize: 16,
+    textAlign: 'center',
+    marginBottom: 20,
+    color: '#555', // Color del mensaje
+  },
+  buttonContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    width: '100%',
+  },
+  button: {
+    flex: 1,
+    paddingVertical: 10,
+    marginHorizontal: 5,
+    borderRadius: 5,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  cancelButton: {
+    backgroundColor: '#f44336', // Color del botón de cancelar
+  },
+  confirmButton: {
+    backgroundColor: '#4CAF50', // Color del botón de confirmación
+  },
+  cancelButtonText: {
+    color: '#fff', // Color del texto de cancelar
+    fontSize: 16,
+  },
+  confirmButtonText: {
+    color: '#fff', // Color del texto de confirmación
+    fontSize: 16,
+  },
   Scrollcito: {
     marginTop: 80,
   },
@@ -447,11 +557,6 @@ const styles = StyleSheet.create({
   placeholderInset: {
     borderWidth: 4,
     borderColor: '#0c0',
-  },
-  container: {
-    flex: 1,
-    marginTop: 10,
-    backgroundColor: '#ffffff',
   },
   titleContainer: {
     marginTop: 50,
@@ -574,120 +679,3 @@ const styles = StyleSheet.create({
     color: '#333',
   },
 });
-
-{
-  /*           <FAB
-            icon="plus"
-            style={styles.fab}
-            onPress={() => setModalVisible(true)}
-          /> */
-}
-
-/*         <Modal
-          animationType="slide"
-          transparent={true}
-          visible={modalVisible}
-          onRequestClose={() => {
-            Alert.alert('Modal has been closed.');
-            setModalVisible(!modalVisible);
-          }}>
-          <Pressable
-            style={styles.closeButton}
-            onPress={() => setModalVisible(!modalVisible)}>
-            <Text style={styles.closeButtonText}>X</Text>
-          </Pressable>
-          <View style={styles.centeredView}>
-            <View style={styles.modalView}>
-              <ImageButton
-                onPress={() => {
-                  setModalVisible(false);
-                  navigation.navigate('CreateNotes');
-                }}
-                imageStyle={styles.image}
-                source={require('../assets/icons/notas.png')}
-                text="Notas"
-              />
-              <ImageButton
-                onPress={() => {
-                  setModalVisible(false);
-                  navigation.navigate('AddMedice');
-                }}
-                imageStyle={styles.imagemed}
-                source={require('../assets/icons/medi.png')}
-                text="Medicamentos"
-              />
-              <ImageButton
-                onPress={() => {
-                  setModalVisible(false);
-                  navigation.navigate('CreateCitas');
-                }}
-                imageStyle={styles.imagecite}
-                source={require('../assets/icons/citas.png')}
-                text="Citas"
-              />
-            </View>
-          </View>
-        </Modal> */
-
-/* import React from 'react';
-import { View, Text, StyleSheet, Image } from 'react-native';
-import { createStackNavigator } from '@react-navigation/stack';
-
-
-const Stack = createStackNavigator();
-
-const HomeScreen = ({ navigation }) => {
-  return (
-
-
-    <View style={styles.container}>
-      <Image source={require('./img/salud.png')} style={styles.imagen} />
-      <Text style={styles.texto}>
-        Todavía no hay ningún recordatorio. ¡Pulsa "+" para agregar uno!
-      </Text>
-    </View>
-  );
-};
-
-const HomeStackScreen = () => {
-  return (
-    <Stack.Navigator
-      screenOptions={{
-        headerTitleAlign: 'center',
-        headerStyle: {
-          backgroundColor: '#8fcbbc',
-        },
-        headerTintColor: '#666666',
-        headerTitleStyle: {
-          fontWeight: 'bold',
-          fontSize: 30,
-        },
-      }}>
-      <Stack.Screen name="Home" component={HomeScreen} />
-    </Stack.Navigator>
-  );
-};
-
-export default HomeStackScreen;
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: '#8fcbbc',
-  },
-  imagen: {
-    width: 100,
-    height: 100,
-  },
-  texto: {
-    fontSize: 18,
-    textAlign: 'center',
-    marginTop: 10,
-    marginBottom: 10,
-    marginLeft: 30,
-    marginRight: 30,
-  },
-});
-*/

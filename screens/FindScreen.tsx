@@ -14,10 +14,9 @@ const FindScreen = () => {
   const [selectedDate, setSelectedDate] = useState('');
   const [cites, setCites] = useState<Cita[]>([]);
 
-  const handleDatePress = day => {
+  const handleDatePress = (day: any) => {
     setSelectedDate(day.dateString);
   };
-
   interface Cita {
     id_citas: number;
     fecha: Date;
@@ -34,6 +33,7 @@ const FindScreen = () => {
   useEffect(() => {
     if (selectedDate !== '') {
       // Actualizar citas cuando se selecciona una nueva fecha
+      // actualizar cites cuando se selecciona una nueva fecha
       fetchCites();
     }
     //Actualiza citas cuando se agrega una nueva
@@ -52,7 +52,7 @@ const FindScreen = () => {
     setSelectedDate(DiaCreado);
   }, []);
 
-  const fetchCitesForDate = date => {
+  const fetchCitesForDate = (date: any) => {
     fetch(`http://localhost:3100/Citas?fecha=${date}`, {
       method: 'GET',
       headers: {
@@ -103,11 +103,6 @@ const FindScreen = () => {
     // console.log('hola');
   };
 
-
-
-
-
-  
   return (
     <View style={styles.container}>
       <Text style={styles.headerText}>CALENDARIO</Text>
@@ -134,7 +129,7 @@ const FindScreen = () => {
           textMonthFontSize: 20,
           textDayHeaderFontSize: 16,
         }}
-        renderHeader={date => {
+        renderHeader={(date: any) => {
           const header = date.toString('MMMM yyyy');
           const [month, year] = header.split(' ');
           return (

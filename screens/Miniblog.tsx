@@ -1,7 +1,15 @@
 import React from 'react';
-import {View, Text, TouchableOpacity, StyleSheet, Image} from 'react-native';
+import {Text, TouchableOpacity, StyleSheet, Image} from 'react-native';
 
-const MiniBlog = ({title, content, image, onPress}) => {
+const MiniBlog = ({
+  title,
+  image,
+  onPress,
+}: {
+  title: string;
+  image: any;
+  onPress: any;
+}) => {
   return (
     <TouchableOpacity onPress={onPress} style={styles.container}>
       <Image source={image} style={styles.image} />

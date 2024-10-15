@@ -6,13 +6,13 @@ import {createStackNavigator} from '@react-navigation/stack';
 import {Icon} from 'react-native-elements';
 
 import Login from './screens/Login';
-import HomeScreen from './screens/HomeScreen';
+import HomeScreen from './screens/Inicio';
 import FindScreen from './screens/FindScreen';
 import ChatScreen from './screens/ChatScreen';
 import AddMedice from './screens/AddMedice';
 import CreateNotes from './screens/CreateNotes';
 import PostScreen from './screens/PostScreen';
-import SettingsScreen from './screens/SettingsScreen';
+//import SettingsScreen from './screens/SettingsScreen';
 import MiniBlog from './screens/Miniblog';
 import BlogDetailScreen from './screens/BlogDetailScreen';
 import CreateCitas from './screens/CreateCitas';
@@ -51,13 +51,13 @@ PushNotification.getChannels(function (channel_ids) {
 // Navigator para las pantallas principales en el bottom tab navigator
 function TabNavigator() {
   return (
-    <Tab.Navigator initialRouteName="Inicio">
+    <Tab.Navigator>
       <Tab.Screen
-        name="HomeScreen"
+        name="Inicio"
         component={HomeScreen}
         options={{
           headerShown: true,
-          headerTitle: 'Home',
+          headerTitle: 'Inicio',
           headerStyle: {
             backgroundColor: 'white',
           },
@@ -161,7 +161,6 @@ export default function App(): React.JSX.Element {
           component={Edits}
           options={{headerShown: false}}
         /> */}
-
         <Stack.Screen
           name="CreateNotes"
           component={CreateNotes}

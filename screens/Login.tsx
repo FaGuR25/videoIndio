@@ -2,18 +2,17 @@ import {
   SafeAreaView,
   StyleSheet,
   View,
-  TextInput,
-  Button,
+  //TextInput,
+  //Button,
   Text,
-  Alert,
+  //Alert,
   Image,
-  Pressable,
+  //Pressable,
 } from 'react-native';
-import React, {useState} from 'react';
-import HomeScreen from './HomeScreen';
-import PushNotification from 'react-native-push-notification';
-import {TouchableOpacity} from 'react-native-gesture-handler';
-
+import React from 'react';
+//import HomeScreen from './HomeScreen';
+//import PushNotification from 'react-native-push-notification';
+//import {TouchableOpacity} from 'react-native-gesture-handler';
 const styles = StyleSheet.create({
   container: {
     width: '100%',
@@ -28,8 +27,8 @@ const styles = StyleSheet.create({
     alignContent: 'center',
   },
   logo: {
-    width: 100,
-    height: 100,
+    width: 180,
+    height: 180,
     marginBottom: 20,
   },
   TextInput: {
@@ -60,20 +59,25 @@ const styles = StyleSheet.create({
     color: '#004d40',
     marginBottom: 20,
   },
+  TextoPrincipal: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    fontFamily: 'Autumn Children',
+  },
 });
 
-type RootStackParamList = {
+/* type RootStackParamList = {
   Home: undefined;
   Login: undefined;
 };
 
 type LoginProps = {
   navigation: StackNavigationProp<RootStackParamList, 'Home'>;
-};
+}; */
 
-function Login({navigation}: LoginProps): React.JSX.Element {
-  const [usuario, setUsuario] = useState('');
-  const [contrasena, setContrasena] = useState('');
+function Login({navigation}: {navigation: any}): React.JSX.Element {
+  // const [usuario, setUsuario] = useState('');
+  // const [contrasena, setContrasena] = useState('');
 
   const btnIngresarOnPress = function () {
     //if (usuario && contrasena) {
@@ -91,6 +95,7 @@ function Login({navigation}: LoginProps): React.JSX.Element {
           style={styles.logo}
           resizeMode="contain"
         />
+        <Text style={styles.TextoPrincipal}>AgendaSalud</Text>
         {/* <Text style={styles.title}>Iniciar Sesión</Text>
         <TextInput
           style={styles.TextInput}
