@@ -38,7 +38,7 @@ interface Medicamentos {
 }
 
 // custom alert
-const CustomAlertNotas = ({visible, onConfirm, onCancel, id_notas}) => {
+const CustomAlertNotas = ({visible, onConfirm, onCancel}) => {
   return (
     <Modal
       visible={visible}
@@ -60,7 +60,7 @@ const CustomAlertNotas = ({visible, onConfirm, onCancel, id_notas}) => {
             </TouchableOpacity>
             <TouchableOpacity
               style={[styles.button, styles.confirmButton]}
-              onPress={() => onConfirm(id_notas)}>
+              onPress={() => onConfirm()}>
               <Text style={styles.confirmButtonText}>Sí</Text>
             </TouchableOpacity>
           </View>
@@ -71,7 +71,7 @@ const CustomAlertNotas = ({visible, onConfirm, onCancel, id_notas}) => {
 };
 
 // custom alert MEDICAMENTOS
-const CustomAlertMedic = ({visible, onConfirm, onCancel, id_medicamento}) => {
+const CustomAlertMedic = ({visible, onConfirm, onCancel}) => {
   return (
     <Modal
       visible={visible}
@@ -82,7 +82,7 @@ const CustomAlertMedic = ({visible, onConfirm, onCancel, id_medicamento}) => {
         <View style={styles.alertContainer}>
           <Text style={styles.alertTitle}>Eliminar Medicamento</Text>
           <Text style={styles.alertMessage}>
-            ¿Estás seguro de que deseas eliminar esta Medicamento?
+            ¿Estás seguro de que deseas eliminar este Medicamento?
           </Text>
           <View style={styles.buttonContainer}>
             <TouchableOpacity
@@ -93,9 +93,7 @@ const CustomAlertMedic = ({visible, onConfirm, onCancel, id_medicamento}) => {
             </TouchableOpacity>
             <TouchableOpacity
               style={[styles.button, styles.confirmButton]}
-              onPress={() => onConfirm(id_medicamento)}>
-              {/* onConfirmDelete(id_citas)} */}
-
+              onPress={() => onConfirm()}>
               <Text style={styles.confirmButtonText}>Sí</Text>
             </TouchableOpacity>
           </View>
@@ -116,6 +114,8 @@ export default function HomeScreen({navigation}: {navigation: any}) {
   const [week, setWeek] = useState(0);
   const [isModalVisible, setModalVisible] = useState(false);
   const [isModalVisible2, setModalVisible2] = useState(false);
+  const [selectedNoteId, setSelectedNoteId] = useState(null); // Nuevo estado para almacenar id_notas
+  const [selectedMediId, setSelectedMediId] = useState(null); // Nuevo estado para almacenar id_notas
 
   //const [searchQuery, setSearchQuery] = React.useState('');
 
@@ -192,7 +192,7 @@ export default function HomeScreen({navigation}: {navigation: any}) {
 
   /* fetch de DeleteMedice */
   //===========================================================
-  const handleDeleteMedicamento = (id: number) => {
+  const handleDeleteMedi = (id: number) => {
     setModalVisible2(false);
     const requestOptions = {
       method: 'DELETE',
@@ -210,24 +210,29 @@ export default function HomeScreen({navigation}: {navigation: any}) {
         fetchMedice(); // Actualizar la lista de medicamentos
       })
       // eslint-disable-next-line prettier/prettier
-      .catch(error => console.error('Error al eliminar el medicamento:', error));
+      .catch(error =>
+        console.error('Error al eliminar el medicamento:', error),
+      );
   };
   //===========================================================
 
   //===========================================================
   // Custom Aler
 
-  const handleDeleteNotas = () => {
+  const handleDeleteNotas = (id_notas: number) => {
+    setSelectedNoteId(id_notas); // Guardar el id de la nota seleccionada
     setModalVisible(true);
-    console.log('nodal visible');
+    //console.log('Modal id:', id_notas);
   };
 
-  const onConfirmDelete = (id: number) => {
-    setModalVisible(false);
-    // Lógica para eliminar la cita
-    console.log('Nota id:', id);
-    //handleDeleteNote(id);
-    //console.log('Nota eliminada');
+  const onConfirmDelete = () => {
+    if (selectedNoteId !== null) {
+      setModalVisible(false);
+      //console.log('Nota id:', selectedNoteId);
+      // Logica para eliminar la nota
+      handleDeleteNote(selectedNoteId);
+      // console.log('Nota eliminada');
+    }
   };
 
   const onCancelDelete = () => {
@@ -235,14 +240,15 @@ export default function HomeScreen({navigation}: {navigation: any}) {
     console.log('Eliminación cancelada');
   };
 
-  const handleDeleteMedi = () => {
+  const handleDeleteMedicamento = (id_medi: number) => {
+    setSelectedMediId(id_medi); // Guardar el id de la nota seleccionada
     setModalVisible2(true);
   };
 
-  const onConfirmDeleteMedi = (id: number) => {
+  const onConfirmDeleteMedi = () => {
     setModalVisible2(false);
     // Lógica para eliminar la cita
-    handleDeleteMedicamento(id);
+    handleDeleteMedi(selectedMediId);
     console.log('Medicamento eliminado');
   };
 
@@ -376,20 +382,19 @@ export default function HomeScreen({navigation}: {navigation: any}) {
                 <Text style={styles.noteContent}>{item.notas}</Text>
                 <Pressable
                   style={styles.closeButton}
-                  onPress={() => handleDeleteNotas()}>
+                  onPress={() => handleDeleteNotas(item.id_notas)}>
                   <Text style={styles.closeButtonText}>X</Text>
                   <CustomAlertNotas
                     visible={isModalVisible}
                     onConfirm={onConfirmDelete}
                     onCancel={onCancelDelete}
-                    id_notas={item.id_notas}
                   />
                 </Pressable>
               </View>
             )}
           />
           <View style={styles.mostrarCosas}>
-            <Text style={styles.mostrarCosas}>Medicinas</Text>
+            <Text style={styles.mostrarCosas}>Medicamentos</Text>
           </View>
           <FlatList
             style={styles.FlatListMedicine}
@@ -409,13 +414,12 @@ export default function HomeScreen({navigation}: {navigation: any}) {
                 <Text style={styles.noteContent}>{item.dias}</Text>
                 <Pressable
                   style={styles.closeButton}
-                  onPress={() => handleDeleteMedi()}>
+                  onPress={() => handleDeleteMedicamento(item.id_medicamento)}>
                   <Text style={styles.closeButtonText}>X</Text>
                   <CustomAlertMedic
                     visible={isModalVisible2}
                     onConfirm={onConfirmDeleteMedi}
                     onCancel={onCancelDeleteMedi} //AQUI TIENE QUE SER onConfirmDelete
-                    id_medicamento={item.id_medicamento}
                   />
                 </Pressable>
               </View>
