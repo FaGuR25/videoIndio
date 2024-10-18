@@ -37,7 +37,8 @@ interface Medicamentos {
   dias: number;
 }
 
-const CustomAlertNotas = ({visible, onConfirm, onCancel, id_citas}) => {
+// custom alert
+const CustomAlertNotas = ({visible, onConfirm, onCancel, id_notas}) => {
   return (
     <Modal
       visible={visible}
@@ -46,9 +47,9 @@ const CustomAlertNotas = ({visible, onConfirm, onCancel, id_citas}) => {
       onRequestClose={onCancel}>
       <View style={styles.modalBackground}>
         <View style={styles.alertContainer}>
-          <Text style={styles.alertTitle}>Eliminar Cita</Text>
+          <Text style={styles.alertTitle}>Eliminar Nota</Text>
           <Text style={styles.alertMessage}>
-            ¿Estás seguro de que deseas eliminar esta cita?
+            ¿Estás seguro de que deseas eliminar esta Nota?
           </Text>
           <View style={styles.buttonContainer}>
             <TouchableOpacity
@@ -59,7 +60,40 @@ const CustomAlertNotas = ({visible, onConfirm, onCancel, id_citas}) => {
             </TouchableOpacity>
             <TouchableOpacity
               style={[styles.button, styles.confirmButton]}
-              onPress={() => onConfirm(id_citas)}>
+              onPress={() => onConfirm(id_notas)}>
+              <Text style={styles.confirmButtonText}>Sí</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </View>
+    </Modal>
+  );
+};
+
+// custom alert MEDICAMENTOS
+const CustomAlertMedic = ({visible, onConfirm, onCancel, id_medicamento}) => {
+  return (
+    <Modal
+      visible={visible}
+      transparent={true}
+      animationType="fade"
+      onRequestClose={onCancel}>
+      <View style={styles.modalBackground}>
+        <View style={styles.alertContainer}>
+          <Text style={styles.alertTitle}>Eliminar Medicamento</Text>
+          <Text style={styles.alertMessage}>
+            ¿Estás seguro de que deseas eliminar esta Medicamento?
+          </Text>
+          <View style={styles.buttonContainer}>
+            <TouchableOpacity
+              style={[styles.button, styles.cancelButton]}
+              onPress={onCancel}>
+              {/* {onCancelDelete}> */}
+              <Text style={styles.cancelButtonText}>Cancelar</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={[styles.button, styles.confirmButton]}
+              onPress={() => onConfirm(id_medicamento)}>
               {/* onConfirmDelete(id_citas)} */}
 
               <Text style={styles.confirmButtonText}>Sí</Text>
@@ -81,6 +115,7 @@ export default function HomeScreen({navigation}: {navigation: any}) {
   const [value, setValue] = useState(new Date());
   const [week, setWeek] = useState(0);
   const [isModalVisible, setModalVisible] = useState(false);
+  const [isModalVisible2, setModalVisible2] = useState(false);
 
   //const [searchQuery, setSearchQuery] = React.useState('');
 
@@ -158,43 +193,24 @@ export default function HomeScreen({navigation}: {navigation: any}) {
   /* fetch de DeleteMedice */
   //===========================================================
   const handleDeleteMedicamento = (id: number) => {
-    // Mostrar alerta de confirmación
-    Alert.alert(
-      'Eliminar Medicamento', // Título de la alerta
-      '¿Estás seguro de que deseas eliminar este medicamento?', // Mensaje
-      [
-        {
-          text: 'No', // Opción de cancelar
-          onPress: () => console.log('Eliminación cancelada'),
-          style: 'cancel', // Estilo del botón de cancelar
-        },
-        {
-          text: 'Sí', // Opción de confirmación
-          onPress: () => {
-            // Ejecutar la eliminación si el usuario confirma
-            const requestOptions = {
-              method: 'DELETE',
-              redirect: 'follow',
-            };
+    setModalVisible2(false);
+    const requestOptions = {
+      method: 'DELETE',
+      redirect: 'follow',
+    };
 
-            fetch(`http://localhost:3100/Medicamentos/${id}`, requestOptions)
-              .then(response => response.text())
-              .then(result => {
-                Alert.alert(
-                  'Medicamento eliminado',
-                  'El medicamento ha sido eliminado exitosamente.',
-                );
-                console.log(result);
-                fetchMedice(); // Actualizar la lista de medicamentos
-              })
-              .catch(error =>
-                console.error('Error al eliminar el medicamento:', error),
-              );
-          },
-        },
-      ],
-      {cancelable: true}, // Permitir que se cierre tocando fuera de la alerta
-    );
+    fetch(`http://localhost:3100/Medicamentos/${id}`, requestOptions)
+      .then(response => response.text())
+      .then(result => {
+        Alert.alert(
+          'Medicamento eliminado',
+          'El medicamento ha sido eliminado exitosamente.',
+        );
+        console.log(result);
+        fetchMedice(); // Actualizar la lista de medicamentos
+      })
+      // eslint-disable-next-line prettier/prettier
+      .catch(error => console.error('Error al eliminar el medicamento:', error));
   };
   //===========================================================
 
@@ -203,13 +219,15 @@ export default function HomeScreen({navigation}: {navigation: any}) {
 
   const handleDeleteNotas = () => {
     setModalVisible(true);
+    console.log('nodal visible');
   };
 
   const onConfirmDelete = (id: number) => {
     setModalVisible(false);
     // Lógica para eliminar la cita
-    handleDeleteNote(id);
-    console.log('Cita eliminada');
+    console.log('Nota id:', id);
+    //handleDeleteNote(id);
+    //console.log('Nota eliminada');
   };
 
   const onCancelDelete = () => {
@@ -217,6 +235,21 @@ export default function HomeScreen({navigation}: {navigation: any}) {
     console.log('Eliminación cancelada');
   };
 
+  const handleDeleteMedi = () => {
+    setModalVisible2(true);
+  };
+
+  const onConfirmDeleteMedi = (id: number) => {
+    setModalVisible2(false);
+    // Lógica para eliminar la cita
+    handleDeleteMedicamento(id);
+    console.log('Medicamento eliminado');
+  };
+
+  const onCancelDeleteMedi = () => {
+    setModalVisible2(false);
+    console.log('Eliminación cancelada');
+  };
   //===========================================================
 
   const weeks = React.useMemo(() => {
@@ -256,164 +289,180 @@ export default function HomeScreen({navigation}: {navigation: any}) {
   ];
 
   return (
-    <>
-      <SafeAreaView style={{flex: 1}}>
-        <View style={styles.container}>
-          <View style={styles.picker}>
-            <Swiper
-              index={1}
-              ref={swiper}
-              loop={false}
-              showsPagination={false}
-              onIndexChanged={ind => {
-                if (ind === 1) {
-                  return;
-                }
-                setTimeout(() => {
-                  const newIndex = ind - 1;
-                  const newWeek = week + newIndex;
-                  setWeek(newWeek);
-                  setValue(moment(value).add(newIndex, 'week').toDate());
-                  swiper.current.scrollTo(1, false);
-                }, 100);
-              }}>
-              {weeks.map((dates, index) => (
-                <View style={styles.itemRow} key={index}>
-                  {dates.map((item, dateIndex) => {
-                    const isActive =
-                      value.toDateString() === item.date.toDateString();
-                    return (
-                      <TouchableWithoutFeedback
-                        key={dateIndex}
-                        onPress={() => setValue(item.date)}>
-                        <View
+    <SafeAreaView style={{flex: 1}}>
+      <View style={styles.container}>
+        <View style={styles.picker}>
+          <Swiper
+            index={1}
+            ref={swiper}
+            loop={false}
+            showsPagination={false}
+            onIndexChanged={ind => {
+              if (ind === 1) {
+                return;
+              }
+              setTimeout(() => {
+                const newIndex = ind - 1;
+                const newWeek = week + newIndex;
+                setWeek(newWeek);
+                setValue(moment(value).add(newIndex, 'week').toDate());
+                swiper.current.scrollTo(1, false);
+              }, 100);
+            }}>
+            {weeks.map((dates, index) => (
+              <View style={styles.itemRow} key={index}>
+                {dates.map((item, dateIndex) => {
+                  const isActive =
+                    value.toDateString() === item.date.toDateString();
+                  return (
+                    <TouchableWithoutFeedback
+                      key={dateIndex}
+                      onPress={() => setValue(item.date)}>
+                      <View
+                        style={[
+                          styles.item,
+                          isActive && {
+                            backgroundColor: '#01780d',
+                            borderColor: '#01780d',
+                          },
+                        ]}>
+                        <Text
                           style={[
-                            styles.item,
-                            isActive && {
-                              backgroundColor: '#01780d',
-                              borderColor: '#01780d',
-                            },
+                            styles.itemWeekday,
+                            isActive && {color: '#fff'},
                           ]}>
-                          <Text
-                            style={[
-                              styles.itemWeekday,
-                              isActive && {color: '#fff'},
-                            ]}>
-                            {item.weekday === 'Mon' && 'Lun'}
-                            {item.weekday === 'Tue' && 'Mar'}
-                            {item.weekday === 'Wed' && 'Mié'}
-                            {item.weekday === 'Thu' && 'Jue'}
-                            {item.weekday === 'Fri' && 'Vie'}
-                            {item.weekday === 'Sat' && 'Sáb'}
-                            {item.weekday === 'Sun' && 'Dom'}
-                          </Text>
-                          <Text
-                            style={[
-                              styles.itemDate,
-                              isActive && {color: '#fff'},
-                            ]}>
-                            {item.date.getDate()}
-                          </Text>
-                        </View>
-                      </TouchableWithoutFeedback>
-                    );
-                  })}
-                </View>
-              ))}
-            </Swiper>
+                          {item.weekday === 'Mon' && 'Lun'}
+                          {item.weekday === 'Tue' && 'Mar'}
+                          {item.weekday === 'Wed' && 'Mié'}
+                          {item.weekday === 'Thu' && 'Jue'}
+                          {item.weekday === 'Fri' && 'Vie'}
+                          {item.weekday === 'Sat' && 'Sáb'}
+                          {item.weekday === 'Sun' && 'Dom'}
+                        </Text>
+                        <Text
+                          style={[
+                            styles.itemDate,
+                            isActive && {color: '#fff'},
+                          ]}>
+                          {item.date.getDate()}
+                        </Text>
+                      </View>
+                    </TouchableWithoutFeedback>
+                  );
+                })}
+              </View>
+            ))}
+          </Swiper>
+        </View>
+
+        <ScrollView style={styles.Scrollcito}>
+          <View style={styles.mostrarCosas}>
+            <Text style={styles.mostrarCosas}>Notas</Text>
           </View>
 
-          <ScrollView style={styles.Scrollcito}>
-            {/*             <Searchbar
-              placeholder="Search"
-              onChangeText={setSearchQuery}
-              value={searchQuery}
-            /> */}
-
-            {/* <Image source={require('./img/salud.png')} style={styles.imagen} />
-            <Text style={styles.texto}>
-              Todavía no hay ningún recordatorio. ¡Pulsa "+" para agregar uno!
-            </Text> */}
-
-            <FlatList
-              data={notes}
-              keyExtractor={item =>
-                item.id_notas
-                  ? item.id_notas.toString()
-                  : Math.random().toString()
-              }
-              renderItem={({item}) => (
-                <View style={styles.noteCard}>
-                  <Text style={styles.diseño}>Notas</Text>
-                  <Text style={styles.diseño}>{item.titulo}</Text>
-                  <Text style={styles.noteContent}>{item.notas}</Text>
-                  <Pressable
-                    style={styles.closeButton}
-                    onPress={() => handleDeleteNotas()}>
-                    <Text style={styles.closeButtonText}>X</Text>
-                    <CustomAlertNotas
-                      visible={isModalVisible}
-                      onConfirm={onConfirmDelete}
-                      onCancel={onCancelDelete} //AQUI TIENE QUE SER onConfirmDelete
-                      id_citas={item.id_notas}
-                    />
-                  </Pressable>
-                </View>
-              )}
-            />
-
-            <FlatList
-              data={medice}
-              keyExtractor={item =>
-                item.id_medicamento
-                  ? item.id_medicamento.toString()
-                  : Math.random().toString()
-              }
-              renderItem={({item}) => (
-                <View style={styles.noteCard}>
-                  <Text style={styles.diseño}>Medicamentos</Text>
-                  <Text style={styles.diseño}>{item.nombreMedicamento}</Text>
-                  <Text style={styles.noteContent}>{item.gramos} </Text>
-                  <Text style={styles.noteContent}>{item.tiempo}</Text>
-                  <Text style={styles.noteContent}>{item.dias}</Text>
-                  <Pressable
-                    style={styles.closeButton}
-                    onPress={() =>
-                      handleDeleteMedicamento(item.id_medicamento)
-                    }>
-                    <Text style={styles.closeButtonText}>X</Text>
-                  </Pressable>
-                </View>
-              )}
-            />
-          </ScrollView>
-          <FloatingAction
-            actions={actions}
-            color="green"
-            position="right"
-            onPressItem={name => {
-              if (name === 'Notes') {
-                navigation.navigate('CreateNotes');
-              } else if (name === 'Medice') {
-                navigation.navigate('AddMedice');
-              } else if (name === 'Cites') {
-                navigation.navigate('CreateCitas');
-              }
-            }}
+          <FlatList
+            style={styles.FlatListNotes}
+            data={notes}
+            keyExtractor={item =>
+              item.id_notas
+                ? item.id_notas.toString()
+                : Math.random().toString()
+            }
+            scrollEnabled={false}
+            renderItem={({item}) => (
+              <View style={styles.noteCardNotes}>
+                {/* <Text style={styles.diseño}>Notas</Text> */}
+                <Text style={styles.diseño}>{item.titulo}</Text>
+                <Text style={styles.noteContent}>{item.notas}</Text>
+                <Pressable
+                  style={styles.closeButton}
+                  onPress={() => handleDeleteNotas()}>
+                  <Text style={styles.closeButtonText}>X</Text>
+                  <CustomAlertNotas
+                    visible={isModalVisible}
+                    onConfirm={onConfirmDelete}
+                    onCancel={onCancelDelete}
+                    id_notas={item.id_notas}
+                  />
+                </Pressable>
+              </View>
+            )}
           />
-        </View>
-      </SafeAreaView>
-    </>
+          <View style={styles.mostrarCosas}>
+            <Text style={styles.mostrarCosas}>Medicinas</Text>
+          </View>
+          <FlatList
+            style={styles.FlatListMedicine}
+            data={medice}
+            keyExtractor={item =>
+              item.id_medicamento
+                ? item.id_medicamento.toString()
+                : Math.random().toString()
+            }
+            scrollEnabled={false}
+            renderItem={({item}) => (
+              <View style={styles.noteCardMedicine}>
+                {/* <Text style={styles.diseño}>Medicamentos</Text> */}
+                <Text style={styles.diseño}>{item.nombreMedicamento}</Text>
+                <Text style={styles.noteContent}>{item.gramos} </Text>
+                <Text style={styles.noteContent}>{item.tiempo}</Text>
+                <Text style={styles.noteContent}>{item.dias}</Text>
+                <Pressable
+                  style={styles.closeButton}
+                  onPress={() => handleDeleteMedi()}>
+                  <Text style={styles.closeButtonText}>X</Text>
+                  <CustomAlertMedic
+                    visible={isModalVisible2}
+                    onConfirm={onConfirmDeleteMedi}
+                    onCancel={onCancelDeleteMedi} //AQUI TIENE QUE SER onConfirmDelete
+                    id_medicamento={item.id_medicamento}
+                  />
+                </Pressable>
+              </View>
+            )}
+          />
+        </ScrollView>
+        <FloatingAction
+          actions={actions}
+          color="green"
+          position="right"
+          onPressItem={name => {
+            if (name === 'Notes') {
+              navigation.navigate('CreateNotes');
+            } else if (name === 'Medice') {
+              navigation.navigate('AddMedice');
+            } else if (name === 'Cites') {
+              navigation.navigate('CreateCitas');
+            }
+          }}
+        />
+      </View>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
+  mostrarCosas: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    alignContent: 'center',
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: '#000',
+    marginTop: 5,
+  },
+  FlatListMedicine: {
+    //backgroundColor: '#ffff00',
+  },
+  FlatListNotes: {
+    //backgroundColor: '#ff00ff',
+  },
   container: {
     flex: 1,
     justifyContent: 'center',
-    alignItems: 'center',
     marginTop: 10,
     backgroundColor: '#ffffff',
+    flexDirection: 'column',
   },
   modalBackground: {
     flex: 1,
@@ -493,21 +542,15 @@ const styles = StyleSheet.create({
     marginRight: 60,
     marginBottom: 20,
   },
-  imagecite: {
-    width: 70,
-    height: 60,
-    marginTop: 5,
-    marginRight: 60,
-    marginBottom: 20,
-  },
   picker: {
     flex: 1,
     maxHeight: 74,
     paddingVertical: 12,
     flexDirection: 'row',
     alignItems: 'center',
-    marginTop: 5,
+    marginTop: 10,
     position: 'absolute',
+    top: 0,
   },
   subtitle: {
     fontSize: 17,
@@ -657,11 +700,26 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: '#000',
   },
-  noteCard: {
+  noteCardNotes: {
     color: '#333',
     padding: 15,
     borderRadius: 8,
-    backgroundColor: '#fff',
+    backgroundColor: 'rgba(235, 255, 235, 1)',
+    //rgba(0, 0, 0, 0.5)
+    marginVertical: 8,
+    marginHorizontal: 16,
+    shadowColor: '#000',
+    shadowOpacity: 0.1,
+    shadowRadius: 8,
+    elevation: 2,
+  },
+  noteCardMedicine: {
+    color: '#333',
+    padding: 15,
+    borderRadius: 8,
+    backgroundColor: 'rgba(247, 245, 233, 1)',
+    //
+    //rgba(0, 0, 0, 0.5)
     marginVertical: 8,
     marginHorizontal: 16,
     shadowColor: '#000',

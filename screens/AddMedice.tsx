@@ -82,7 +82,7 @@ export default function AddMedice({navigation}: {navigation: any}) {
           'Éxito',
           'Medicamento guardado y notificación programada exitosamente.',
         );
-        navigation.navigate('HomeScreen'); // Navega a la pantalla de inicio
+        navigation.navigate('Inicio'); // Navega a la pantalla de inicio
       })
       .catch(error => console.error(error));
   };
