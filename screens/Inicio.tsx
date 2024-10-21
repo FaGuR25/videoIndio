@@ -1,5 +1,7 @@
 import React, {useState, useRef, useCallback} from 'react';
 import {FloatingAction} from 'react-native-floating-action';
+import {Icon} from 'react-native-elements';
+import medicamentos from '../assets/icons/medicamentos.png';
 // import {Searchbar} from 'react-native-paper';
 import {
   StyleSheet,
@@ -12,6 +14,7 @@ import {
   FlatList,
   Alert,
   TouchableOpacity,
+  Image,
 } from 'react-native';
 import {useFocusEffect} from '@react-navigation/native';
 //import ImageButton from './ImageButton';
@@ -37,8 +40,14 @@ interface Medicamentos {
   dias: number;
 }
 
+interface MyComponents {
+  visible: boolean;
+  onConfirm: () => void;
+  onCancel: () => void;
+}
+
 // custom alert
-const CustomAlertNotas = ({visible, onConfirm, onCancel}) => {
+const CustomAlertNotas = ({visible, onConfirm, onCancel}: MyComponents) => {
   return (
     <Modal
       visible={visible}
@@ -71,7 +80,7 @@ const CustomAlertNotas = ({visible, onConfirm, onCancel}) => {
 };
 
 // custom alert MEDICAMENTOS
-const CustomAlertMedic = ({visible, onConfirm, onCancel}) => {
+const CustomAlertMedic = ({visible, onConfirm, onCancel}: MyComponents) => {
   return (
     <Modal
       visible={visible}
@@ -178,10 +187,6 @@ export default function HomeScreen({navigation}: {navigation: any}) {
     fetch(`http://localhost:3100/Notas/${id}`, requestOptions)
       .then(response => response.text())
       .then(result => {
-        Alert.alert(
-          'Nota eliminada',
-          'Tu nota ha sido eliminada exitosamente.',
-        );
         console.log(result);
         fetchNotes(); // Actualizar la lista de notas
       })
@@ -202,10 +207,6 @@ export default function HomeScreen({navigation}: {navigation: any}) {
     fetch(`http://localhost:3100/Medicamentos/${id}`, requestOptions)
       .then(response => response.text())
       .then(result => {
-        Alert.alert(
-          'Medicamento eliminado',
-          'El medicamento ha sido eliminado exitosamente.',
-        );
         console.log(result);
         fetchMedice(); // Actualizar la lista de medicamentos
       })
@@ -383,7 +384,7 @@ export default function HomeScreen({navigation}: {navigation: any}) {
                 <Pressable
                   style={styles.closeButton}
                   onPress={() => handleDeleteNotas(item.id_notas)}>
-                  <Text style={styles.closeButtonText}>X</Text>
+                  <Icon type="MaterialIcons" name="delete" />
                   <CustomAlertNotas
                     visible={isModalVisible}
                     onConfirm={onConfirmDelete}
@@ -393,9 +394,12 @@ export default function HomeScreen({navigation}: {navigation: any}) {
               </View>
             )}
           />
-          <View style={styles.mostrarCosas}>
-            <Text style={styles.mostrarCosas}>Medicamentos</Text>
+          <View style={styles.containertext}>
+            <Image source={medicamentos} style={styles.imagetext} />
+            <Text style={styles.textWithBorder}>Medicamentos</Text>
+            <Text style={styles.textWithBorder}>Medicamentos</Text>
           </View>
+
           <FlatList
             style={styles.FlatListMedicine}
             data={medice}
@@ -415,7 +419,7 @@ export default function HomeScreen({navigation}: {navigation: any}) {
                 <Pressable
                   style={styles.closeButton}
                   onPress={() => handleDeleteMedicamento(item.id_medicamento)}>
-                  <Text style={styles.closeButtonText}>X</Text>
+                  <Icon type="MaterialIcons" name="delete" />
                   <CustomAlertMedic
                     visible={isModalVisible2}
                     onConfirm={onConfirmDeleteMedi}
@@ -739,5 +743,24 @@ const styles = StyleSheet.create({
   noteContent: {
     fontSize: 16,
     color: '#333',
+  },
+  containertext: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    position: 'relative',
+  },
+  imagetext: {
+    width: 365,
+    height: 40,
+    borderRadius: 10,
+  },
+  textWithBorder: {
+    position: 'absolute',
+    fontSize: 24, // Ajusta el tamaño de fuente según lo necesites
+    fontWeight: 'bold',
+    color: '#000', // Color del texto
+    textShadowColor: 'orange', // Color del borde
+    textShadowOffset: {width: 3, height: 3}, // Ajusta el desplazamiento del borde
+    textShadowRadius: 2, // Ajusta el radio del borde
   },
 });

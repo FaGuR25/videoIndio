@@ -13,6 +13,7 @@ import React from 'react';
 //import HomeScreen from './HomeScreen';
 //import PushNotification from 'react-native-push-notification';
 //import {TouchableOpacity} from 'react-native-gesture-handler';
+
 const styles = StyleSheet.create({
   container: {
     width: '100%',
@@ -25,6 +26,22 @@ const styles = StyleSheet.create({
     backgroundColor: '#e0f2f1',
     justifyContent: 'center',
     alignContent: 'center',
+  },
+  diagonalLinesContainer: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    zIndex: -1,
+    overflow: 'hidden',
+  },
+  diagonalLine: {
+    position: 'absolute',
+    width: '300%',
+    height: 3,
+    backgroundColor: '#b2dfdb',
+    transform: [{rotate: '45deg'}],
   },
   logo: {
     width: 180,
@@ -60,9 +77,10 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   TextoPrincipal: {
-    fontSize: 24,
+    fontSize: 30,
+    marginBottom: 30,
     fontWeight: 'bold',
-    fontFamily: 'Autumn Children',
+    fontFamily: 'Autumn_Children.ttf',
   },
 });
 
@@ -89,13 +107,37 @@ function Login({navigation}: {navigation: any}): React.JSX.Element {
 
   return (
     <SafeAreaView style={styles.screen}>
-      <View style={styles.container}>
-        <Image
-          source={require('../assets/icons/logome.png')}
-          style={styles.logo}
-          resizeMode="contain"
-        />
-        <Text style={styles.TextoPrincipal}>AgendaSalud</Text>
+      <View style={styles.screen}>
+        <View style={styles.diagonalLinesContainer}>
+          {/* Repite las líneas diagonales */}
+          <View style={[styles.diagonalLine, {top: '5%'}]} />
+          <View style={[styles.diagonalLine, {top: '10%'}]} />
+          <View style={[styles.diagonalLine, {top: '15%'}]} />
+          <View style={[styles.diagonalLine, {top: '20%'}]} />
+          <View style={[styles.diagonalLine, {top: '25%'}]} />
+          <View style={[styles.diagonalLine, {top: '30%'}]} />
+          <View style={[styles.diagonalLine, {top: '35%'}]} />
+          <View style={[styles.diagonalLine, {top: '40%'}]} />
+          <View style={[styles.diagonalLine, {top: '45%'}]} />
+          <View style={[styles.diagonalLine, {top: '50%'}]} />
+          <View style={[styles.diagonalLine, {top: '55%'}]} />
+          <View style={[styles.diagonalLine, {top: '60%'}]} />
+          <View style={[styles.diagonalLine, {top: '65%'}]} />
+          <View style={[styles.diagonalLine, {top: '70%'}]} />
+          <View style={[styles.diagonalLine, {top: '75%'}]} />
+          <View style={[styles.diagonalLine, {top: '80%'}]} />
+          <View style={[styles.diagonalLine, {top: '85%'}]} />
+          <View style={[styles.diagonalLine, {top: '90%'}]} />
+        </View>
+
+        <View style={styles.container}>
+          <Image
+            source={require('../assets/icons/logome.png')}
+            style={styles.logo}
+            resizeMode="contain"
+          />
+          <Text style={styles.TextoPrincipal}>AgendaSalud</Text>
+        </View>
         {/* <Text style={styles.title}>Iniciar Sesión</Text>
         <TextInput
           style={styles.TextInput}
