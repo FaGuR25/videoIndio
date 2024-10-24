@@ -7,8 +7,11 @@ import {
   FlatList,
   ScrollView,
   Pressable,
+  TouchableOpacity,
+  Modal,
 } from 'react-native';
 import {Calendar} from 'react-native-calendars';
+import {Icon} from 'react-native-elements';
 
 const FindScreen = () => {
   const [selectedDate, setSelectedDate] = useState('');
@@ -24,6 +27,42 @@ const FindScreen = () => {
     documentos: String;
   }
 
+  // custom alert
+  const [isModalVisible, setModalVisible] = useState(false);
+  const [selectedCitaId, setSelectedCitaId] = useState(null); // Nuevo estado para almacenar id_notas
+
+  const CustomAlertCita = ({visible, onConfirm, onCancel}: MyComponents) => {
+    return (
+      <Modal
+        visible={visible}
+        transparent={true}
+        animationType="fade"
+        onRequestClose={onCancel}>
+        <View style={styles.modalBackground}>
+          <View style={styles.alertContainer}>
+            <Text style={styles.alertTitle}>Eliminar Nota</Text>
+            <Text style={styles.alertMessage}>
+              ¿Estás seguro de que deseas eliminar esta Nota?
+            </Text>
+            <View style={styles.buttonContainer}>
+              <TouchableOpacity
+                style={[styles.button, styles.cancelButton]}
+                onPress={onCancel}>
+                {/* {onCancelDelete}> */}
+                <Text style={styles.cancelButtonText}>Cancelar</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={[styles.button, styles.confirmButton]}
+                onPress={() => onConfirm()}>
+                <Text style={styles.confirmButtonText}>Sí</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
+      </Modal>
+    );
+  };
+
   useFocusEffect(
     useCallback(() => {
       fetchCites();
@@ -33,12 +72,9 @@ const FindScreen = () => {
   useEffect(() => {
     if (selectedDate !== '') {
       // Actualizar citas cuando se selecciona una nueva fecha
-      // actualizar cites cuando se selecciona una nueva fecha
       fetchCites();
     }
     //Actualiza citas cuando se agrega una nueva
-    //fetchCitesForDate(selectedDate);
-    //fetchCites();
   }, [selectedDate]);
 
   useEffect(() => {
@@ -65,7 +101,7 @@ const FindScreen = () => {
   };
 
   /*  fetch de GetNotes */
-  //=============Mantenimiento======================================
+  //===================================================
   const fetchCites = () => {
     const myHeaders = new Headers();
     myHeaders.append('Content-Type', 'application/json');
@@ -85,6 +121,27 @@ const FindScreen = () => {
 
   /* fetch de DeleteNote */
   //===========================================================
+
+  const handleDeleteCitas = (id_citas: number) => {
+    setSelectedCitaId(id_citas); // Guardar el id de la nota seleccionada
+    setModalVisible(true);
+    //console.log('Modal id:', id_citas);
+  };
+
+  const onConfirmDeleteCitas = () => {
+    if (selectedCitaId !== null) {
+      setModalVisible(false);
+      //console.log('Nota id:', selectedCitaId);
+      // Logica para eliminar la nota
+      handleDeleteCita(selectedCitaId);
+      // console.log('Nota eliminada');
+    }
+  };
+
+  const onCancelDeleteCitas = () => {
+    setModalVisible(false);
+    console.log('Eliminación cancelada');
+  };
 
   const handleDeleteCita = (id: number) => {
     const requestOptions = {
@@ -153,18 +210,27 @@ const FindScreen = () => {
           keyExtractor={item =>
             item.id_citas ? item.id_citas.toString() : Math.random().toString()
           }
+          scrollEnabled={false}
           renderItem={({item}) => (
-            <View style={styles.noteCard}>
-              <Text style={styles.diseño}>Cita</Text>
-              <Text style={styles.diseño}>{item.fecha}</Text>
-              <Text style={styles.noteContent}>{item.tiempo}</Text>
-              <Text style={styles.noteContent}>{item.documentos}</Text>
-              <Pressable
-                style={styles.closeButton}
-                onPress={() => handleDeleteCita(item.id_citas)}>
-                <Text>X</Text>
-              </Pressable>
-            </View>
+            <>
+              <View style={styles.noteCard}>
+                <Text style={styles.diseño}>Cita</Text>
+                <Text style={styles.diseño}>{item.fecha}</Text>
+                <Text style={styles.noteContent}>{item.tiempo}</Text>
+                <Text style={styles.noteContent}>{item.documentos}</Text>
+                <Pressable
+                  style={styles.closeButton}
+                  onPress={() => handleDeleteCitas(item.id_citas)}>
+                  <Icon type="MaterialIcons" name="delete" />
+                  <CustomAlertCita
+                    visible={isModalVisible}
+                    onConfirm={onConfirmDeleteCitas}
+                    onCancel={onCancelDeleteCitas}
+                  />
+                </Pressable>
+              </View>
+              <View style={styles.divider} />
+            </>
           )}
         />
       </ScrollView>
@@ -173,6 +239,12 @@ const FindScreen = () => {
 };
 
 const styles = StyleSheet.create({
+  divider: {
+    height: 1,
+    backgroundColor: '#ccc',
+    marginVertical: 8,
+    marginHorizontal: 20,
+  },
   container: {
     flex: 1,
     paddingTop: 20,
@@ -223,7 +295,8 @@ const styles = StyleSheet.create({
     color: '#8fcbbc',
   },
   noteCard: {
-    backgroundColor: '#f9f9f9',
+    // backgroundColor: '#f9f9f9',
+    backgroundColor: 'rgba(240, 245, 233, 1)',
     padding: 15,
     marginVertical: 5,
     marginHorizontal: 20,
@@ -244,6 +317,63 @@ const styles = StyleSheet.create({
   noteContent: {
     fontSize: 14,
     color: '#555',
+  },
+  modalBackground: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)', // Fondo oscuro transparente
+  },
+  alertContainer: {
+    width: 300,
+    padding: 20,
+    backgroundColor: '#fff',
+    borderRadius: 10,
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: {width: 0, height: 2},
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+  alertTitle: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    marginBottom: 15,
+    color: '#333', // Color del título
+  },
+  alertMessage: {
+    fontSize: 16,
+    textAlign: 'center',
+    marginBottom: 20,
+    color: '#555', // Color del mensaje
+  },
+  buttonContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    width: '100%',
+  },
+  button: {
+    flex: 1,
+    paddingVertical: 10,
+    marginHorizontal: 5,
+    borderRadius: 5,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  cancelButton: {
+    backgroundColor: '#f44336', // Color del botón de cancelar
+  },
+  confirmButton: {
+    backgroundColor: '#4CAF50', // Color del botón de confirmación
+  },
+  cancelButtonText: {
+    color: '#fff', // Color del texto de cancelar
+    fontSize: 16,
+  },
+  confirmButtonText: {
+    color: '#fff', // Color del texto de confirmación
+    fontSize: 16,
   },
 });
 

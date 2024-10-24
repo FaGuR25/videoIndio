@@ -13,6 +13,7 @@ import React from 'react';
 //import HomeScreen from './HomeScreen';
 //import PushNotification from 'react-native-push-notification';
 //import {TouchableOpacity} from 'react-native-gesture-handler';
+import * as Animatable from 'react-native-animatable';
 
 const styles = StyleSheet.create({
   container: {
@@ -30,7 +31,7 @@ const styles = StyleSheet.create({
   diagonalLinesContainer: {
     position: 'absolute',
     top: 0,
-    left: 0,
+    left: -300,
     right: 0,
     bottom: 0,
     zIndex: -1,
@@ -65,6 +66,8 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     paddingHorizontal: 20,
     marginTop: 20,
+    marginBottom: 30,
+    marginHorizontal: 130,
   },
   buttonText: {
     color: '#ffffff',
@@ -84,50 +87,24 @@ const styles = StyleSheet.create({
   },
 });
 
-/* type RootStackParamList = {
-  Home: undefined;
-  Login: undefined;
-};
-
-type LoginProps = {
-  navigation: StackNavigationProp<RootStackParamList, 'Home'>;
-}; */
+const topValues = Array.from({length: 40}, (_, index) => index * 5); // Cambia 40 por la cantidad de líneas que necesites
 
 function Login({navigation}: {navigation: any}): React.JSX.Element {
-  // const [usuario, setUsuario] = useState('');
-  // const [contrasena, setContrasena] = useState('');
-
   const btnIngresarOnPress = function () {
-    //if (usuario && contrasena) {
     navigation.navigate('Tabs');
     return;
-    //}
-    //Alert.alert('Fallido', 'Datos incorrectos...');
   };
 
   return (
     <SafeAreaView style={styles.screen}>
       <View style={styles.screen}>
         <View style={styles.diagonalLinesContainer}>
-          {/* Repite las líneas diagonales */}
-          <View style={[styles.diagonalLine, {top: '5%'}]} />
-          <View style={[styles.diagonalLine, {top: '10%'}]} />
-          <View style={[styles.diagonalLine, {top: '15%'}]} />
-          <View style={[styles.diagonalLine, {top: '20%'}]} />
-          <View style={[styles.diagonalLine, {top: '25%'}]} />
-          <View style={[styles.diagonalLine, {top: '30%'}]} />
-          <View style={[styles.diagonalLine, {top: '35%'}]} />
-          <View style={[styles.diagonalLine, {top: '40%'}]} />
-          <View style={[styles.diagonalLine, {top: '45%'}]} />
-          <View style={[styles.diagonalLine, {top: '50%'}]} />
-          <View style={[styles.diagonalLine, {top: '55%'}]} />
-          <View style={[styles.diagonalLine, {top: '60%'}]} />
-          <View style={[styles.diagonalLine, {top: '65%'}]} />
-          <View style={[styles.diagonalLine, {top: '70%'}]} />
-          <View style={[styles.diagonalLine, {top: '75%'}]} />
-          <View style={[styles.diagonalLine, {top: '80%'}]} />
-          <View style={[styles.diagonalLine, {top: '85%'}]} />
-          <View style={[styles.diagonalLine, {top: '90%'}]} />
+          {topValues.map((value, index) => (
+            <View
+              key={index}
+              style={[styles.diagonalLine, {top: `${value}%`}]}
+            />
+          ))}
         </View>
 
         <View style={styles.container}>
@@ -136,29 +113,21 @@ function Login({navigation}: {navigation: any}): React.JSX.Element {
             style={styles.logo}
             resizeMode="contain"
           />
-          <Text style={styles.TextoPrincipal}>AgendaSalud</Text>
+          <Animatable.Text
+            animation="fadeIn"
+            duration={2000}
+            style={styles.TextoPrincipal}>
+            Agenda Salud
+          </Animatable.Text>
         </View>
-        {/* <Text style={styles.title}>Iniciar Sesión</Text>
-        <TextInput
-          style={styles.TextInput}
-          placeholder="Usuario"
-          placeholderTextColor="#004d40"
-          onChangeText={u => setUsuario(u)}
-        />
-        <TextInput
-          style={styles.TextInput}
-          placeholder="Contraseña"
-          placeholderTextColor="#004d40"
-          secureTextEntry={true}
-          onChangeText={p => setContrasena(p)}
-        /> */}
         <View style={styles.buttonContainer}>
           <Text style={styles.buttonText} onPress={btnIngresarOnPress}>
             Ingresar
           </Text>
         </View>
       </View>
-      {/* <TouchableOpacity
+    </SafeAreaView>
+    /* <TouchableOpacity
         onPress={() => {
           PushNotification.localNotificationSchedule({
             channelId: 'fatima1', // (required for Android)
@@ -169,8 +138,7 @@ function Login({navigation}: {navigation: any}): React.JSX.Element {
           });
         }}>
         <Text>boton</Text>
-      </TouchableOpacity> */}
-    </SafeAreaView>
+      </TouchableOpacity> */
   );
 }
 

@@ -2,6 +2,7 @@ import React, {useState, useRef, useCallback} from 'react';
 import {FloatingAction} from 'react-native-floating-action';
 import {Icon} from 'react-native-elements';
 import medicamentos from '../assets/icons/medicamentos.png';
+import notas from '../assets/icons/bloc.png';
 // import {Searchbar} from 'react-native-paper';
 import {
   StyleSheet,
@@ -12,7 +13,6 @@ import {
   Text,
   Pressable,
   FlatList,
-  Alert,
   TouchableOpacity,
   Image,
 } from 'react-native';
@@ -363,8 +363,10 @@ export default function HomeScreen({navigation}: {navigation: any}) {
         </View>
 
         <ScrollView style={styles.Scrollcito}>
-          <View style={styles.mostrarCosas}>
-            <Text style={styles.mostrarCosas}>Notas</Text>
+          <View style={styles.containertext}>
+            <Image source={notas} style={styles.imagetext} />
+            <Text style={styles.textWithBorder}>Notas</Text>
+            <Text style={styles.textWithBorder}>Notas</Text>
           </View>
 
           <FlatList
@@ -377,21 +379,24 @@ export default function HomeScreen({navigation}: {navigation: any}) {
             }
             scrollEnabled={false}
             renderItem={({item}) => (
-              <View style={styles.noteCardNotes}>
-                {/* <Text style={styles.diseño}>Notas</Text> */}
-                <Text style={styles.diseño}>{item.titulo}</Text>
-                <Text style={styles.noteContent}>{item.notas}</Text>
-                <Pressable
-                  style={styles.closeButton}
-                  onPress={() => handleDeleteNotas(item.id_notas)}>
-                  <Icon type="MaterialIcons" name="delete" />
-                  <CustomAlertNotas
-                    visible={isModalVisible}
-                    onConfirm={onConfirmDelete}
-                    onCancel={onCancelDelete}
-                  />
-                </Pressable>
-              </View>
+              <>
+                <View style={styles.noteCardNotes}>
+                  {/* <Text style={styles.diseño}>Notas</Text> */}
+                  <Text style={styles.diseño}>{item.titulo}</Text>
+                  <Text style={styles.noteContent}>{item.notas}</Text>
+                  <Pressable
+                    style={styles.closeButton}
+                    onPress={() => handleDeleteNotas(item.id_notas)}>
+                    <Icon type="MaterialIcons" name="delete" />
+                    <CustomAlertNotas
+                      visible={isModalVisible}
+                      onConfirm={onConfirmDelete}
+                      onCancel={onCancelDelete}
+                    />
+                  </Pressable>
+                </View>
+                <View style={styles.divider} />
+              </>
             )}
           />
           <View style={styles.containertext}>
@@ -410,23 +415,28 @@ export default function HomeScreen({navigation}: {navigation: any}) {
             }
             scrollEnabled={false}
             renderItem={({item}) => (
-              <View style={styles.noteCardMedicine}>
-                {/* <Text style={styles.diseño}>Medicamentos</Text> */}
-                <Text style={styles.diseño}>{item.nombreMedicamento}</Text>
-                <Text style={styles.noteContent}>{item.gramos} </Text>
-                <Text style={styles.noteContent}>{item.tiempo}</Text>
-                <Text style={styles.noteContent}>{item.dias}</Text>
-                <Pressable
-                  style={styles.closeButton}
-                  onPress={() => handleDeleteMedicamento(item.id_medicamento)}>
-                  <Icon type="MaterialIcons" name="delete" />
-                  <CustomAlertMedic
-                    visible={isModalVisible2}
-                    onConfirm={onConfirmDeleteMedi}
-                    onCancel={onCancelDeleteMedi} //AQUI TIENE QUE SER onConfirmDelete
-                  />
-                </Pressable>
-              </View>
+              <>
+                <View style={styles.noteCardMedicine}>
+                  {/* <Text style={styles.diseño}>Medicamentos</Text> */}
+                  <Text style={styles.diseño}>{item.nombreMedicamento}</Text>
+                  <Text style={styles.noteContent}>{item.gramos} </Text>
+                  <Text style={styles.noteContent}>{item.tiempo}</Text>
+                  <Text style={styles.noteContent}>{item.dias}</Text>
+                  <Pressable
+                    style={styles.closeButton}
+                    onPress={() =>
+                      handleDeleteMedicamento(item.id_medicamento)
+                    }>
+                    <Icon type="MaterialIcons" name="delete" />
+                    <CustomAlertMedic
+                      visible={isModalVisible2}
+                      onConfirm={onConfirmDeleteMedi}
+                      onCancel={onCancelDeleteMedi} //AQUI TIENE QUE SER onConfirmDelete
+                    />
+                  </Pressable>
+                </View>
+                <View style={styles.divider} />
+              </>
             )}
           />
         </ScrollView>
@@ -450,6 +460,12 @@ export default function HomeScreen({navigation}: {navigation: any}) {
 }
 
 const styles = StyleSheet.create({
+  divider: {
+    height: 1, // Altura de la línea
+    backgroundColor: '#ccc', // Color de la línea
+    marginVertical: 8, // Espacio alrededor de la línea
+    marginHorizontal: 20,
+  },
   mostrarCosas: {
     justifyContent: 'center',
     alignItems: 'center',
@@ -533,8 +549,10 @@ const styles = StyleSheet.create({
     marginTop: 80,
   },
   diseño: {
+    fontWeight: 'bold',
     color: '#333',
     fontSize: 18,
+    marginBottom: 10,
   },
   imagemed: {
     width: 55,
@@ -650,12 +668,6 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: '#666',
   },
-  imageProfile: {
-    width: 100,
-    height: 100,
-    marginBottom: 20,
-    marginRight: 30,
-  },
   center: {
     justifyContent: 'center',
     alignItems: 'center',
@@ -709,31 +721,29 @@ const styles = StyleSheet.create({
     color: '#000',
   },
   noteCardNotes: {
-    color: '#333',
     padding: 15,
     borderRadius: 8,
-    backgroundColor: 'rgba(235, 255, 235, 1)',
-    //rgba(0, 0, 0, 0.5)
+    backgroundColor: 'rgba(247, 200, 233, .88)',
     marginVertical: 8,
     marginHorizontal: 16,
     shadowColor: '#000',
     shadowOpacity: 0.1,
     shadowRadius: 8,
     elevation: 2,
+    borderBottomWidth: StyleSheet.hairlineWidth,
   },
   noteCardMedicine: {
     color: '#333',
     padding: 15,
     borderRadius: 8,
     backgroundColor: 'rgba(247, 245, 233, 1)',
-    //
-    //rgba(0, 0, 0, 0.5)
     marginVertical: 8,
     marginHorizontal: 16,
     shadowColor: '#000',
     shadowOpacity: 0.1,
     shadowRadius: 8,
     elevation: 2,
+    borderBottomWidth: StyleSheet.hairlineWidth,
   },
   noteTitle: {
     fontSize: 18,
@@ -751,16 +761,16 @@ const styles = StyleSheet.create({
   },
   imagetext: {
     width: 365,
-    height: 40,
+    height: 30,
     borderRadius: 10,
   },
   textWithBorder: {
     position: 'absolute',
-    fontSize: 24, // Ajusta el tamaño de fuente según lo necesites
+    fontSize: 20, // Ajusta el tamaño de fuente según lo necesites
     fontWeight: 'bold',
     color: '#000', // Color del texto
-    textShadowColor: 'orange', // Color del borde
+    textShadowColor: 'white', // Color del borde
     textShadowOffset: {width: 3, height: 3}, // Ajusta el desplazamiento del borde
-    textShadowRadius: 2, // Ajusta el radio del borde
+    textShadowRadius: 4, // Ajusta el radio del borde
   },
 });

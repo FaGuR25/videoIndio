@@ -87,6 +87,11 @@ export default function AddMedice({navigation}: {navigation: any}) {
       .catch(error => console.error(error));
   };
 
+  const handleGramosChange = (text: string) => {
+    const numericText = text.replace(/[^0-9]/g, ''); // Permite solo números
+    setGramos(numericText);
+  };
+
   return (
     <ScrollView contentContainerStyle={styles.contenedorPadre}>
       <View style={styles.tarjeta}>
@@ -106,7 +111,8 @@ export default function AddMedice({navigation}: {navigation: any}) {
           multiline={true}
           style={styles.textoInput}
           value={gramos}
-          onChangeText={setGramos}
+          onChangeText={handleGramosChange}
+          keyboardType="numeric"
         />
         <Text style={styles.textLimit}>0/50</Text>
 
