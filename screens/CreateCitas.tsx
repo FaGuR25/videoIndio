@@ -75,6 +75,8 @@ export default function CreateCitas({navigation}: {navigation: any}) {
     });
   };
 
+  const caractElement = 150;
+
   return (
     <View style={styles.contenedorPadre}>
       <View style={styles.tarjeta}>
@@ -114,16 +116,18 @@ export default function CreateCitas({navigation}: {navigation: any}) {
           )}
         </View>
 
-        <Text style={styles.textLlevar}>¿Qué llevar?</Text>
         <TextInput
           placeholder="Agregar elementos"
           multiline={true}
           numberOfLines={4}
           style={styles.textoInput}
-          value={items.join('\n')}
-          onChangeText={text => setItems(text.split('\n'))}
+          value={items}
+          onChangeText={text => setItems(text.slice(0, caractElement))}
         />
-
+        <Text
+          style={
+            styles.charCount
+          }>{`${items.length}/${caractElement} caracteres`}</Text>
         <View style={styles.buttonsContainer}>
           <TouchableOpacity style={styles.saveButton} onPress={handleSave}>
             <Text style={styles.saveButtonText}>GUARDAR</Text>
@@ -139,6 +143,12 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  charCount: {
+    fontSize: 12,
+    color: '#388E3C',
+    textAlign: 'right',
+    marginBottom: 10,
   },
   tarjeta: {
     margin: 20,

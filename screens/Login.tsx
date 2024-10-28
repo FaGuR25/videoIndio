@@ -1,28 +1,29 @@
-import {
-  SafeAreaView,
-  StyleSheet,
-  View,
-  //TextInput,
-  //Button,
-  Text,
-  //Alert,
-  Image,
-  Touchable,
-  //Pressable,
-} from 'react-native';
-import React from 'react';
-//import HomeScreen from './HomeScreen';
-//import PushNotification from 'react-native-push-notification';
-//import {TouchableOpacity} from 'react-native-gesture-handler';
+import {SafeAreaView, StyleSheet, View, Text, Image} from 'react-native';
+import React, {useRef} from 'react';
 import * as Animatable from 'react-native-animatable';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 
 const topValues = Array.from({length: 40}, (_, index) => index * 5); // Cambia 40 por la cantidad de líneas que necesites
 
 function Login({navigation}: {navigation: any}): React.JSX.Element {
-  const btnIngresarOnPress = function () {
-    navigation.navigate('Tabs');
-    return;
+  const logoRef = useRef(null);
+
+  const btnIngresarOnPress = () => {
+    if (logoRef.current) {
+      // Animación de escala y opacidad con un pequeño rebote inicial
+      logoRef.current
+        .animate(
+          {
+            0: {scale: 1, opacity: 1},
+            0.3: {scale: 1.2}, // Pequeño rebote inicial
+            1: {scale: 15, opacity: 0}, // Escala grande con desaparición gradual
+          },
+          1000,
+        )
+        .then(() => {
+          navigation.navigate('Tabs'); // Navega a la pantalla de inicio
+        });
+    }
   };
 
   return (
@@ -38,11 +39,16 @@ function Login({navigation}: {navigation: any}): React.JSX.Element {
         </View>
 
         <View style={styles.container}>
-          <Image
-            source={require('../assets/icons/logome.png')}
-            style={styles.logo}
-            resizeMode="contain"
-          />
+          <Animatable.View
+            ref={logoRef}
+            style={styles.logoContainer}
+            useNativeDriver>
+            <Image
+              source={require('../assets/icons/logome.png')}
+              style={styles.logo}
+              resizeMode="contain"
+            />
+          </Animatable.View>
           <Animatable.Text
             animation="fadeIn"
             duration={2000}
@@ -59,18 +65,6 @@ function Login({navigation}: {navigation: any}): React.JSX.Element {
         </View>
       </View>
     </SafeAreaView>
-    /* <TouchableOpacity
-        onPress={() => {
-          PushNotification.localNotificationSchedule({
-            channelId: 'fatima1', // (required for Android)
-            title: 'medicamentos 15 segundos', // (optional)
-            message: 'tomate los medicamentos', // (required)
-            date: new Date(Date.now() + 15 * 1000),
-            allowWhileIdle: true,
-          });
-        }}>
-        <Text>boton</Text>
-      </TouchableOpacity> */
   );
 }
 
@@ -102,6 +96,10 @@ const styles = StyleSheet.create({
     height: 3,
     backgroundColor: '#b2dfdb',
     transform: [{rotate: '45deg'}],
+  },
+  logoContainer: {
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   logo: {
     width: 180,
@@ -142,10 +140,9 @@ const styles = StyleSheet.create({
     fontSize: 30,
     marginBottom: 30,
     fontWeight: 'bold',
-    fontFamily: 'Autumn_Children.ttf',
+    fontFamily: 'NotoSansElbasan-Regular',
   },
   IngresarButton: {
-    //backgroundColor: '#004d40',
     paddingVertical: 10,
     paddingHorizontal: 20,
     borderRadius: 5,

@@ -49,8 +49,9 @@
 	<false/>
 	<key>UIAppFonts</key>
 	<array>
-		<string>Autumn Children.ttf</string>
 		<string>Mister Grape - Personal Use.otf</string>
+		<string>Autumn_Children.ttf</string>
+		<string>NotoSansElbasan-Regular.ttf</string>
 	</array>
 </dict>
 </plist>

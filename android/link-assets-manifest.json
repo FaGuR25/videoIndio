@@ -2,12 +2,16 @@
   "migIndex": 1,
   "data": [
     {
-      "path": "assets/fonts/Autumn Children.ttf",
+      "path": "assets/fonts/Autumn_Children.ttf",
       "sha1": "e914336ccd7c44b95f6e49388f1b7847752effa0"
     },
     {
       "path": "assets/fonts/Mister Grape - Personal Use.otf",
       "sha1": "c376cfdf496ec180b2743577add2701a2534bcca"
+    },
+    {
+      "path": "assets/fonts/NotoSansElbasan-Regular.ttf",
+      "sha1": "72fc73e6546f0b7cdf162ab947240cb09bfc8306"
     }
   ]
 }

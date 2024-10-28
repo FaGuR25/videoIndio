@@ -11,9 +11,53 @@ import {
   Modal,
   Image,
 } from 'react-native';
-import {Calendar} from 'react-native-calendars';
+import {Calendar, LocaleConfig} from 'react-native-calendars';
 import {Icon} from 'react-native-elements';
 import citas from '../assets/icons/citas.png';
+
+// Configuración del idioma español para el calendario
+LocaleConfig.locales['es'] = {
+  monthNames: [
+    'Enero',
+    'Febrero',
+    'Marzo',
+    'Abril',
+    'Mayo',
+    'Junio',
+    'Julio',
+    'Agosto',
+    'Septiembre',
+    'Octubre',
+    'Noviembre',
+    'Diciembre',
+  ],
+  monthNamesShort: [
+    'Ene.',
+    'Feb.',
+    'Mar.',
+    'Abr.',
+    'May.',
+    'Jun.',
+    'Jul.',
+    'Ago.',
+    'Sept.',
+    'Oct.',
+    'Nov.',
+    'Dic.',
+  ],
+  dayNames: [
+    'Domingo',
+    'Lunes',
+    'Martes',
+    'Miércoles',
+    'Jueves',
+    'Viernes',
+    'Sábado',
+  ],
+  dayNamesShort: ['Dom.', 'Lun.', 'Mar.', 'Mié.', 'Jue.', 'Vie.', 'Sáb.'],
+  today: 'Hoy', // Nombre para "hoy"
+};
+LocaleConfig.defaultLocale = 'es'; // Establece el idioma predeterminado a español
 
 const FindScreen = () => {
   const [selectedDate, setSelectedDate] = useState('');
@@ -261,7 +305,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     paddingTop: 20,
-    backgroundColor: '#ffffff',
+    backgroundColor: '#F0F8F7',
   },
   closeButton: {
     position: 'absolute',
@@ -280,6 +324,7 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderColor: '#ccc',
     marginBottom: 20,
+    backgroundColor: '#F0F8F7',
   },
   headerContainer: {
     flexDirection: 'row',

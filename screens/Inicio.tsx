@@ -489,7 +489,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     marginTop: 0,
-    backgroundColor: '#ffffff',
+    backgroundColor: '#F0F8F7',
     flexDirection: 'column',
   },
   modalBackground: {
@@ -785,6 +785,7 @@ const styles = StyleSheet.create({
     marginVertical: 0,
     alignItems: 'center',
     marginTop: 30,
+    fontFamily: 'Autumn_Children',
   },
   containerAll: {
     flex: 1,
