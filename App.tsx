@@ -14,7 +14,7 @@ import CreateNotes from './screens/CreateNotes';
 import PostScreen from './screens/PostScreen';
 //import SettingsScreen from './screens/SettingsScreen';
 import MiniBlog from './screens/Miniblog';
-import BlogDetailScreen from './screens/BlogDetailScreen';
+// import BlogDetailScreen from './screens/BlogDetailScreen';
 import CreateCitas from './screens/CreateCitas';
 
 import PushNotification from 'react-native-push-notification';
@@ -56,7 +56,7 @@ function TabNavigator() {
         name="Inicio"
         component={HomeScreen}
         options={{
-          headerShown: true,
+          headerShown: false,
           headerTitle: 'Inicio',
           headerStyle: {
             backgroundColor: 'white',
@@ -93,7 +93,7 @@ function TabNavigator() {
         name="Blog"
         component={PostScreen}
         options={{
-          headerShown: true,
+          headerShown: false,
           headerTitle: 'Blog',
           headerStyle: {
             backgroundColor: '#8fcbbc',
@@ -181,11 +181,11 @@ export default function App(): React.JSX.Element {
           component={MiniBlog}
           options={{headerShown: false}}
         />
-        <Stack.Screen
+        {/* <Stack.Screen
           name="BlogDetailScreen"
           component={BlogDetailScreen}
           options={{headerShown: false}}
-        />
+        /> */}
         <Stack.Screen
           name="CreateCitas"
           component={CreateCitas}

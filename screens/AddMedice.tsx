@@ -89,85 +89,101 @@ export default function AddMedice({navigation}: {navigation: any}) {
 
   const handleGramosChange = (text: string) => {
     const numericText = text.replace(/[^0-9]/g, ''); // Permite solo números
-    setGramos(numericText);
+    setGramos(numericText.slice(0, caractGramMed));
   };
 
+  const caractNombMed = 40;
+  const caractGramMed = 6;
+
   return (
-    <ScrollView contentContainerStyle={styles.contenedorPadre}>
-      <View style={styles.tarjeta}>
-        <Text style={styles.NameMedice}>Nombre del Medicamento</Text>
-        <TextInput
-          placeholder="Nombre del Medicamento"
-          style={styles.textoInputTitle}
-          numberOfLines={3}
-          value={nombreMedicamento}
-          onChangeText={setNombreMedicamento}
-        />
-        <Text style={styles.textLimit}>0/250</Text>
-
-        <Text style={styles.NameMedice}>Gramos</Text>
-        <TextInput
-          placeholder="Gramos"
-          multiline={true}
-          style={styles.textoInput}
-          value={gramos}
-          onChangeText={handleGramosChange}
-          keyboardType="numeric"
-        />
-        <Text style={styles.textLimit}>0/50</Text>
-
-        <Text style={styles.modalHeader}>Horario</Text>
-        {showPicker && (
-          <DateTimePicker
-            value={date}
-            mode="time"
-            display="spinner"
-            onChange={onChange}
+    <View style={styles.container}>
+      <ScrollView contentContainerStyle={styles.contenedorPadre}>
+        <View style={styles.tarjeta}>
+          <Text style={styles.NameMedice}>Nombre del Medicamento</Text>
+          <TextInput
+            placeholder="Nombre del Medicamento"
+            style={styles.textoInputTitle}
+            numberOfLines={3}
+            value={nombreMedicamento}
+            onChangeText={text =>
+              setNombreMedicamento(text.slice(0, caractNombMed))
+            }
           />
-        )}
-        <TouchableOpacity
-          style={styles.button}
-          onPress={() => setShowPicker(true)}>
-          <Text style={styles.buttonText}>Agregar Hora</Text>
-        </TouchableOpacity>
+          <Text
+            style={
+              styles.textLimit
+            }>{`${nombreMedicamento.length}/${caractNombMed} caracteres`}</Text>
+          <Text style={styles.NameMedice}>Gramos</Text>
+          <TextInput
+            placeholder="Gramos"
+            multiline={true}
+            style={styles.textoInput}
+            value={gramos}
+            onChangeText={handleGramosChange}
+            keyboardType="numeric"
+          />
+          <Text
+            style={
+              styles.textLimit
+            }>{`${gramos.length}/${caractGramMed} caracteres`}</Text>
 
-        <Text style={styles.modalHeader}>Días</Text>
-        <View style={styles.daysContainer}>
-          {['L', 'M', 'M', 'J', 'V', 'S', 'D'].map((day, index) => (
-            <TouchableOpacity
-              key={index}
-              style={[
-                styles.dayButton,
-                dias.includes(index + 1) && {backgroundColor: '#01780d'},
-              ]}
-              onPress={() => {
-                setDias(prev =>
-                  prev.includes(index + 1)
-                    ? prev.filter(d => d !== index + 1)
-                    : [...prev, index + 1],
-                );
-              }}>
-              <Text style={styles.dayButtonText}>{day}</Text>
-            </TouchableOpacity>
-          ))}
-        </View>
-
-        <View style={styles.buttonContainer}>
-          <TouchableOpacity style={styles.botonEnviar} onPress={handleSave}>
-            <Text style={styles.textoBtn}>Guardar</Text>
-          </TouchableOpacity>
+          <Text style={styles.modalHeader}>Horario</Text>
+          {showPicker && (
+            <DateTimePicker
+              value={date}
+              mode="time"
+              display="spinner"
+              onChange={onChange}
+            />
+          )}
           <TouchableOpacity
-            style={styles.botonCancelar}
-            onPress={() => navigation.goBack()}>
-            <Text style={styles.textoBtn}>Cancelar</Text>
+            style={styles.button}
+            onPress={() => setShowPicker(true)}>
+            <Text style={styles.buttonText}>Agregar Hora</Text>
           </TouchableOpacity>
+
+          <Text style={styles.modalHeader}>Días</Text>
+          <View style={styles.daysContainer}>
+            {['L', 'M', 'M', 'J', 'V', 'S', 'D'].map((day, index) => (
+              <TouchableOpacity
+                key={index}
+                style={[
+                  styles.dayButton,
+                  dias.includes(index + 1) && {backgroundColor: '#01780d'},
+                ]}
+                onPress={() => {
+                  setDias(prev =>
+                    prev.includes(index + 1)
+                      ? prev.filter(d => d !== index + 1)
+                      : [...prev, index + 1],
+                  );
+                }}>
+                <Text style={styles.dayButtonText}>{day}</Text>
+              </TouchableOpacity>
+            ))}
+          </View>
+
+          <View style={styles.buttonContainer}>
+            <TouchableOpacity style={styles.botonEnviar} onPress={handleSave}>
+              <Text style={styles.textoBtn}>Guardar</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.botonCancelar}
+              onPress={() => navigation.goBack()}>
+              <Text style={styles.textoBtn}>Cancelar</Text>
+            </TouchableOpacity>
+          </View>
         </View>
-      </View>
-    </ScrollView>
+      </ScrollView>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#F0F8F7', // Un verde claro suave de fondo
+  },
   botonRecordatorio: {
     color: '#333',
   },
@@ -182,7 +198,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     padding: 20,
-    backgroundColor: '#f0f0f0',
+    backgroundColor: '#F0F8F7',
   },
   tarjeta: {
     backgroundColor: '#ffffff',
@@ -229,7 +245,7 @@ const styles = StyleSheet.create({
     color: '#333',
   },
   button: {
-    backgroundColor: '#4682b4',
+    backgroundColor: '#077187',
     paddingVertical: 10,
     paddingHorizontal: 15,
     borderRadius: 5,
@@ -246,7 +262,7 @@ const styles = StyleSheet.create({
     marginVertical: 10,
   },
   dayButton: {
-    backgroundColor: '#4682b4',
+    backgroundColor: '#077187',
     width: 40,
     height: 40,
     borderRadius: 20,

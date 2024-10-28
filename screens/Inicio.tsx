@@ -296,166 +296,170 @@ export default function HomeScreen({navigation}: {navigation: any}) {
   ];
 
   return (
-    <SafeAreaView style={{flex: 1}}>
-      <View style={styles.container}>
-        <View style={styles.picker}>
-          <Swiper
-            index={1}
-            ref={swiper}
-            loop={false}
-            showsPagination={false}
-            onIndexChanged={ind => {
-              if (ind === 1) {
-                return;
+    <View style={styles.containerAll}>
+      <Text style={styles.headerText}>INICIO</Text>
+      <View style={styles.divider} />
+      <SafeAreaView style={{flex: 1}}>
+        <View style={styles.container}>
+          <View style={styles.picker}>
+            <Swiper
+              index={1}
+              ref={swiper}
+              loop={false}
+              showsPagination={false}
+              onIndexChanged={ind => {
+                if (ind === 1) {
+                  return;
+                }
+                setTimeout(() => {
+                  const newIndex = ind - 1;
+                  const newWeek = week + newIndex;
+                  setWeek(newWeek);
+                  setValue(moment(value).add(newIndex, 'week').toDate());
+                  swiper.current.scrollTo(1, false);
+                }, 100);
+              }}>
+              {weeks.map((dates, index) => (
+                <View style={styles.itemRow} key={index}>
+                  {dates.map((item, dateIndex) => {
+                    const isActive =
+                      value.toDateString() === item.date.toDateString();
+                    return (
+                      <TouchableWithoutFeedback
+                        key={dateIndex}
+                        onPress={() => setValue(item.date)}>
+                        <View
+                          style={[
+                            styles.item,
+                            isActive && {
+                              backgroundColor: '#01780d',
+                              borderColor: '#01780d',
+                            },
+                          ]}>
+                          <Text
+                            style={[
+                              styles.itemWeekday,
+                              isActive && {color: '#fff'},
+                            ]}>
+                            {item.weekday === 'Mon' && 'Lun'}
+                            {item.weekday === 'Tue' && 'Mar'}
+                            {item.weekday === 'Wed' && 'Mié'}
+                            {item.weekday === 'Thu' && 'Jue'}
+                            {item.weekday === 'Fri' && 'Vie'}
+                            {item.weekday === 'Sat' && 'Sáb'}
+                            {item.weekday === 'Sun' && 'Dom'}
+                          </Text>
+                          <Text
+                            style={[
+                              styles.itemDate,
+                              isActive && {color: '#fff'},
+                            ]}>
+                            {item.date.getDate()}
+                          </Text>
+                        </View>
+                      </TouchableWithoutFeedback>
+                    );
+                  })}
+                </View>
+              ))}
+            </Swiper>
+          </View>
+
+          <ScrollView style={styles.Scrollcito}>
+            <View style={styles.containertext}>
+              <Image source={notas} style={styles.imagetext} />
+              <Text style={styles.textWithBorder}>Notas</Text>
+              <Text style={styles.textWithBorder}>Notas</Text>
+            </View>
+
+            <FlatList
+              style={styles.FlatListNotes}
+              data={notes}
+              keyExtractor={item =>
+                item.id_notas
+                  ? item.id_notas.toString()
+                  : Math.random().toString()
               }
-              setTimeout(() => {
-                const newIndex = ind - 1;
-                const newWeek = week + newIndex;
-                setWeek(newWeek);
-                setValue(moment(value).add(newIndex, 'week').toDate());
-                swiper.current.scrollTo(1, false);
-              }, 100);
-            }}>
-            {weeks.map((dates, index) => (
-              <View style={styles.itemRow} key={index}>
-                {dates.map((item, dateIndex) => {
-                  const isActive =
-                    value.toDateString() === item.date.toDateString();
-                  return (
-                    <TouchableWithoutFeedback
-                      key={dateIndex}
-                      onPress={() => setValue(item.date)}>
-                      <View
-                        style={[
-                          styles.item,
-                          isActive && {
-                            backgroundColor: '#01780d',
-                            borderColor: '#01780d',
-                          },
-                        ]}>
-                        <Text
-                          style={[
-                            styles.itemWeekday,
-                            isActive && {color: '#fff'},
-                          ]}>
-                          {item.weekday === 'Mon' && 'Lun'}
-                          {item.weekday === 'Tue' && 'Mar'}
-                          {item.weekday === 'Wed' && 'Mié'}
-                          {item.weekday === 'Thu' && 'Jue'}
-                          {item.weekday === 'Fri' && 'Vie'}
-                          {item.weekday === 'Sat' && 'Sáb'}
-                          {item.weekday === 'Sun' && 'Dom'}
-                        </Text>
-                        <Text
-                          style={[
-                            styles.itemDate,
-                            isActive && {color: '#fff'},
-                          ]}>
-                          {item.date.getDate()}
-                        </Text>
-                      </View>
-                    </TouchableWithoutFeedback>
-                  );
-                })}
-              </View>
-            ))}
-          </Swiper>
+              scrollEnabled={false}
+              renderItem={({item}) => (
+                <>
+                  <View style={styles.noteCardNotes}>
+                    {/* <Text style={styles.diseño}>Notas</Text> */}
+                    <Text style={styles.diseño}>{item.titulo}</Text>
+                    <Text style={styles.noteContent}>{item.notas}</Text>
+                    <Pressable
+                      style={styles.closeButton}
+                      onPress={() => handleDeleteNotas(item.id_notas)}>
+                      <Icon type="MaterialIcons" name="delete" />
+                      <CustomAlertNotas
+                        visible={isModalVisible}
+                        onConfirm={onConfirmDelete}
+                        onCancel={onCancelDelete}
+                      />
+                    </Pressable>
+                  </View>
+                  <View style={styles.divider} />
+                </>
+              )}
+            />
+            <View style={styles.containertext}>
+              <Image source={medicamentos} style={styles.imagetext} />
+              <Text style={styles.textWithBorder}>Medicamentos</Text>
+              <Text style={styles.textWithBorder}>Medicamentos</Text>
+            </View>
+
+            <FlatList
+              style={styles.FlatListMedicine}
+              data={medice}
+              keyExtractor={item =>
+                item.id_medicamento
+                  ? item.id_medicamento.toString()
+                  : Math.random().toString()
+              }
+              scrollEnabled={false}
+              renderItem={({item}) => (
+                <>
+                  <View style={styles.noteCardMedicine}>
+                    {/* <Text style={styles.diseño}>Medicamentos</Text> */}
+                    <Text style={styles.diseño}>{item.nombreMedicamento}</Text>
+                    <Text style={styles.noteContent}>{item.gramos} </Text>
+                    <Text style={styles.noteContent}>{item.tiempo}</Text>
+                    <Text style={styles.noteContent}>{item.dias}</Text>
+                    <Pressable
+                      style={styles.closeButton}
+                      onPress={() =>
+                        handleDeleteMedicamento(item.id_medicamento)
+                      }>
+                      <Icon type="MaterialIcons" name="delete" />
+                      <CustomAlertMedic
+                        visible={isModalVisible2}
+                        onConfirm={onConfirmDeleteMedi}
+                        onCancel={onCancelDeleteMedi} //AQUI TIENE QUE SER onConfirmDelete
+                      />
+                    </Pressable>
+                  </View>
+                  <View style={styles.divider} />
+                </>
+              )}
+            />
+          </ScrollView>
+          <FloatingAction
+            actions={actions}
+            color="green"
+            position="right"
+            onPressItem={name => {
+              if (name === 'Notes') {
+                navigation.navigate('CreateNotes');
+              } else if (name === 'Medice') {
+                navigation.navigate('AddMedice');
+              } else if (name === 'Cites') {
+                navigation.navigate('CreateCitas');
+              }
+            }}
+          />
         </View>
-
-        <ScrollView style={styles.Scrollcito}>
-          <View style={styles.containertext}>
-            <Image source={notas} style={styles.imagetext} />
-            <Text style={styles.textWithBorder}>Notas</Text>
-            <Text style={styles.textWithBorder}>Notas</Text>
-          </View>
-
-          <FlatList
-            style={styles.FlatListNotes}
-            data={notes}
-            keyExtractor={item =>
-              item.id_notas
-                ? item.id_notas.toString()
-                : Math.random().toString()
-            }
-            scrollEnabled={false}
-            renderItem={({item}) => (
-              <>
-                <View style={styles.noteCardNotes}>
-                  {/* <Text style={styles.diseño}>Notas</Text> */}
-                  <Text style={styles.diseño}>{item.titulo}</Text>
-                  <Text style={styles.noteContent}>{item.notas}</Text>
-                  <Pressable
-                    style={styles.closeButton}
-                    onPress={() => handleDeleteNotas(item.id_notas)}>
-                    <Icon type="MaterialIcons" name="delete" />
-                    <CustomAlertNotas
-                      visible={isModalVisible}
-                      onConfirm={onConfirmDelete}
-                      onCancel={onCancelDelete}
-                    />
-                  </Pressable>
-                </View>
-                <View style={styles.divider} />
-              </>
-            )}
-          />
-          <View style={styles.containertext}>
-            <Image source={medicamentos} style={styles.imagetext} />
-            <Text style={styles.textWithBorder}>Medicamentos</Text>
-            <Text style={styles.textWithBorder}>Medicamentos</Text>
-          </View>
-
-          <FlatList
-            style={styles.FlatListMedicine}
-            data={medice}
-            keyExtractor={item =>
-              item.id_medicamento
-                ? item.id_medicamento.toString()
-                : Math.random().toString()
-            }
-            scrollEnabled={false}
-            renderItem={({item}) => (
-              <>
-                <View style={styles.noteCardMedicine}>
-                  {/* <Text style={styles.diseño}>Medicamentos</Text> */}
-                  <Text style={styles.diseño}>{item.nombreMedicamento}</Text>
-                  <Text style={styles.noteContent}>{item.gramos} </Text>
-                  <Text style={styles.noteContent}>{item.tiempo}</Text>
-                  <Text style={styles.noteContent}>{item.dias}</Text>
-                  <Pressable
-                    style={styles.closeButton}
-                    onPress={() =>
-                      handleDeleteMedicamento(item.id_medicamento)
-                    }>
-                    <Icon type="MaterialIcons" name="delete" />
-                    <CustomAlertMedic
-                      visible={isModalVisible2}
-                      onConfirm={onConfirmDeleteMedi}
-                      onCancel={onCancelDeleteMedi} //AQUI TIENE QUE SER onConfirmDelete
-                    />
-                  </Pressable>
-                </View>
-                <View style={styles.divider} />
-              </>
-            )}
-          />
-        </ScrollView>
-        <FloatingAction
-          actions={actions}
-          color="green"
-          position="right"
-          onPressItem={name => {
-            if (name === 'Notes') {
-              navigation.navigate('CreateNotes');
-            } else if (name === 'Medice') {
-              navigation.navigate('AddMedice');
-            } else if (name === 'Cites') {
-              navigation.navigate('CreateCitas');
-            }
-          }}
-        />
-      </View>
-    </SafeAreaView>
+      </SafeAreaView>
+    </View>
   );
 }
 
@@ -484,7 +488,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'center',
-    marginTop: 10,
+    marginTop: 0,
     backgroundColor: '#ffffff',
     flexDirection: 'column',
   },
@@ -571,10 +575,9 @@ const styles = StyleSheet.create({
   picker: {
     flex: 1,
     maxHeight: 74,
-    paddingVertical: 12,
+    paddingVertical: 8,
     flexDirection: 'row',
     alignItems: 'center',
-    marginTop: 10,
     position: 'absolute',
     top: 0,
   },
@@ -772,5 +775,20 @@ const styles = StyleSheet.create({
     textShadowColor: 'white', // Color del borde
     textShadowOffset: {width: 3, height: 3}, // Ajusta el desplazamiento del borde
     textShadowRadius: 4, // Ajusta el radio del borde
+  },
+  headerText: {
+    backgroundColor: 'white',
+    height: 50,
+    fontSize: 24,
+    fontWeight: 'bold',
+    textAlign: 'center',
+    marginVertical: 0,
+    alignItems: 'center',
+    marginTop: 30,
+  },
+  containerAll: {
+    flex: 1,
+    paddingTop: 0,
+    backgroundColor: '#ffffff',
   },
 });

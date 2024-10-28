@@ -9,9 +9,11 @@ import {
   Pressable,
   TouchableOpacity,
   Modal,
+  Image,
 } from 'react-native';
 import {Calendar} from 'react-native-calendars';
 import {Icon} from 'react-native-elements';
+import citas from '../assets/icons/citas.png';
 
 const FindScreen = () => {
   const [selectedDate, setSelectedDate] = useState('');
@@ -25,6 +27,12 @@ const FindScreen = () => {
     fecha: Date;
     tiempo: number;
     documentos: String;
+  }
+
+  interface MyComponents {
+    visible: any;
+    onConfirm: any;
+    onCancel: any;
   }
 
   // custom alert
@@ -205,6 +213,11 @@ const FindScreen = () => {
             <Text style={styles.selectedDate}>{selectedDate}</Text>
           </View>
         )}
+        <View style={styles.containertext}>
+          <Image source={citas} style={styles.imagetext} />
+          <Text style={styles.textWithBorder}>Citas</Text>
+          <Text style={styles.textWithBorder}>Citas</Text>
+        </View>
         <FlatList
           data={cites}
           keyExtractor={item =>
@@ -374,6 +387,25 @@ const styles = StyleSheet.create({
   confirmButtonText: {
     color: '#fff', // Color del texto de confirmación
     fontSize: 16,
+  },
+  containertext: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    position: 'relative',
+  },
+  imagetext: {
+    width: 365,
+    height: 30,
+    borderRadius: 10,
+  },
+  textWithBorder: {
+    position: 'absolute',
+    fontSize: 20, // Ajusta el tamaño de fuente según lo necesites
+    fontWeight: 'bold',
+    color: '#000', // Color del texto
+    textShadowColor: 'white', // Color del borde
+    textShadowOffset: {width: 3, height: 3}, // Ajusta el desplazamiento del borde
+    textShadowRadius: 4, // Ajusta el radio del borde
   },
 });
 
