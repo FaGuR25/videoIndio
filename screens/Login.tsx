@@ -1,12 +1,20 @@
 import {SafeAreaView, StyleSheet, View, Text, Image} from 'react-native';
-import React, {useRef} from 'react';
+import React, {useCallback, useEffect, useRef} from 'react';
 import * as Animatable from 'react-native-animatable';
 import {TouchableOpacity} from 'react-native-gesture-handler';
+import {useFocusEffect} from '@react-navigation/native';
 
 const topValues = Array.from({length: 40}, (_, index) => index * 5); // Cambia 40 por la cantidad de líneas que necesites
 
 function Login({navigation}: {navigation: any}): React.JSX.Element {
   const logoRef = useRef(null);
+
+  // useEffect(() => {
+  //   if (logoRef.current) {
+  //     // Restablece la escala y opacidad del logo al montarse el componente
+  //     logoRef.current.setNativeProps({ style: { opacity: 1, transform: [{ scale: 1 }] } });
+  //   }
+  // }, []);
 
   const btnIngresarOnPress = () => {
     if (logoRef.current) {
@@ -140,7 +148,9 @@ const styles = StyleSheet.create({
     fontSize: 30,
     marginBottom: 30,
     fontWeight: 'bold',
-    fontFamily: 'NotoSansElbasan-Regular',
+    fontFamily: 'Ohyou',
+    // fontFamily: 'yow-font',
+    // fontFamily: 'Cochin',
   },
   IngresarButton: {
     paddingVertical: 10,

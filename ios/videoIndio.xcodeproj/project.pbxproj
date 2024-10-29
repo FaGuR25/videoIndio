@@ -17,6 +17,9 @@
 		25D98D35E59F46C19631AEA4 /* Mister Grape - Personal Use.otf in Resources */ = {isa = PBXBuildFile; fileRef = 2E6242982CD74A4BBF9D2C15 /* Mister Grape - Personal Use.otf */; };
 		FCFE022007024568A4272730 /* Autumn_Children.ttf in Resources */ = {isa = PBXBuildFile; fileRef = CB3261749ED44F3F8550A00D /* Autumn_Children.ttf */; };
 		E90F32CACA7D44F5A2EEC38A /* NotoSansElbasan-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 6073466F61854F9AA9C02E3D /* NotoSansElbasan-Regular.ttf */; };
+		B2D1B4C9FF014712BF7C140B /* Ohyou.otf in Resources */ = {isa = PBXBuildFile; fileRef = 9AE4A8CE2337461199EC3BC7 /* Ohyou.otf */; };
+		1A095814C3134727B738C6B7 /* Ohyou.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 5E38BE0AE536407FA23F13DA /* Ohyou.ttf */; };
+		3923378B7E8043B4AFE85A49 /* ohyou.zip in Resources */ = {isa = PBXBuildFile; fileRef = 4800B91335F440FD826EA649 /* ohyou.zip */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -50,6 +53,9 @@
 		2E6242982CD74A4BBF9D2C15 /* Mister Grape - Personal Use.otf */ = {isa = PBXFileReference; name = "Mister Grape - Personal Use.otf"; path = "../assets/fonts/Mister Grape - Personal Use.otf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 		CB3261749ED44F3F8550A00D /* Autumn_Children.ttf */ = {isa = PBXFileReference; name = "Autumn_Children.ttf"; path = "../assets/fonts/Autumn_Children.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 		6073466F61854F9AA9C02E3D /* NotoSansElbasan-Regular.ttf */ = {isa = PBXFileReference; name = "NotoSansElbasan-Regular.ttf"; path = "../assets/fonts/NotoSansElbasan-Regular.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		9AE4A8CE2337461199EC3BC7 /* Ohyou.otf */ = {isa = PBXFileReference; name = "Ohyou.otf"; path = "../assets/fonts/Ohyou.otf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		5E38BE0AE536407FA23F13DA /* Ohyou.ttf */ = {isa = PBXFileReference; name = "Ohyou.ttf"; path = "../assets/fonts/Ohyou.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		4800B91335F440FD826EA649 /* ohyou.zip */ = {isa = PBXFileReference; name = "ohyou.zip"; path = "../assets/fonts/ohyou.zip"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -161,6 +167,9 @@
 				2E6242982CD74A4BBF9D2C15 /* Mister Grape - Personal Use.otf */,
 				CB3261749ED44F3F8550A00D /* Autumn_Children.ttf */,
 				6073466F61854F9AA9C02E3D /* NotoSansElbasan-Regular.ttf */,
+				9AE4A8CE2337461199EC3BC7 /* Ohyou.otf */,
+				5E38BE0AE536407FA23F13DA /* Ohyou.ttf */,
+				4800B91335F440FD826EA649 /* ohyou.zip */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -264,6 +273,9 @@
 				25D98D35E59F46C19631AEA4 /* Mister Grape - Personal Use.otf in Resources */,
 				FCFE022007024568A4272730 /* Autumn_Children.ttf in Resources */,
 				E90F32CACA7D44F5A2EEC38A /* NotoSansElbasan-Regular.ttf in Resources */,
+				B2D1B4C9FF014712BF7C140B /* Ohyou.otf in Resources */,
+				1A095814C3134727B738C6B7 /* Ohyou.ttf in Resources */,
+				3923378B7E8043B4AFE85A49 /* ohyou.zip in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

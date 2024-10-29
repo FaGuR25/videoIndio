@@ -1,91 +1,59 @@
 import React from 'react';
-import 'react-native-gesture-handler';
+import {View, TouchableOpacity} from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import {createStackNavigator} from '@react-navigation/stack';
 import {Icon} from 'react-native-elements';
-
-import Login from './screens/Login';
 import HomeScreen from './screens/Inicio';
 import FindScreen from './screens/FindScreen';
-import ChatScreen from './screens/ChatScreen';
-import AddMedice from './screens/AddMedice';
-import CreateNotes from './screens/CreateNotes';
 import PostScreen from './screens/PostScreen';
-//import SettingsScreen from './screens/SettingsScreen';
-import MiniBlog from './screens/Miniblog';
-// import BlogDetailScreen from './screens/BlogDetailScreen';
-import CreateCitas from './screens/CreateCitas';
+import {GestureHandlerRootView} from 'react-native-gesture-handler';
 
-import PushNotification from 'react-native-push-notification';
-
-const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 
-PushNotification.configure({
-  onNotification: function (notification) {
-    console.log('NOTIFICATION:', notification);
-    // Handle notification click
-  },
-  popInitialNotification: true, // This ensures the initial notification is handled
-  requestPermissions: false,
-});
-
-PushNotification.createChannel(
-  {
-    channelId: 'fatima1', // (required)
-    channelName: 'Default Channel', // (required)
-    channelDescription: 'A default channel', // (optional)
-    soundName: 'default', // (optional)
-    importance: 1, // (optional) default: 4. Int value of the Android notification importance
-    vibrate: true, // (optional) default: true. Creates the default vibration pattern if true.
-    playSound: true,
-  },
-  created => console.log(`createChannel returned ${created}`), // (optional) callback returns whether the channel was created, false means it already existed.
-);
-
-PushNotification.getChannels(function (channel_ids) {
-  console.log(channel_ids); // ['channel_id_1']
-});
-
-// Navigator para las pantallas principales en el bottom tab navigator
 function TabNavigator() {
   return (
-    <Tab.Navigator>
+    <Tab.Navigator
+      screenOptions={{
+        tabBarShowLabel: true,
+        tabBarStyle: {
+          height: 80,
+          borderTopLeftRadius: 30,
+          borderTopRightRadius: 30,
+          backgroundColor: '#E8F5E9', // Fondo verde claro
+          position: 'absolute',
+          left: 0,
+          right: 0,
+          bottom: 0,
+          shadowColor: '#000',
+          shadowOffset: {width: 0, height: 10},
+          shadowOpacity: 0.25,
+          shadowRadius: 3.5,
+          elevation: 5,
+        },
+        tabBarLabelStyle: {
+          fontSize: 12,
+          fontWeight: '600',
+        },
+        tabBarActiveTintColor: '#388E3C', // Verde oscuro para ícono activo
+        tabBarInactiveTintColor: '#A5D6A7', // Verde claro para ícono inactivo
+      }}>
       <Tab.Screen
         name="Inicio"
         component={HomeScreen}
         options={{
           headerShown: false,
-          headerTitle: 'Inicio',
-          headerStyle: {
-            backgroundColor: 'white',
-          },
-          headerTitleStyle: {
-            color: '#006400',
-            fontWeight: 'bold',
-          },
-          tabBarIcon: props => (
-            <Icon type="feather" name="home" color={props.color} />
+          tabBarIcon: ({color}) => (
+            <Icon type="material" name="home" color={color} />
           ),
         }}
       />
-
       <Tab.Screen
         name="Calendario"
         component={FindScreen}
         options={{
           headerShown: false,
-          headerTitle: 'Calendario',
-          headerStyle: {
-            backgroundColor: '#8fcbbc',
-          },
-          headerTitleStyle: {
-            color: '#006400',
-            fontWeight: 'bold',
-          },
-          tabBarIcon: props => (
-            <Icon type="entypo" name="calendar" color={props.color} />
+          tabBarIcon: ({color}) => (
+            <Icon type="material-community" name="calendar" color={color} />
           ),
         }}
       />
@@ -94,105 +62,22 @@ function TabNavigator() {
         component={PostScreen}
         options={{
           headerShown: false,
-          headerTitle: 'Blog',
-          headerStyle: {
-            backgroundColor: '#8fcbbc',
-          },
-          headerTitleStyle: {
-            color: '#006400',
-            fontWeight: 'bold',
-          },
-          tabBarIcon: props => (
-            <Icon
-              type="foundation"
-              name="clipboard-notes"
-              color={props.color}
-            />
+          tabBarIcon: ({color}) => (
+            <Icon type="material" name="description" color={color} />
           ),
         }}
       />
-      {/* <Tab.Screen
-        name="Perfil"
-        component={SettingsScreen}
-        options={{
-          headerShown: true,
-          headerTitle: 'Perfil',
-          headerStyle: {
-            backgroundColor: '#8fcbbc',
-          },
-          headerTitleStyle: {
-            color: '#006400',
-            fontWeight: 'bold',
-          },
-          tabBarIcon: props => (
-            <Icon
-              type="MaterialCommunityIcons"
-              name="account-circle"
-              color={props.color}
-            />
-          ),
-        }}
-      /> */}
     </Tab.Navigator>
   );
 }
 
-export default function App(): React.JSX.Element {
+export default function App() {
   return (
-    <NavigationContainer>
-      <Stack.Navigator initialRouteName="Login">
-        <Stack.Screen
-          name="Login"
-          component={Login}
-          options={{headerShown: false}}
-        />
-        <Stack.Screen
-          name="Tabs"
-          component={TabNavigator}
-          options={{headerShown: false}}
-        />
-        {/* <Stack.Screen
-          name="HiddenScreens"
-          component={HiddenStackNavigator}
-          options={{headerShown: false}}
-        /> */}
-        {/* <Stack.Screen
-          name="Edits"
-          component={Edits}
-          options={{headerShown: false}}
-        /> */}
-        <Stack.Screen
-          name="CreateNotes"
-          component={CreateNotes}
-          options={{headerShown: false}}
-        />
-        <Stack.Screen
-          name="AddMedice"
-          component={AddMedice}
-          options={{headerShown: false}}
-        />
-        <Stack.Screen
-          name="Plus"
-          component={ChatScreen}
-          options={{headerShown: false}}
-        />
-        <Stack.Screen
-          name="MiniBlog"
-          component={MiniBlog}
-          options={{headerShown: false}}
-        />
-        {/* <Stack.Screen
-          name="BlogDetailScreen"
-          component={BlogDetailScreen}
-          options={{headerShown: false}}
-        /> */}
-        <Stack.Screen
-          name="CreateCitas"
-          component={CreateCitas}
-          options={{headerShown: false}}
-        />
-      </Stack.Navigator>
-    </NavigationContainer>
+    <GestureHandlerRootView style={{flex: 1}}>
+      <NavigationContainer>
+        <TabNavigator />
+      </NavigationContainer>
+    </GestureHandlerRootView>
   );
 }
 

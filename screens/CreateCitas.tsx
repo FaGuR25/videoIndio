@@ -15,7 +15,7 @@ export default function CreateCitas({navigation}: {navigation: any}) {
   const [date, setDate] = useState(new Date());
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [showTimePicker, setShowTimePicker] = useState(false);
-  const [items, setItems] = useState(['']);
+  const [items, setItems] = useState('');
 
   const onChangeDate = (event, selectedDate) => {
     const currentDate = selectedDate || date;
@@ -32,7 +32,7 @@ export default function CreateCitas({navigation}: {navigation: any}) {
   const handleSave = () => {
     const fecha = date.toISOString().split('T')[0]; // Formato YYYY-MM-DD
     const tiempo = date.toTimeString().split(' ')[0]; // Formato HH:MM:SS
-    const documentos = items.join(', ');
+    const documentos = items;
 
     const myHeaders = new Headers();
     myHeaders.append('Content-Type', 'application/json');

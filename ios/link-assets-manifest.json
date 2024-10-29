@@ -12,6 +12,18 @@
     {
       "path": "assets/fonts/NotoSansElbasan-Regular.ttf",
       "sha1": "72fc73e6546f0b7cdf162ab947240cb09bfc8306"
+    },
+    {
+      "path": "assets/fonts/Ohyou.otf",
+      "sha1": "c54d07725ddaac343be6d05cd600facb4f7ffb8a"
+    },
+    {
+      "path": "assets/fonts/Ohyou.ttf",
+      "sha1": "ce17065c17b3d8a31ebac363a691df1276263e0c"
+    },
+    {
+      "path": "assets/fonts/ohyou.zip",
+      "sha1": "930ba626e2d06b0e5d9cc124bed40fe677d794e3"
     }
   ]
 }
