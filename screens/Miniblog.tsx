@@ -24,17 +24,14 @@ const styles = StyleSheet.create({
   container: {
     marginBottom: 16,
     borderWidth: 1,
-    borderColor: '#ccc',
-    borderRadius: 20,
+    borderRadius: 10,
     padding: 16,
-    backgroundColor: '#fff',
   },
   image: {
     width: '100%',
     height: 200,
     borderRadius: 20,
     marginBottom: 8,
-    backgroundColor: '#ecffec',
   },
   title: {
     fontSize: 20,

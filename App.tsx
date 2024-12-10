@@ -1,14 +1,47 @@
 import React from 'react';
-import {View, TouchableOpacity} from 'react-native';
+import 'react-native-gesture-handler';
 import {NavigationContainer} from '@react-navigation/native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import {createStackNavigator} from '@react-navigation/stack';
 import {Icon} from 'react-native-elements';
+import Login from './screens/Login';
+import BlogDetailScreen from './screens/BlogDetailScreen';
 import HomeScreen from './screens/Inicio';
 import FindScreen from './screens/FindScreen';
 import PostScreen from './screens/PostScreen';
-import {GestureHandlerRootView} from 'react-native-gesture-handler';
+import AddMedice from './screens/AddMedice';
+import CreateNotes from './screens/CreateNotes';
+import MiniBlog from './screens/Miniblog';
+import CreateCitas from './screens/CreateCitas';
+import PushNotification from 'react-native-push-notification';
 
+const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
+
+PushNotification.configure({
+  onNotification: function (notification) {
+    console.log('NOTIFICATION:', notification);
+  },
+  popInitialNotification: true,
+  requestPermissions: false,
+});
+
+PushNotification.createChannel(
+  {
+    channelId: 'fatima1',
+    channelName: 'Default Channel',
+    channelDescription: 'A default channel',
+    soundName: 'default',
+    importance: 1,
+    vibrate: true,
+    playSound: true,
+  },
+  created => console.log(`createChannel returned ${created}`),
+);
+
+PushNotification.getChannels(function (channel_ids) {
+  console.log(channel_ids);
+});
 
 function TabNavigator() {
   return (
@@ -16,54 +49,53 @@ function TabNavigator() {
       screenOptions={{
         tabBarShowLabel: true,
         tabBarStyle: {
-          height: 80,
-          borderTopLeftRadius: 30,
-          borderTopRightRadius: 30,
-          backgroundColor: '#E8F5E9', // Fondo verde claro
-          position: 'absolute',
-          left: 0,
-          right: 0,
-          bottom: 0,
-          shadowColor: '#000',
-          shadowOffset: {width: 0, height: 10},
-          shadowOpacity: 0.25,
-          shadowRadius: 3.5,
+          height: 60,
+          backgroundColor: '#018856',
+          borderTopWidth: 2,
           elevation: 5,
+          borderRadius: 10,
         },
         tabBarLabelStyle: {
           fontSize: 12,
           fontWeight: '600',
+          color: 'white',
         },
-        tabBarActiveTintColor: '#388E3C', // Verde oscuro para ícono activo
-        tabBarInactiveTintColor: '#A5D6A7', // Verde claro para ícono inactivo
+        tabBarActiveTintColor: '#3498db',
+        tabBarInactiveTintColor: '#7f8c8d',
+        tabBarIconStyle: {
+          marginTop: 4,
+          backgroundColor: 'white',
+        },
       }}>
       <Tab.Screen
         name="Inicio"
         component={HomeScreen}
         options={{
           headerShown: false,
-          tabBarIcon: ({color}) => (
-            <Icon type="material" name="home" color={color} />
+          tabBarIcon: props => (
+            <Icon type="feather" name="home" color="white" />
           ),
         }}
       />
+
       <Tab.Screen
         name="Calendario"
         component={FindScreen}
         options={{
           headerShown: false,
-          tabBarIcon: ({color}) => (
-            <Icon type="material-community" name="calendar" color={color} />
+          tabBarIcon: props => (
+            <Icon type="entypo" name="calendar" color="white" />
           ),
         }}
       />
+
       <Tab.Screen
         name="Blog"
         component={PostScreen}
         options={{
           headerShown: false,
-          tabBarIcon: ({color}) => (
-            <Icon type="material" name="description" color={color} />
+          tabBarIcon: props => (
+            <Icon type="foundation" name="clipboard-notes" color="white" />
           ),
         }}
       />
@@ -73,103 +105,44 @@ function TabNavigator() {
 
 export default function App() {
   return (
-    <GestureHandlerRootView style={{flex: 1}}>
-      <NavigationContainer>
-        <TabNavigator />
-      </NavigationContainer>
-    </GestureHandlerRootView>
-  );
-}
-
-/*
-
-import React from 'react';
-import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import {NavigationContainer} from '@react-navigation/native';
-import {Icon} from 'react-native-elements';
-
-import HomeScreen from './screens/HomeScreen';
-import FindScreen from './screens/FindScreen';
-import ChatScreen from './screens/ChatScreen';
-import PostScreen from './screens/PostScreen';
-import SettingsScreen from './screens/SettingsScreen';
-
-const Tab = createBottomTabNavigator();
-
-export default function App() {
-  return (
     <NavigationContainer>
-      <Tab.Navigator>
-        <Tab.Screen
-          name="Inicio"
-          component={HomeScreen}
-          options={{
-            tabBarIcon: props => (
-              <Icon type="antdesign" name="stepforward" color={props.color} />
-            ),
-          }}
+      <Stack.Navigator initialRouteName="Login">
+        <Stack.Screen
+          name="Login"
+          component={Login}
+          options={{headerShown: false}}
         />
-
-        <Tab.Screen
-          name="Calendario"
-          component={FindScreen}
-          options={{
-            tabBarIcon: props => (
-              <Icon type="feather" name="dollar-sign" color={props.color} />
-            ),
-          }}
+        <Stack.Screen
+          name="Tabs"
+          component={TabNavigator}
+          options={{headerShown: false}}
         />
-
-        <Tab.Screen
-          name="Plus"
-          component={ChatScreen}
-          options={{
-            tabBarIcon: props => (
-              <Icon type="feather" name="heart" color={props.color} />
-            ),
-          }}
+        <Stack.Screen
+          name="CreateNotes"
+          component={CreateNotes}
+          options={{headerShown: false}}
         />
-
-        <Tab.Screen
-          name="Comunidad"
-          component={PostScreen}
-          options={{
-            tabBarIcon: props => (
-              <Icon
-                type="ionicon"
-                name="tennisball-outline"
-                color={props.color}
-              />
-            ),
-          }}
+        <Stack.Screen
+          name="AddMedice"
+          component={AddMedice}
+          options={{headerShown: false}}
         />
-
-        <Tab.Screen
-          name="Perfil"
-          component={SettingsScreen}
-          options={{
-            tabBarIcon: props => (
-              <Icon
-                type="ionicon"
-                name="hardware-chip-outline"
-                color={props.color}
-              />
-            ),
-          }}
+        <Stack.Screen
+          name="MiniBlog"
+          component={MiniBlog}
+          options={{headerShown: false}}
         />
-      </Tab.Navigator>
+        <Stack.Screen
+          name="BlogDetailScreen"
+          component={BlogDetailScreen}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name="CreateCitas"
+          component={CreateCitas}
+          options={{headerShown: false}}
+        />
+      </Stack.Navigator>
     </NavigationContainer>
   );
 }
-
-
-*/
-
-/*
-return (
-  <NavigationContainer>
-    <Stacks />
-  </NavigationContainer>
-);
-};
-*/

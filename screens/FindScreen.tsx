@@ -62,6 +62,7 @@ LocaleConfig.defaultLocale = 'es'; // Establece el idioma predeterminado a espa�
 const FindScreen = () => {
   const [selectedDate, setSelectedDate] = useState('');
   const [cites, setCites] = useState<Cita[]>([]);
+  const [markedDates, setMarkedDates] = useState({});
 
   const handleDatePress = (day: any) => {
     setSelectedDate(day.dateString);
@@ -123,6 +124,12 @@ const FindScreen = () => {
 
   useEffect(() => {
     if (selectedDate !== '') {
+      fetchCitesForDate(selectedDate);
+    }
+  }, [selectedDate]);
+
+  useEffect(() => {
+    if (selectedDate !== '') {
       // Actualizar citas cuando se selecciona una nueva fecha
       fetchCites();
     }
@@ -139,6 +146,17 @@ const FindScreen = () => {
     const DiaCreado: string = `${year}-${month}-${day}`;
     setSelectedDate(DiaCreado);
   }, []);
+
+  useEffect(() => {
+    if (cites.length > 0) {
+      const newMarkedDates = cites.reduce((acc, cita) => {
+        const date = cita.fecha.split('T')[0]; // Ajustar formato si es necesario
+        acc[date] = {marked: true, dotColor: 'red'}; // Personaliza el color y el estilo del punto
+        return acc;
+      }, {});
+      setMarkedDates(newMarkedDates);
+    }
+  }, [cites]);
 
   const fetchCitesForDate = (date: any) => {
     fetch(`http://localhost:3100/Citas?fecha=${date}`, {
@@ -218,6 +236,7 @@ const FindScreen = () => {
       <Calendar
         onDayPress={handleDatePress}
         markedDates={{
+          ...markedDates,
           [selectedDate]: {selected: true, selectedColor: '#8fcbbc'},
         }}
         style={styles.calendar}
@@ -260,7 +279,7 @@ const FindScreen = () => {
         <View style={styles.containertext}>
           <Image source={citas} style={styles.imagetext} />
           <Text style={styles.textWithBorder}>Citas</Text>
-          <Text style={styles.textWithBorder}>Citas</Text>
+          {/* <Text style={styles.textWithBorder}>Citas</Text> */}
         </View>
         <FlatList
           data={cites}
@@ -272,9 +291,14 @@ const FindScreen = () => {
             <>
               <View style={styles.noteCard}>
                 <Text style={styles.diseño}>Cita</Text>
-                <Text style={styles.diseño}>{item.fecha}</Text>
-                <Text style={styles.noteContent}>{item.tiempo}</Text>
-                <Text style={styles.noteContent}>{item.documentos}</Text>
+                <Text style={styles.diseño}>
+                  Fecha: {new Date(item.fecha).toLocaleDateString()}
+                </Text>
+                <Text style={styles.noteContent}>Hora: {item.tiempo}</Text>
+                <Text style={styles.noteContent}>
+                  Llevar:
+                  {item.documentos}
+                </Text>
                 <Pressable
                   style={styles.closeButton}
                   onPress={() => handleDeleteCitas(item.id_citas)}>
@@ -286,7 +310,7 @@ const FindScreen = () => {
                   />
                 </Pressable>
               </View>
-              <View style={styles.divider} />
+              {/* <View style={styles.divider} /> */}
             </>
           )}
         />
@@ -305,7 +329,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     paddingTop: 20,
-    backgroundColor: '#F0F8F7',
+    backgroundColor: 'white',
   },
   closeButton: {
     position: 'absolute',
@@ -324,7 +348,7 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderColor: '#ccc',
     marginBottom: 20,
-    backgroundColor: '#F0F8F7',
+    backgroundColor: 'white',
   },
   headerContainer: {
     flexDirection: 'row',
@@ -360,6 +384,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 20,
     borderRadius: 10,
     shadowColor: '#000',
+    marginBottom: 10,
     shadowOffset: {
       width: 0,
       height: 2,
@@ -437,6 +462,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     position: 'relative',
+    marginBottom: 10,
   },
   imagetext: {
     width: 365,

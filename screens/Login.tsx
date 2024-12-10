@@ -17,21 +17,7 @@ function Login({navigation}: {navigation: any}): React.JSX.Element {
   // }, []);
 
   const btnIngresarOnPress = () => {
-    if (logoRef.current) {
-      // Animación de escala y opacidad con un pequeño rebote inicial
-      logoRef.current
-        .animate(
-          {
-            0: {scale: 1, opacity: 1},
-            0.3: {scale: 1.2}, // Pequeño rebote inicial
-            1: {scale: 15, opacity: 0}, // Escala grande con desaparición gradual
-          },
-          1000,
-        )
-        .then(() => {
-          navigation.navigate('Tabs'); // Navega a la pantalla de inicio
-        });
-    }
+    navigation.navigate('Tabs'); // Navega a la pantalla de inicio
   };
 
   return (
@@ -160,7 +146,7 @@ const styles = StyleSheet.create({
   IngresarButtonText: {
     color: 'white',
     fontWeight: 'bold',
-    fontSize: 17,
+    fontSize: 14,
   },
 });
 

@@ -5,7 +5,6 @@ import {
   View,
   TextInput,
   Alert,
-  Pressable,
   TouchableOpacity,
 } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
@@ -16,6 +15,19 @@ export default function CreateCitas({navigation}: {navigation: any}) {
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [showTimePicker, setShowTimePicker] = useState(false);
   const [items, setItems] = useState('');
+
+  const formatDateToSpanish = (date: Date) => {
+    const day = date.getDate().toString().padStart(2, '0');
+    const month = (date.getMonth() + 1).toString().padStart(2, '0');
+    const year = date.getFullYear();
+    return `${day}/${month}/${year}`;
+  };
+
+  const formatTimeToSpanish = (date: Date) => {
+    const hours = date.getHours().toString().padStart(2, '0');
+    const minutes = date.getMinutes().toString().padStart(2, '0');
+    return `${hours}:${minutes}`;
+  };
 
   const onChangeDate = (event, selectedDate) => {
     const currentDate = selectedDate || date;
@@ -30,8 +42,8 @@ export default function CreateCitas({navigation}: {navigation: any}) {
   };
 
   const handleSave = () => {
-    const fecha = date.toISOString().split('T')[0]; // Formato YYYY-MM-DD
-    const tiempo = date.toTimeString().split(' ')[0]; // Formato HH:MM:SS
+    const fecha = date.toISOString().split('T')[0];
+    const tiempo = date.toTimeString().split(' ')[0];
     const documentos = items;
 
     const myHeaders = new Headers();
@@ -54,7 +66,7 @@ export default function CreateCitas({navigation}: {navigation: any}) {
       .then(response => response.json())
       .then(result => {
         Alert.alert('Éxito', 'Cita guardada exitosamente.');
-        scheduleNotification(fecha, tiempo, documentos); // notificación
+        scheduleNotification(fecha, tiempo, documentos);
         navigation.goBack();
       })
       .catch(error => {
@@ -67,82 +79,116 @@ export default function CreateCitas({navigation}: {navigation: any}) {
     const notificationDate = new Date(date);
 
     PushNotification.localNotificationSchedule({
-      channelId: 'fatima1', // (required for Android)
-      title: `Recordatorio: Tienes una cita`, // (optional)
-      message: `No olvides llevar: ${documentos}`, // (required)
-      date: notificationDate, // Fecha y hora de la notificación
-      allowWhileIdle: true, // Permite notificaciones cuando el dispositivo está inactivo
+      channelId: 'fatima1',
+      title: `Recordatorio: Tienes una cita`,
+      message: `No olvides llevar: ${documentos}`,
+      date: notificationDate,
+      allowWhileIdle: true,
     });
   };
 
   const caractElement = 150;
 
   return (
-    <View style={styles.contenedorPadre}>
-      <View style={styles.tarjeta}>
-        <Pressable
-          style={styles.closeButton}
-          onPress={() => navigation.goBack()}>
-          <Text style={styles.closeButtonText}>X</Text>
-        </Pressable>
-
-        <View style={styles.datePicker}>
-          <Text>Fecha de la cita</Text>
-          <Pressable onPress={() => setShowDatePicker(true)}>
-            <Text>{date.toDateString()}</Text>
-          </Pressable>
-          {showDatePicker && (
-            <DateTimePicker
-              value={date}
-              mode="date"
-              display="default"
-              onChange={onChangeDate}
-            />
-          )}
-        </View>
-
-        <View style={styles.timePicker}>
-          <Text>Hora del recordatorio</Text>
-          <Pressable onPress={() => setShowTimePicker(true)}>
-            <Text>{date.toLocaleTimeString()}</Text>
-          </Pressable>
-          {showTimePicker && (
-            <DateTimePicker
-              value={date}
-              mode="time"
-              display="default"
-              onChange={onChangeTime}
-            />
-          )}
-        </View>
-
-        <TextInput
-          placeholder="Agregar elementos"
-          multiline={true}
-          numberOfLines={4}
-          style={styles.textoInput}
-          value={items}
-          onChangeText={text => setItems(text.slice(0, caractElement))}
+    <View style={styles.container}>
+      <Text style={styles.title}>Crear Cita</Text>
+      <TouchableOpacity
+        style={[styles.input, styles.buttonInput]}
+        onPress={() => setShowDatePicker(true)}>
+        <Text style={styles.buttonInputText}>
+          {`Fecha de la cita: ${formatDateToSpanish(
+            date,
+          )}                       Presióname`}
+        </Text>
+      </TouchableOpacity>
+      {showDatePicker && (
+        <DateTimePicker
+          value={date}
+          mode="date"
+          display="default"
+          onChange={onChangeDate}
         />
-        <Text
-          style={
-            styles.charCount
-          }>{`${items.length}/${caractElement} caracteres`}</Text>
-        <View style={styles.buttonsContainer}>
-          <TouchableOpacity style={styles.saveButton} onPress={handleSave}>
-            <Text style={styles.saveButtonText}>GUARDAR</Text>
-          </TouchableOpacity>
-        </View>
-      </View>
+      )}
+      <TouchableOpacity
+        style={[styles.input, styles.buttonInput]}
+        onPress={() => setShowTimePicker(true)}>
+        <Text style={styles.buttonInputText}>
+          {`Hora del recordatorio: ${formatTimeToSpanish(
+            date,
+          )}                        Presióname`}
+        </Text>
+      </TouchableOpacity>
+      {showTimePicker && (
+        <DateTimePicker
+          value={date}
+          mode="time"
+          display="default"
+          onChange={onChangeTime}
+        />
+      )}
+      <TextInput
+        style={[styles.input, styles.textArea]}
+        placeholder="Agregar elementos"
+        value={items}
+        onChangeText={text => setItems(text.slice(0, caractElement))}
+        placeholderTextColor="#A9A9A9"
+        multiline
+      />
+      <Text style={styles.charCount}>
+        {`${items.length}/${caractElement} caracteres`}
+      </Text>
+      <TouchableOpacity style={styles.button} onPress={handleSave}>
+        <Text style={styles.buttonText}>Guardar Cita</Text>
+      </TouchableOpacity>
+      <TouchableOpacity
+        style={styles.cancelButton}
+        onPress={() => navigation.goBack()}>
+        <Text style={styles.cancelButtonText}>Cancelar</Text>
+      </TouchableOpacity>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  contenedorPadre: {
+  title: {
+    fontSize: 24,
+    fontWeight: '600',
+    color: '#333',
+    textAlign: 'center',
+    marginBottom: 20,
+  },
+  container: {
     flex: 1,
+    padding: 20,
+    backgroundColor: '#F0F8F7',
+  },
+  input: {
+    height: 50,
+    borderColor: '#66BB6A',
+    borderWidth: 1,
+    borderRadius: 10,
+    paddingHorizontal: 15,
+    marginBottom: 15,
+    backgroundColor: '#fff',
+    color: '#333',
+    fontSize: 16,
+    shadowColor: '#000',
+    shadowOffset: {width: 0, height: 2},
+    shadowOpacity: 0.1,
+    shadowRadius: 5,
+    elevation: 3,
+  },
+  buttonInput: {
     justifyContent: 'center',
-    alignItems: 'center',
+  },
+  buttonInputText: {
+    color: '#388E3C',
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+  textArea: {
+    height: 120,
+    textAlignVertical: 'top',
   },
   charCount: {
     fontSize: 12,
@@ -150,63 +196,33 @@ const styles = StyleSheet.create({
     textAlign: 'right',
     marginBottom: 10,
   },
-  tarjeta: {
-    margin: 20,
-    backgroundColor: '#d4fed3',
-    borderRadius: 20,
-    width: '95%',
-    height: '90%',
-    padding: 20,
+  button: {
+    backgroundColor: '#388E3C',
+    paddingVertical: 15,
+    borderRadius: 10,
+    alignItems: 'center',
     shadowColor: '#000',
     shadowOffset: {width: 0, height: 2},
-    shadowOpacity: 0.25,
-    shadowRadius: 4,
-    elevation: 5,
+    shadowOpacity: 0.1,
+    shadowRadius: 5,
+    elevation: 3,
   },
-  closeButton: {
-    alignSelf: 'flex-end',
+  buttonText: {
+    color: '#fff',
+    fontSize: 18,
+    fontWeight: '600',
   },
-  closeButtonText: {
-    fontSize: 20,
-    fontWeight: 'bold',
-  },
-  datePicker: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginVertical: 10,
-  },
-  timePicker: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginVertical: 10,
-  },
-  textoInput: {
-    borderColor: '#cccccc',
-    borderRadius: 8,
-    borderWidth: 1,
-    padding: 10,
+  cancelButton: {
     marginTop: 20,
-    marginBottom: 20,
-  },
-  textLlevar: {
-    color: 'black',
-    marginTop: 20,
-    marginLeft: 140,
-  },
-  buttonsContainer: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-  },
-  saveButton: {
-    backgroundColor: '#004d40',
+    backgroundColor: '#ff534a',
+    borderRadius: 5,
     paddingVertical: 10,
     paddingHorizontal: 20,
-    borderRadius: 5,
+    alignItems: 'center',
   },
-  saveButtonText: {
+  cancelButtonText: {
     color: 'white',
     fontWeight: 'bold',
+    fontSize: 16,
   },
 });

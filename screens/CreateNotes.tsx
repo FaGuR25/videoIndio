@@ -47,6 +47,7 @@ export default function CreateNotes({navigation}: {navigation: any}) {
 
   return (
     <View style={styles.container}>
+      <Text style={styles.title}>Crear Nota</Text>
       <TextInput
         style={styles.input}
         placeholder="Título"
@@ -85,6 +86,13 @@ export default function CreateNotes({navigation}: {navigation: any}) {
 }
 
 const styles = StyleSheet.create({
+  title: {
+    fontSize: 24,
+    fontWeight: '600',
+    color: '#333',
+    textAlign: 'center',
+    marginBottom: 20,
+  },
   charCount: {
     fontSize: 12,
     color: '#388E3C',

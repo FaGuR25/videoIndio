@@ -280,18 +280,21 @@ export default function HomeScreen({navigation}: {navigation: any}) {
       icon: require('../assets/icons/notes.png'),
       name: 'Notes',
       position: 1,
+      color: 'green',
     },
     {
       text: 'Agregar Medicamento',
       icon: require('../assets/icons/farmaco.png'),
       name: 'Medice',
       position: 2,
+      color: 'green',
     },
     {
       text: 'Agregar Cita',
       icon: require('../assets/icons/cita-medica.png'),
       name: 'Cites',
       position: 3,
+      color: 'green',
     },
   ];
 
@@ -383,6 +386,7 @@ export default function HomeScreen({navigation}: {navigation: any}) {
               scrollEnabled={false}
               renderItem={({item}) => (
                 <>
+                  {/* <View style={styles.divider} /> */}
                   <View style={styles.noteCardNotes}>
                     {/* <Text style={styles.diseño}>Notas</Text> */}
                     <Text style={styles.diseño}>{item.titulo}</Text>
@@ -398,14 +402,13 @@ export default function HomeScreen({navigation}: {navigation: any}) {
                       />
                     </Pressable>
                   </View>
-                  <View style={styles.divider} />
                 </>
               )}
             />
             <View style={styles.containertext}>
               <Image source={medicamentos} style={styles.imagetext} />
               <Text style={styles.textWithBorder}>Medicamentos</Text>
-              <Text style={styles.textWithBorder}>Medicamentos</Text>
+              {/* <Text style={styles.textWithBorder}>Medicamentos</Text> */}
             </View>
 
             <FlatList
@@ -419,11 +422,16 @@ export default function HomeScreen({navigation}: {navigation: any}) {
               scrollEnabled={false}
               renderItem={({item}) => (
                 <>
+                  {/* <View style={styles.divider} /> */}
                   <View style={styles.noteCardMedicine}>
                     {/* <Text style={styles.diseño}>Medicamentos</Text> */}
-                    <Text style={styles.diseño}>{item.nombreMedicamento}</Text>
-                    <Text style={styles.noteContent}>{item.gramos} </Text>
-                    <Text style={styles.noteContent}>{item.tiempo}</Text>
+                    <Text style={styles.diseño}>
+                      Tomar: {item.nombreMedicamento}
+                    </Text>
+                    <Text style={styles.noteContent}>
+                      {item.gramos} gramos{' '}
+                    </Text>
+                    <Text style={styles.noteContent}>hora: {item.tiempo}</Text>
                     <Text style={styles.noteContent}>{item.dias}</Text>
                     <Pressable
                       style={styles.closeButton}
@@ -438,7 +446,6 @@ export default function HomeScreen({navigation}: {navigation: any}) {
                       />
                     </Pressable>
                   </View>
-                  <View style={styles.divider} />
                 </>
               )}
             />
@@ -489,7 +496,6 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     marginTop: 0,
-    backgroundColor: '#F0F8F7',
     flexDirection: 'column',
   },
   modalBackground: {
@@ -624,7 +630,6 @@ const styles = StyleSheet.create({
     height: 400,
     marginTop: 0,
     padding: 0,
-    backgroundColor: 'transparent',
   },
   placeholderInset: {
     borderWidth: 4,
@@ -645,10 +650,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     marginVertical: 8,
   },
-  footer: {
-    backgroundColor: '#01780d',
-    height: 70,
-  },
+
   right: {
     marginLeft: 200,
   },
@@ -684,7 +686,7 @@ const styles = StyleSheet.create({
     width: '100%',
   },
   fab: {
-    backgroundColor: '#01780d',
+    backgroundColor: '#654654',
     position: 'absolute',
     color: '#fdfefc',
     margin: 16,
@@ -761,6 +763,8 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     position: 'relative',
+    marginTop: 10,
+    marginBottom: 10,
   },
   imagetext: {
     width: 365,

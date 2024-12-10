@@ -19,10 +19,11 @@ export default function AddMedice({navigation}: {navigation: any}) {
   const [gramos, setGramos] = useState('');
   const [dias, setDias] = useState([]);
 
-  const onChange = ({selectedDate}: {selectedDate: any}) => {
-    const currentDate = selectedDate || date;
-    setShowPicker(Platform.OS === 'ios');
-    setDate(currentDate);
+  const onChange = (event: any, selectedDate: Date | undefined) => {
+    if (selectedDate) {
+      setDate(selectedDate); // Actualiza la hora seleccionada
+    }
+    setShowPicker(Platform.OS === 'ios'); // Cierra el picker si no está en iOS
   };
 
   const handleSave = () => {
@@ -33,13 +34,6 @@ export default function AddMedice({navigation}: {navigation: any}) {
 
     const myHeaders = new Headers();
     myHeaders.append('Content-Type', 'application/json');
-
-    // const raw = JSON.stringify({
-    //   nombreMedicamento,
-    //   gramos,
-    //   tiempo: date.toTimeString().split(' ')[0],
-    //   dias,
-    // });
 
     const raw = JSON.stringify({
       nombreMedicamento,
@@ -57,7 +51,6 @@ export default function AddMedice({navigation}: {navigation: any}) {
     fetch('http://localhost:3100/Medicamentos', requestOptions)
       .then(response => response.json())
       .then(result => {
-        // Configuración de la notificación
         dias.forEach(day => {
           const notificationDate = new Date(date);
           notificationDate.setDate(
@@ -66,29 +59,29 @@ export default function AddMedice({navigation}: {navigation: any}) {
           );
 
           PushNotification.localNotificationSchedule({
-            channelId: 'fatima1', // (required for Android)
-            title: `Recordatorio: ${nombreMedicamento}`, // (optional)
-            message: `Es hora de tomar ${nombreMedicamento} (${gramos})`, // (required)
+            channelId: 'fatima1',
+            title: `Recordatorio: ${nombreMedicamento}`,
+            message: `Es hora de tomar ${nombreMedicamento} (${gramos})`,
             date: notificationDate,
-            repeatType: 'week', // Repite cada semana en el mismo día
+            repeatType: 'week',
             allowWhileIdle: true,
-            playSound: true, // Habilita el sonido
-            soundName: 'default', // Usa el sonido predeterminado
-            vibrate: true, // Habilita la vibración
-            vibration: 1000, // Duración de la vibración en milisegundos (opcional)
+            playSound: true,
+            soundName: 'default',
+            vibrate: true,
+            vibration: 1000,
           });
         });
         Alert.alert(
           'Éxito',
           'Medicamento guardado y notificación programada exitosamente.',
         );
-        navigation.navigate('Inicio'); // Navega a la pantalla de inicio
+        navigation.navigate('Inicio');
       })
       .catch(error => console.error(error));
   };
 
   const handleGramosChange = (text: string) => {
-    const numericText = text.replace(/[^0-9]/g, ''); // Permite solo números
+    const numericText = text.replace(/[^0-9]/g, '');
     setGramos(numericText.slice(0, caractGramMed));
   };
 
@@ -182,10 +175,7 @@ export default function AddMedice({navigation}: {navigation: any}) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F0F8F7', // Un verde claro suave de fondo
-  },
-  botonRecordatorio: {
-    color: '#333',
+    backgroundColor: '#F0F8F7',
   },
   NameMedice: {
     color: '#333',
@@ -299,165 +289,3 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
 });
-/* 
-import {
-  SafeAreaView,
-  StyleSheet,
-  View,
-  //TextInput,
-  //Button,
-  Text,
-  //Alert,
-  Image,
-  Touchable,
-  //Pressable,
-} from 'react-native';
-import React from 'react';
-//import HomeScreen from './HomeScreen';
-//import PushNotification from 'react-native-push-notification';
-//import {TouchableOpacity} from 'react-native-gesture-handler';
-import * as Animatable from 'react-native-animatable';
-import {TouchableOpacity} from 'react-native-gesture-handler';
-
-const topValues = Array.from({length: 40}, (_, index) => index * 5); // Cambia 40 por la cantidad de líneas que necesites
-
-function Login({navigation}: {navigation: any}): React.JSX.Element {
-  const btnIngresarOnPress = function () {
-    navigation.navigate('Tabs');
-    return;
-  };
-
-  return (
-    <SafeAreaView style={styles.screen}>
-      <View style={styles.screen}>
-        <View style={styles.diagonalLinesContainer}>
-          {topValues.map((value, index) => (
-            <View
-              key={index}
-              style={[styles.diagonalLine, {top: `${value}%`}]}
-            />
-          ))}
-        </View>
-
-        <View style={styles.container}>
-          <Image
-            source={require('../assets/icons/logome.png')}
-            style={styles.logo}
-            resizeMode="contain"
-          />
-          <Animatable.Text
-            animation="fadeIn"
-            duration={2000}
-            style={styles.TextoPrincipal}>
-            Agenda Salud
-          </Animatable.Text>
-        </View>
-        <View style={styles.buttonContainer}>
-          <TouchableOpacity
-            style={styles.IngresarButton}
-            onPress={btnIngresarOnPress}>
-            <Text style={styles.IngresarButtonText}>Ingresar</Text>
-          </TouchableOpacity>
-        </View>
-      </View>
-    </SafeAreaView>
-    /* <TouchableOpacity
-        onPress={() => {
-          PushNotification.localNotificationSchedule({
-            channelId: 'fatima1', // (required for Android)
-            title: 'medicamentos 15 segundos', // (optional)
-            message: 'tomate los medicamentos', // (required)
-            date: new Date(Date.now() + 15 * 1000),
-            allowWhileIdle: true,
-          });
-        }}>
-        <Text>boton</Text>
-      </TouchableOpacity> 
-  );
-}
-
-const styles = StyleSheet.create({
-  container: {
-    width: '100%',
-    alignItems: 'center',
-    justifyContent: 'center',
-    padding: 16,
-  },
-  screen: {
-    height: '100%',
-    backgroundColor: '#e0f2f1',
-    justifyContent: 'center',
-    alignContent: 'center',
-  },
-  diagonalLinesContainer: {
-    position: 'absolute',
-    top: 0,
-    left: -300,
-    right: 0,
-    bottom: 0,
-    zIndex: -1,
-    overflow: 'hidden',
-  },
-  diagonalLine: {
-    position: 'absolute',
-    width: '300%',
-    height: 3,
-    backgroundColor: '#b2dfdb',
-    transform: [{rotate: '45deg'}],
-  },
-  logo: {
-    width: 180,
-    height: 180,
-    marginBottom: 20,
-  },
-  TextInput: {
-    color: 'black',
-    borderWidth: 1,
-    borderRadius: 8,
-    backgroundColor: '#ffffff',
-    paddingVertical: 8,
-    paddingHorizontal: 12,
-    width: '80%',
-    margin: 8,
-    borderColor: '#80cbc4',
-  },
-  buttonContainer: {
-    backgroundColor: '#00796b',
-    borderRadius: 8,
-    paddingVertical: 10,
-    paddingHorizontal: 20,
-    marginTop: 20,
-    marginBottom: 30,
-    marginHorizontal: 130,
-  },
-  buttonText: {
-    color: '#ffffff',
-    fontSize: 18,
-    textAlign: 'center',
-  },
-  title: {
-    fontSize: 24,
-    color: '#004d40',
-    marginBottom: 20,
-  },
-  TextoPrincipal: {
-    fontSize: 30,
-    marginBottom: 30,
-    fontWeight: 'bold',
-    fontFamily: 'Autumn_Children.ttf',
-  },
-  IngresarButton: {
-    //backgroundColor: '#004d40',
-    paddingVertical: 10,
-    paddingHorizontal: 20,
-    borderRadius: 5,
-  },
-  IngresarButtonText: {
-    color: 'white',
-    fontWeight: 'bold',
-    fontSize: 17,
-  },
-});
-
-export default Login;
- */
